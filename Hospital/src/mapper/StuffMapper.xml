@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StuffDao">
+    <resultMap id="stuffMap" type="model.Stuff">
+        <id property="stuffcode" column="stuffcode"/>
+        <result property="thetime" column="thetime"/>
+        <result property="stuff" column="stuff"/>
+        <result property="amount" column="amount"/>
+        <result property="standard" column="standard"/>
+        <result property="company" column="company"/>
+        <result property="place" column="place"/>
+        <result property="buysale" column="buysale"/>
+        <result property="thesale" column="thesale"/>
+        <result property="somecode" column="somecode"/>
+        <result property="lose" column="lose"/>
+        <result property="user" column="user"/>
+    </resultMap>
+
+    <!--添加前查重-->
+    <select id="loadStuff" resultMap="stuffMap">
+        SELECT * FROM stuff WHERE stuffcode=#{stuffcode }
+    </select>
+
+    <!-- 添加药品记录 -->
+    <insert id="addStuff" parameterType="Drugs">
+        INSERT INTO stuff
+            (stuffcode,thetime,stuff,
+                amount,standard,company,
+                  place,buysale,thesale,
+                    somecode,lose,user)
+            VALUES (#{stuffcode },#{thetime },#{stuff },
+                      #{amount },#{standard },#{company },
+                        #{place },#{buysale },#{thesale },
+                          #{somecode },#{lose },#{user })
+    </insert>
+
+
+    <!--查找所有药品记录-->
+    <select id="getAllStuff" resultMap="stuffMap">
+        SELECT * FROM stuff
+    </select>
+
+    
+    <!--查找药品 记录 通过可能有的俩信息查找  患者名称 患者单位-->
+    <select id="getStuffByInf" resultMap="stuffMap">
+        <bind name="pattern" value="'%' + theName + '%'" />
+        SELECT * FROM stuff
+        <where>
+            <if test="theName != ''">
+                AND stuff LIKE #{pattern }
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStuff" parameterType="Drugs">
+        UPDATE stuff set amount=#{amount } where stuffcode=#{stuffcode }
+    </update>
+
+
+
+
+
+</mapper>

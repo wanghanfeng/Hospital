@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ImportantPersonDao">
+    <resultMap id="importantPersonMap" type="model.ImportantPerson">
+        <id property="i_id" column="i_id"/>
+        <result property="thetime" column="time"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="company" column="company"/>
+        <result property="age" column="age"/>
+        <result property="temp" column="temperature"/>
+        <result property="situation" column="situation"/>
+        <result property="drug" column="drug"/>
+        <result property="drugAmount" column="drugAmount"/>
+        <result property="iso" column="isolationTime"/>
+        <result property="doctor" column="doctor"/>
+    </resultMap>
+
+    <!-- 添加外诊记录 -->
+    <insert id="addImportantPerson" parameterType="ImportantPerson">
+        INSERT INTO importantperson
+            (time,name,sex,
+                company,age,temperature,
+                  situation,drug,drugAmount,
+                  isolationTime,doctor)
+            VALUES (#{thetime },#{name },#{sex },
+                        #{company },#{age },#{temp },
+                            #{situation },#{drug },#{drugAmount },
+                              #{iso },#{doctor })
+    </insert>
+
+
+    <!--查找所有外诊记录-->
+    <select id="getAllImportantPerson" resultMap="importantPersonMap">
+        SELECT * FROM importantperson
+    </select>
+
+    
+    <!--查找外诊记录 通过可能有的俩信息查找  患者名称 患者单位-->
+    <select id="getImportantPersonByInf" resultMap="importantPersonMap">
+        <bind name="pattern" value="'%' + theUnit + '%'" />
+        SELECT * FROM importantperson
+        <where>
+            <if test="theName != ''">
+                AND name = #{theName }
+            </if>
+            <if test="theUnit != ''">
+                AND company LIKE #{pattern }
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+</mapper>

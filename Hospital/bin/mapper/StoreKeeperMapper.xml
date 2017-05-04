@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StoreKeeperDao">
+    <resultMap id="storeKeeperMap" type="model.StoreKeeper">
+        <id property="id" column="identify"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+    <!-- 添加仓管 -->
+    <insert id="addStoreKeeper" parameterType="storekeeper">
+        INSERT INTO storageKeeper (identify,name,password) VALUES (#{id },#{name },#{password })
+    </insert>
+
+    <!-- 查找仓管 通过id -->
+    <select id="loadStoreKeeper" resultMap="storeKeeperMap">
+        SELECT * FROM storageKeeper WHERE identify=#{theId }
+    </select>
+
+    <!--仓管登录-->
+    <select id="LoginStoreKeeper" resultMap="storeKeeperMap">
+        SELECT * FROM storageKeeper WHERE identify=#{stoId } AND name=#{stoName } AND password=#{stoPassword }
+    </select>
+
+    <update id="updateStoreKeeper" parameterType="storekeeper">
+        UPDATE storageKeeper SET name=#{name },password=#{password } WHERE identify=#{id }
+    </update>
+
+
+</mapper>
