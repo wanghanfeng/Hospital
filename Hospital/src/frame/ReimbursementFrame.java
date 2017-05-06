@@ -21,26 +21,32 @@ public class ReimbursementFrame {
 	private JFrame jFrame;
 	//菜单栏组件
 	private JPanel jPanel1;
-    private JMenuBar jMenuBar;
-    private JMenu[] jMenus = {new JMenu("外诊报销"), new JMenu("退出")};
-    private JMenuItem j1 = new JMenuItem("信息录入");
-    private JMenuItem j2 = new JMenuItem("信息查询");
-    private JMenuItem j5 = new JMenuItem("注销登陆");
-    
-    
-    private JPanel jPanel2;
-    private JPanel jPanel3; 
-    private JPanel addInfo;
-    
-    //表格组件
-    private String[][] datas = {};
-    public DefaultTableModel model;
-    private JTable table;
-    private JScrollPane scrollPane5;
-    
-    //动态组件
-    private JTextField show;
-    private JScrollPane showPane;
+	private JMenuBar jMenuBar;
+	private JMenu[] jMenus = {new JMenu("外诊报销"),new JMenu("引进设备"),new JMenu("物资更换"),new JMenu("干部报销"), new JMenu("退出")};
+	private JMenuItem j1 = new JMenuItem("信息录入");
+	private JMenuItem j2 = new JMenuItem("信息查询");
+	private JMenuItem j3 = new JMenuItem("信息录入");
+	private JMenuItem j4 = new JMenuItem("信息查询");
+	private JMenuItem j5 = new JMenuItem("信息录入");
+	private JMenuItem j6 = new JMenuItem("信息查询");
+	private JMenuItem j7 = new JMenuItem("信息录入");
+	private JMenuItem j8 = new JMenuItem("信息查询");
+	private JMenuItem j9 = new JMenuItem("注销登陆");
+
+
+	private JPanel jPanel2;
+	private JPanel jPanel3;
+	private JPanel addInfo;
+
+	//表格组件
+	private String[][] datas = {};
+	public DefaultTableModel model;
+	private JTable table;
+	private JScrollPane scrollPane5;
+
+	//动态组件
+	private JTextField show;
+	private JScrollPane showPane;
 
 	public ReimbursementFrame() {
 	}
@@ -96,8 +102,43 @@ public class ReimbursementFrame {
 				addInfo.setVisible(true);
 			}
 		});
+		j3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddImport();
+			}
+		});
+		j4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
+			}
+		});
 		j5.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddChange();
+			}
+		});
+		j6.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		j7.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddLeader();
+			}
+		});
+		j8.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		j9.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -108,7 +149,7 @@ public class ReimbursementFrame {
 
 		jFrame.setVisible(true);
 	}
-	
+
 	// 病人信息录用模块
 	private void selectLayout() {
 		//声明控件
@@ -117,7 +158,7 @@ public class ReimbursementFrame {
 		JLabel queueLabel = new JLabel("队别：");
 		JTextField queue = new JTextField();
 		JButton addInfoSubmit = new JButton("查找");
-		
+
 		//添加控件
 		addInfo.setLayout(null);
 		nameLabel.setBounds(100, 20, 40, 25);
@@ -127,8 +168,8 @@ public class ReimbursementFrame {
 		addInfoSubmit.setBounds(400, 60, 90, 25);
 		addInfo.add(nameLabel);
 		addInfo.add(name);
-		addInfo.add(queueLabel);		
-		addInfo.add(queue);		
+		addInfo.add(queueLabel);
+		addInfo.add(queue);
 		addInfo.add(addInfoSubmit);
 		addInfo.setVisible(false);
 		jPanel2.add(addInfo);
@@ -171,17 +212,23 @@ public class ReimbursementFrame {
 	}
 
 	private void layoutPanel1() {
-        jPanel1.setLayout(new BorderLayout());
-        jMenuBar = new JMenuBar();
-        jMenus[0].add(j1);
-        jMenus[0].add(j2);
-        jMenus[1].add(j5);
-        for(int i = 0; i < jMenus.length; i ++) {
-        	jMenuBar.add(jMenus[i]);
-        }
-        jPanel1.add(jMenuBar);
-    }
-	
+		jPanel1.setLayout(new BorderLayout());
+		jMenuBar = new JMenuBar();
+		jMenus[0].add(j1);
+		jMenus[0].add(j2);
+		jMenus[1].add(j3);
+		jMenus[1].add(j4);
+		jMenus[2].add(j5);
+		jMenus[2].add(j6);
+		jMenus[3].add(j7);
+		jMenus[3].add(j8);
+		jMenus[4].add(j9);
+		for(int i = 0; i < jMenus.length; i ++) {
+			jMenuBar.add(jMenus[i]);
+		}
+		jPanel1.add(jMenuBar);
+	}
+
 	private void layoutPanel2() {
 		jPanel2.setLayout(null);
 		jPanel3 = new JPanel();
@@ -190,7 +237,7 @@ public class ReimbursementFrame {
 		show = new JTextField("欢迎使用");
 		show.setEnabled(false);
 		show.setFont(new Font("黑体",Font.PLAIN,90));
-		show.setHorizontalAlignment(JTextField.CENTER);  
+		show.setHorizontalAlignment(JTextField.CENTER);
 		jPanel3.setLayout(new BorderLayout());
 		showPane = new JScrollPane();
 		showPane.setViewportView(show);
@@ -199,7 +246,7 @@ public class ReimbursementFrame {
 		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
-		
+
 		// 初始化表格
 		tablePanel.setLayout(new BorderLayout());
 		model = new DefaultTableModel(datas, StatueContent.reimbursementColname);
@@ -219,7 +266,7 @@ public class ReimbursementFrame {
 		//查数据库，展示所有财务信息
 		List<Consumables> consumablesList = consumablesAction.getAllConsumables();
 		for (Consumables consumables1 : consumablesList) {
-				model.addRow(new String[]{
+			model.addRow(new String[]{
 					consumables1.getThetime().toString(),
 					consumables1.getThename(),
 					consumables1.getUnit(),
@@ -232,7 +279,7 @@ public class ReimbursementFrame {
 					consumables1.getDoctor()
 			});
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -242,7 +289,7 @@ public class ReimbursementFrame {
 
 class AddReimbursementFrame {
 	ConsumablesAction consumablesAction;
-	private JFrame jFrame = new JFrame("财务信息录入");
+	private JFrame jFrame = new JFrame("外诊报销录入");
 
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -252,18 +299,18 @@ class AddReimbursementFrame {
 	private JLabel reasonLabel = new JLabel("外诊原因：");
 	private JLabel peopleLabel = new JLabel("审核人：");
 	private JLabel sumLabel = new JLabel("总费用：");
-	
+
 	private JLabel usedayLabel = new JLabel("住院天数：");
 	private JLabel ableLabel = new JLabel("可报销费用：");
-	
+
 	private JTextField useday = new JTextField();
 	private JTextField able = new JTextField();
-	
+
 	private JLabel hospitalLabel = new JLabel("就诊医院：");
 	private JComboBox hospital = new JComboBox<>();
 
 	private JLabel idLabel = new JLabel("队别：");
-	
+
 	private JTextField year = new JTextField();
 	private JTextField mouth = new JTextField();
 	private JTextField day = new JTextField();
@@ -276,7 +323,7 @@ class AddReimbursementFrame {
 	private JTextField doctor = new JTextField();
 
 	private JTextField id = new JTextField();
-	
+
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 	public AddReimbursementFrame(ReimbursementFrame reimbursementFrame) {
@@ -286,14 +333,14 @@ class AddReimbursementFrame {
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
-		
+
 		//第一行
 
 		nameLabel.setBounds(30, 60, 70, 25);
 		name.setBounds(100, 60, 90, 25);
 		idLabel.setBounds(220, 60, 80, 25);
 		id.setBounds(300 , 60 , 80 , 25);
-		
+
 		hospitalLabel.setBounds(30, 100, 80, 25);
 		hospital.setBounds(100 , 100 , 150 , 25);
 
@@ -302,26 +349,26 @@ class AddReimbursementFrame {
 			hospital.addItem(5);
 		}
 
-		
+
 		reasonLabel.setBounds(30, 140, 80, 25);
 		reason.setBounds(100,140,150,25);
-		
+
 		peopleLabel.setBounds(30, 180, 80, 25);
 		people.setBounds(100,180,80,25);
 		sumLabel.setBounds(190, 180, 100, 25);
 		sum.setBounds(290 , 180 , 80 , 25);
-		
+
 		usedayLabel.setBounds(30, 220, 80, 25);
 		useday.setBounds(100,220,80,25);
 		ableLabel.setBounds(190, 220, 100, 25);
 		able.setBounds(290 , 220 , 80 , 25);
-		
+
 		doctorLabel.setBounds(30, 260, 80, 25);
 		doctor.setBounds(100,260,80,25);
-		
+
 		submit.setBounds(70 , 300 , 90 , 25);
 		cancel.setBounds(170 , 300 , 90 , 25);
-		
+
 		jFrame.add(nameLabel);
 		jFrame.add(name);
 		jFrame.add(reasonLabel);
@@ -345,7 +392,7 @@ class AddReimbursementFrame {
 		jFrame.add(id);
 		jFrame.add(doctorLabel);
 		jFrame.add(doctor);
-		
+
 		submit.addActionListener(new ActionListener() {
 			//添加财务信息
 			@Override
@@ -448,9 +495,9 @@ class AddReimbursementFrame {
 				jFrame.dispose();
 			}
 		});
-		
+
 		cancel.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jFrame.dispose();
@@ -458,5 +505,265 @@ class AddReimbursementFrame {
 		});
 
 		jFrame.setVisible(true);
+	}
+}
+
+//引进设备信息录入
+class AddImport {
+
+	private JFrame jFrame = new JFrame();
+
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("设备名称：");
+	private JTextField name = new JTextField();
+
+	private JLabel producerLabel = new JLabel("生产商：");
+	private JTextField producer = new JTextField();
+
+	private JLabel typeLabel = new JLabel("类型：");
+	private JTextField type = new JTextField();
+
+	private JLabel valueLabel = new JLabel("市场价格：");
+	private JTextField value = new JTextField();
+
+	private JLabel purchasingLabel = new JLabel("进价：");
+	private JTextField purchasing = new JTextField();
+
+	private JLabel approveLabel = new JLabel("审批人：");
+	private JTextField approve = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddImport() {
+		jFrame.setTitle("引进设备录入");
+		jFrame.setSize(450, 200);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+		producerLabel.setBounds(220, 20, 80, 25);
+		producer.setBounds(280, 20, 90, 25);
+
+		typeLabel.setBounds(30, 60, 80, 25);
+		type.setBounds(110, 60, 90, 25);
+		valueLabel.setBounds(220, 60, 80, 25);
+		value.setBounds(280, 60, 90, 25);
+
+		purchasingLabel.setBounds(30, 100, 80, 25);
+		purchasing.setBounds(110, 100, 90, 25);
+		approveLabel.setBounds(220, 100, 80, 25);
+		approve.setBounds(280, 100, 90, 25);
+
+		submit.setBounds(100, 140, 90, 25);
+		cancel.setBounds(200, 140, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(producerLabel);
+		jFrame.add(producer);
+		jFrame.add(typeLabel);
+		jFrame.add(type);
+		jFrame.add(valueLabel);
+		jFrame.add(value);
+		jFrame.add(purchasingLabel);
+		jFrame.add(purchasing);
+		jFrame.add(approveLabel);
+		jFrame.add(approve);
+		jFrame.add(submit);
+		jFrame.add(cancel);
+		jFrame.setVisible(true);
+	}
+
+}
+
+//物资更换信息录入
+class AddChange{
+	private JFrame jFrame = new JFrame();
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("物资名称：");
+	private JTextField name = new JTextField();
+
+	private JLabel purchasingLabel = new JLabel("进价：");
+	private JTextField purchasing = new JTextField();
+
+	private JLabel approveLabel = new JLabel("审批人：");
+	private JTextField approve = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddChange() {
+		jFrame.setTitle("物资更换录入");
+		jFrame.setSize(450, 180);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+
+		purchasingLabel.setBounds(30, 60, 80, 25);
+		purchasing.setBounds(110, 60, 90, 25);
+		approveLabel.setBounds(220, 60, 80, 25);
+		approve.setBounds(280, 60, 90, 25);
+
+		submit.setBounds(100, 100, 90, 25);
+		cancel.setBounds(200, 100, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			}
+		});
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(purchasingLabel);
+		jFrame.add(purchasing);
+		jFrame.add(approveLabel);
+		jFrame.add(approve);
+		jFrame.add(submit);
+		jFrame.add(cancel);
+
+		jFrame.setVisible(true);
+	}
+}
+
+//干部报销信息录入
+class AddLeader {
+	private JFrame jFrame = new JFrame();
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("姓名：");
+	private JTextField name = new JTextField();
+
+	private JLabel sexLabel = new JLabel("性别：");
+	private ButtonGroup buttonGroup1 = new ButtonGroup();
+	private JRadioButton man = new JRadioButton("男");
+	private JRadioButton woman = new JRadioButton("女");
+
+	private JLabel unitLabel = new JLabel("单位：");
+	private JTextField unit = new JTextField();
+
+	private JLabel percentageLabel = new JLabel("百分比");
+	private JTextField percentage = new JTextField();
+
+	private JLabel hospitalLabel = new JLabel("就诊医院");
+	private JTextField hosptial = new JTextField();
+
+	private JLabel approveLabel = new JLabel("审批人");
+	private JTextField approve = new JTextField();
+
+	private JLabel reasonLabel = new JLabel("报销原因");
+	private JTextField reason = new JTextField();
+
+	private JLabel militaryLabel = new JLabel("军衔：");
+	private JTextField military = new JTextField();
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddLeader() {
+		jFrame.setTitle("引进设备录入");
+		jFrame.setSize(450, 320);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+		unitLabel.setBounds(220, 20, 80, 25);
+		unit.setBounds(280, 20, 90, 25);
+
+		sexLabel.setBounds(30, 60, 80, 25);
+		man.setBounds(100, 60, 50, 25);
+		woman.setBounds(150, 60, 50, 25);
+		buttonGroup1.add(man);
+		buttonGroup1.add(woman);
+
+		militaryLabel.setBounds(30, 100, 80, 25);
+		military.setBounds(110, 100, 90, 25);
+		percentageLabel.setBounds(220, 100, 80, 25);
+		percentage.setBounds(280, 100, 90, 25);
+
+		hospitalLabel.setBounds(30, 140, 80, 25);
+		hosptial.setBounds(110, 140, 90, 25);
+		approveLabel.setBounds(220, 140, 80, 25);
+		approve.setBounds(280, 140, 90, 25);
+
+		reasonLabel.setBounds(30, 180, 80, 25);
+		reason.setBounds(110, 180, 150, 25);
+
+		submit.setBounds(100, 220, 90, 25);
+		cancel.setBounds(200, 220, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			}
+		});
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(militaryLabel);
+		jFrame.add(military);
+		jFrame.add(unitLabel);
+		jFrame.add(unit);
+		jFrame.add(woman);
+		jFrame.add(man);
+		jFrame.add(percentageLabel);
+		jFrame.add(percentage);
+		jFrame.add(approveLabel);
+		jFrame.add(approve);
+		jFrame.add(reasonLabel);
+		jFrame.add(reason);
+		jFrame.add(sexLabel);
+		jFrame.add(hospitalLabel);
+		jFrame.add(hosptial);
+		jFrame.add(submit);
+		jFrame.add(cancel);
+		jFrame.setVisible(true);
+
 	}
 }

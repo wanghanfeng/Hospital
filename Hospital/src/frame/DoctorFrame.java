@@ -32,29 +32,29 @@ public class DoctorFrame {
 
 	//菜单栏组件
 	private JPanel jPanel1;
-    private JMenuBar jMenuBar;
-    private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") , new JMenu("退出")};
-    private JMenuItem j1 = new JMenuItem("病人信息录入");
-    private JMenuItem j2 = new JMenuItem("病人信息查询");
-    private JMenuItem j3 = new JMenuItem("处方信息录入");
-    private JMenuItem j4 = new JMenuItem("处方信息查询");
-    private JMenuItem j5 = new JMenuItem("注销登陆");
-    
-    
-    private JPanel jPanel2;
-    private JPanel jPanel3; 
-    private JPanel addPatient;
-    private JPanel addMedicint;
-    
-    //表格组件
-    public String[][] datas = {};
-    public DefaultTableModel model;
-    private JTable table;
-    private JScrollPane scrollPane5;
-    
-    //动态组件
-    private JTextField show;
-    private JScrollPane showPane;
+	private JMenuBar jMenuBar;
+	private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") , new JMenu("退出")};
+	private JMenuItem j1 = new JMenuItem("病人信息录入");
+	private JMenuItem j2 = new JMenuItem("病人信息查询");
+	private JMenuItem j3 = new JMenuItem("处方信息录入");
+	private JMenuItem j4 = new JMenuItem("处方信息查询");
+	private JMenuItem j5 = new JMenuItem("注销登陆");
+
+
+	private JPanel jPanel2;
+	private JPanel jPanel3;
+	private JPanel addPatient;
+	private JPanel addMedicint;
+
+	//表格组件
+	public String[][] datas = {};
+	public DefaultTableModel model;
+	private JTable table;
+	private JScrollPane scrollPane5;
+
+	//动态组件
+	private JTextField show;
+	private JScrollPane showPane;
 
 	public DoctorFrame() {
 	}
@@ -94,7 +94,7 @@ public class DoctorFrame {
 		addPatient = new JPanel();
 		addPatient.setBounds(0, 0, StatueContent.main_width, 100);
 		addPatientLayout(new DoctorFrame(model));
-		
+
 		addMedicint = new JPanel();
 		addMedicint.setBounds(0, 0, StatueContent.main_width, 100);
 		addMedicintLayout(new DoctorFrame(model));
@@ -150,7 +150,7 @@ public class DoctorFrame {
 
 
 
-	
+
 	// 病人信息录用模块
 	private void addPatientLayout(DoctorFrame doctorFrame) {
 		//声明控件
@@ -167,7 +167,7 @@ public class DoctorFrame {
 		JLabel unitLabel = new JLabel("单位：");
 		JTextField unit = new JTextField();
 		JButton addPatientSubmit = new JButton("查找");
-		
+
 		//添加控件
 		addPatient.setLayout(null);
 		nameLabel.setBounds(100, 20, 40, 25);
@@ -181,10 +181,10 @@ public class DoctorFrame {
 		addPatient.add(nameLabel);
 		addPatient.add(name);
 		addPatient.add(sexLabel);
-		addPatient.add(man);		
-		addPatient.add(woman);		
-		addPatient.add(unitLabel);		
-		addPatient.add(unit);		
+		addPatient.add(man);
+		addPatient.add(woman);
+		addPatient.add(unitLabel);
+		addPatient.add(unit);
 		addPatient.add(addPatientSubmit);
 		addPatient.setVisible(false);
 		jPanel2.add(addPatient);
@@ -304,19 +304,19 @@ public class DoctorFrame {
 	}
 
 	private void layoutPanel1() {
-        jPanel1.setLayout(new BorderLayout());
-        jMenuBar = new JMenuBar();
-        jMenus[0].add(j1);
-        jMenus[0].add(j2);
-        jMenus[1].add(j3);
-        jMenus[1].add(j4);
-        jMenus[2].add(j5);
-        for(int i = 0; i < jMenus.length; i ++) {
-        	jMenuBar.add(jMenus[i]);
-        }
-        jPanel1.add(jMenuBar);
-    }
-	
+		jPanel1.setLayout(new BorderLayout());
+		jMenuBar = new JMenuBar();
+		jMenus[0].add(j1);
+		jMenus[0].add(j2);
+		jMenus[1].add(j3);
+		jMenus[1].add(j4);
+		jMenus[2].add(j5);
+		for(int i = 0; i < jMenus.length; i ++) {
+			jMenuBar.add(jMenus[i]);
+		}
+		jPanel1.add(jMenuBar);
+	}
+
 	private void layoutPanel2() {
 		jPanel2.setLayout(null);
 		jPanel3 = new JPanel();
@@ -325,7 +325,7 @@ public class DoctorFrame {
 		show = new JTextField("欢迎使用");
 		show.setEnabled(false);
 		show.setFont(new Font("黑体",Font.PLAIN,90));
-		show.setHorizontalAlignment(JTextField.CENTER);  
+		show.setHorizontalAlignment(JTextField.CENTER);
 		jPanel3.setLayout(new BorderLayout());
 		showPane = new JScrollPane();
 		showPane.setViewportView(show);
@@ -334,7 +334,7 @@ public class DoctorFrame {
 		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
-		
+
 		// 初始化表格
 		tablePanel.setLayout(new BorderLayout());
 		model = new DefaultTableModel(datas, StatueContent.doctorcolname1);
@@ -372,29 +372,31 @@ public class DoctorFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					int row = ((JTable) e.getSource()).rowAtPoint(e  
-                            .getPoint());  
-                    int col = ((JTable) e.getSource())  
-                            .columnAtPoint(e.getPoint());  
-                    String cellValue = (String) (table  
-                            .getValueAt(row, col));
-                    System.out.println(cellValue);
-                    //展示图片 默认大小 可拖拽放大或缩小
-                    PictureFrame r = new PictureFrame(500, 500);
-                    r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
+					int row = ((JTable) e.getSource()).rowAtPoint(e
+							.getPoint());
+					int col = ((JTable) e.getSource())
+							.columnAtPoint(e.getPoint());
+					String cellValue = (String) (table
+							.getValueAt(row, col));
+					System.out.println(cellValue);
+					//展示图片 默认大小 可拖拽放大或缩小
+					if (col == 6) {
+						PictureFrame r = new PictureFrame(500, 500);
+						r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
+					}
 				}
 			}
 
 			@Override
-			public void mousePressed(MouseEvent e) {	
+			public void mousePressed(MouseEvent e) {
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {	
+			public void mouseReleased(MouseEvent e) {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {	
+			public void mouseEntered(MouseEvent e) {
 			}
 
 			@Override
@@ -411,16 +413,16 @@ class AddPatient{
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
-	
+
 	private String pictureURl;
-	
+
 	private JLabel time = new JLabel("时间：");
 	private JLabel unitLabel = new JLabel("单位：");
 	private JLabel ageLabel = new JLabel("年龄：");
 	private JLabel contentLabel = new JLabel("病情：");
 	private JLabel doctorLabel = new JLabel("医生：");
 	private JLabel pictureLabel = new JLabel("图影资料:");
-	
+
 	private JTextField year = new JTextField();
 	private JTextField mouth = new JTextField();
 	private JTextField day = new JTextField();
@@ -453,40 +455,40 @@ class AddPatient{
 
 		nameLabel.setBounds(30,60,40,25);
 		name.setBounds(70,60,150,25);
-		
+
 		sexLabel.setBounds(30, 90, 40, 25);
 		man.setBounds(70,90,50,25);
 		woman.setBounds(120,90,50,25);
 		buttonGroup1.add(man);
 		buttonGroup1.add(woman);
-		
+
 		unitLabel.setBounds(30, 130, 40, 25);
 		unit.setBounds(70,130,150,25);
-		
+
 		ageLabel.setBounds(30, 170, 40, 25);
 		age.setBounds(70,170,80,25);
 		chuzhen.setBounds(180,170,80,25);
 		fuzhen.setBounds(260,170,80,25);
 		buttonGroup2.add(chuzhen);
 		buttonGroup2.add(fuzhen);
-		
+
 		doctorLabel.setBounds(30, 210, 40, 25);
 		for(int i = 0;i < 5; i++) {
 			doctor.addItem(i);
 		}
 		doctor.setBounds(70 , 210 , 150,25);
-		
+
 		contentLabel.setBounds(30, 250, 40, 25);
 		content.setBounds(70,250,310,70);
-		
+
 		pictureLabel.setBounds(30, 360, 80, 25);
 		pictureTF.setBounds(110, 360, 310, 25 );
 		selectBtn.setBounds(440, 360, 80, 25);
 		pictureTF.setText("请将图片拖拽至此窗口上传");
-		
+
 		submit.setBounds(70 , 475 , 90 , 25);
 		cancel.setBounds(170 , 475 , 90 , 25);
-		
+
 //		jFrame.add(time);
 //		jFrame.add(yearLabel);
 //		jFrame.add(mouthLabel);
@@ -517,36 +519,36 @@ class AddPatient{
 
 		man.doClick();
 		chuzhen.doClick();
-		
+
 		new DropTarget(jFrame, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter()
-        {
-            @Override
-            public void drop(DropTargetDropEvent dtde)//重写适配器的drop方法
-            {
-                try
-                {
-                    if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))//如果拖入的文件格式受支持
-                    {
-                        dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);//接收拖拽来的数据
-                        List<File> list =  (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
-                        pictureURl = list.get(0).getAbsolutePath();
-                        
+		{
+			@Override
+			public void drop(DropTargetDropEvent dtde)//重写适配器的drop方法
+			{
+				try
+				{
+					if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))//如果拖入的文件格式受支持
+					{
+						dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);//接收拖拽来的数据
+						List<File> list =  (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+						pictureURl = list.get(0).getAbsolutePath();
+
 //                        JOptionPane.showMessageDialog(null, pictureURl);
-                        pictureTF.setText(pictureURl);
-                        dtde.dropComplete(true);//指示拖拽操作已完成
-                        new FileUploader(pictureURl);
-                    }
-                    else
-                    {
-                        dtde.rejectDrop();//否则拒绝拖拽来的数据
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
+						pictureTF.setText(pictureURl);
+						dtde.dropComplete(true);//指示拖拽操作已完成
+						new FileUploader(pictureURl);
+					}
+					else
+					{
+						dtde.rejectDrop();//否则拒绝拖拽来的数据
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
 
 		submit.addActionListener(new ActionListener() {
 			//添加病人
@@ -595,7 +597,7 @@ class AddPatient{
 					JOptionPane.showMessageDialog(null,"年龄必须是整数，请检查","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
+
 				//获取图片在网络上的url地址
 				String detail_url = parseToURL(pictureTF.getText());
 				System.out.println(detail_url);
@@ -643,15 +645,15 @@ class AddPatient{
 				jFrame.dispose();
 			}
 		});
-		
+
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jFrame.dispose();
 			}
 		});
-		
-		
+
+
 
 		jFrame.setVisible(true);
 	}
@@ -659,8 +661,12 @@ class AddPatient{
 		if (filePath.length() == 0) {
 			return "";
 		}
-		String[] paraArr = filePath.split("/");
-		String url = StatueContent.server_schem + paraArr[paraArr.length - 1];
+		String temp[] = filePath.split("\\\\");
+		if (temp.length > 1) {
+			filePath = temp[temp.length - 1];
+		}
+		System.out.println(filePath);
+		String url = StatueContent.server_schem + filePath;
 		return url;
 	}
 }
@@ -675,7 +681,7 @@ class AddMedicine{
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
-	
+
 	private JLabel nameLabel = new JLabel("患者姓名：");
 	private JComboBox name = new JComboBox<>();
 
@@ -685,22 +691,22 @@ class AddMedicine{
 	private JLabel unitLabel = new JLabel("患者单位：");
 	private JLabel numLabel = new JLabel("数量：");
 	private JLabel usenumLabel = new JLabel("用量：");
-	
+
 	private JLabel usedayLabel = new JLabel("用药天数：");
 	private JLabel pinlvLabel = new JLabel("用药频率：");
-	
+
 	private JTextField useday = new JTextField();
 	private JTextField pinlv = new JTextField();
 
 	private JLabel idLabel = new JLabel("音位码：");
-	
+
 	private JTextField year = new JTextField();
 	private JTextField mouth = new JTextField();
 	private JTextField day = new JTextField();
 	private JTextField num = new JTextField();
 	private JTextField usenum = new JTextField();
 	private JTextField unit = new JTextField();
-	
+
 	private JLabel disease = new JLabel("慢性病：");
 	private ButtonGroup buttonGroup1 = new ButtonGroup();
 	private JRadioButton yesDisease = new JRadioButton("是");
@@ -713,7 +719,7 @@ class AddMedicine{
 	private JTextField doctor = new JTextField();
 
 	private JTextField id = new JTextField();
-	
+
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 	public AddMedicine(DoctorFrame doctorFrame) {
@@ -722,7 +728,7 @@ class AddMedicine{
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
-		
+
 		//第一行
 		nameLabel.setBounds(30, 60, 70, 25);
 		name.setBounds(100, 60, 90, 25);
@@ -734,7 +740,7 @@ class AddMedicine{
 
 		idLabel.setBounds(220, 60, 80, 25);
 		id.setBounds(300 , 60 , 80 , 25);
-		
+
 		medicineLabel.setBounds(30, 100, 80, 25);
 		medicine.setBounds(100 , 100 , 150 , 25);
 		List<Drugs> drugses = drugsAction.getAllDrugs();
@@ -748,12 +754,12 @@ class AddMedicine{
 		num.setBounds(100,180,80,25);
 		usenumLabel.setBounds(190, 180, 70, 25);
 		usenum.setBounds(260 , 180 , 80 , 25);
-		
+
 		usedayLabel.setBounds(30, 220, 80, 25);
 		useday.setBounds(100,220,80,25);
 		pinlvLabel.setBounds(190, 220, 70, 25);
 		pinlv.setBounds(260 , 220 , 80 , 25);
-		
+
 		disease.setBounds(30, 260, 80, 25);
 		yesDisease.setBounds(100,260,50,25);
 		noDisesse.setBounds(150,260,50,25);
@@ -763,13 +769,13 @@ class AddMedicine{
 
 		noteLabel.setBounds(30, 300, 80, 25);
 		note.setBounds(100,300,150,25);
-		
+
 		doctorLabel.setBounds(30, 340, 80, 25);
 		doctor.setBounds(100,340,80,25);
-		
+
 		submit.setBounds(70 , 380 , 90 , 25);
 		cancel.setBounds(170 , 380 , 90 , 25);
-		
+
 //		jFrame.add(time);
 //		jFrame.add(yearLabel);
 //		jFrame.add(mouthLabel);
@@ -802,7 +808,7 @@ class AddMedicine{
 		jFrame.add(note);
 		jFrame.add(doctorLabel);
 		jFrame.add(doctor);
-		
+
 		submit.addActionListener(new ActionListener() {
 
 			//添加处方!
@@ -924,9 +930,9 @@ class AddMedicine{
 				jFrame.dispose();
 			}
 		});
-		
+
 		cancel.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jFrame.dispose();
@@ -936,4 +942,3 @@ class AddMedicine{
 		jFrame.setVisible(true);
 	}
 }
-

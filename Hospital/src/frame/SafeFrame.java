@@ -24,32 +24,36 @@ public class SafeFrame {
 	HealthScreenAction healthScreenAction;
 
 	private JFrame jFrame;
-	
+
 	//菜单栏组件
 	private JPanel jPanel1;
-    private JMenuBar jMenuBar;
-    private JMenu[] jMenus = {new JMenu("重点人员") , new JMenu("卫生排查") , new JMenu("退出")};
-    private JMenuItem j1 = new JMenuItem("信息录入");
-    private JMenuItem j2 = new JMenuItem("信息查询");
-    private JMenuItem j3 = new JMenuItem("信息录入");
-    private JMenuItem j4 = new JMenuItem("信息查询");
-    private JMenuItem j5 = new JMenuItem("注销登陆");
-    
-    
-    private JPanel jPanel2;
-    private JPanel jPanel3; 
-    private JPanel addPeople;
-    private JPanel addInfo;
-    
-    //表格组件
-    private String[][] datas = {};
-    public DefaultTableModel model;
-    private JTable table;
-    private JScrollPane scrollPane5;
-    
-    //动态组件
-    private JTextField show;
-    private JScrollPane showPane;
+	private JMenuBar jMenuBar;
+	private JMenu[] jMenus = {new JMenu("重点人员") , new JMenu("卫生排查") ,new JMenu("预防工作"),new JMenu("专家讲座"), new JMenu("退出")};
+	private JMenuItem j1 = new JMenuItem("信息录入");
+	private JMenuItem j2 = new JMenuItem("信息查询");
+	private JMenuItem j3 = new JMenuItem("信息录入");
+	private JMenuItem j4 = new JMenuItem("信息查询");
+	private JMenuItem j5 = new JMenuItem("信息录入");
+	private JMenuItem j6 = new JMenuItem("信息查询");
+	private JMenuItem j7 = new JMenuItem("信息录入");
+	private JMenuItem j8 = new JMenuItem("信息查询");
+	private JMenuItem j9 = new JMenuItem("注销登陆");
+
+
+	private JPanel jPanel2;
+	private JPanel jPanel3;
+	private JPanel addPeople;
+	private JPanel addInfo;
+
+	//表格组件
+	private String[][] datas = {};
+	public DefaultTableModel model;
+	private JTable table;
+	private JScrollPane scrollPane5;
+
+	//动态组件
+	private JTextField show;
+	private JScrollPane showPane;
 
 	public SafeFrame() {
 	}
@@ -86,7 +90,7 @@ public class SafeFrame {
 		addPeople = new JPanel();
 		addPeople.setBounds(0, 0, StatueContent.main_width, 100);
 		addPeopleLayout();
-		
+
 		addInfo = new JPanel();
 		addInfo.setBounds(0, 0, StatueContent.main_width, 100);
 		addInfoLayout();
@@ -126,6 +130,31 @@ public class SafeFrame {
 			}
 		});
 		j5.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddPrevention();
+			}
+		});
+		j6.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		j7.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddSpecialist();
+			}
+		});
+		j8.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		j9.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -136,7 +165,7 @@ public class SafeFrame {
 
 		jFrame.setVisible(true);
 	}
-	
+
 	// 病人信息录用模块
 	private void addPeopleLayout() {
 		//声明控件
@@ -145,7 +174,7 @@ public class SafeFrame {
 		JLabel unitLabel = new JLabel("单位：");
 		JTextField unit = new JTextField();
 		JButton addPatientSubmit = new JButton("查找");
-		
+
 		//添加控件
 		addPeople.setLayout(null);
 		nameLabel.setBounds(100, 20, 40, 25);
@@ -155,8 +184,8 @@ public class SafeFrame {
 		addPatientSubmit.setBounds(400, 60, 90, 25);
 		addPeople.add(nameLabel);
 		addPeople.add(name);
-		addPeople.add(unitLabel);		
-		addPeople.add(unit);		
+		addPeople.add(unitLabel);
+		addPeople.add(unit);
 		addPeople.add(addPatientSubmit);
 		addPeople.setVisible(false);
 		jPanel2.add(addPeople);
@@ -209,10 +238,10 @@ public class SafeFrame {
 
 		// 添加控件
 		addInfo.setLayout(null);
-		
+
 		unitLabel.setBounds(100, 20, 80, 25);
 		unit.setBounds(180 ,20 , 200 , 25);
-		
+
 		addMedicintSubmit.setBounds(440, 60, 90, 25);
 		addInfo.add(unitLabel);
 		addInfo.add(unit);
@@ -284,19 +313,23 @@ public class SafeFrame {
 	}
 
 	private void layoutPanel1() {
-        jPanel1.setLayout(new BorderLayout());
-        jMenuBar = new JMenuBar();
-        jMenus[0].add(j1);
-        jMenus[0].add(j2);
-        jMenus[1].add(j3);
-        jMenus[1].add(j4);
-        jMenus[2].add(j5);
-        for(int i = 0; i < jMenus.length; i ++) {
-        	jMenuBar.add(jMenus[i]);
-        }
-        jPanel1.add(jMenuBar);
-    }
-	
+		jPanel1.setLayout(new BorderLayout());
+		jMenuBar = new JMenuBar();
+		jMenus[0].add(j1);
+		jMenus[0].add(j2);
+		jMenus[1].add(j3);
+		jMenus[1].add(j4);
+		jMenus[2].add(j5);
+		jMenus[2].add(j6);
+		jMenus[3].add(j7);
+		jMenus[3].add(j8);
+		jMenus[4].add(j9);
+		for(int i = 0; i < jMenus.length; i ++) {
+			jMenuBar.add(jMenus[i]);
+		}
+		jPanel1.add(jMenuBar);
+	}
+
 	private void layoutPanel2() {
 		jPanel2.setLayout(null);
 		jPanel3 = new JPanel();
@@ -305,7 +338,7 @@ public class SafeFrame {
 		show = new JTextField("欢迎使用");
 		show.setEnabled(false);
 		show.setFont(new Font("黑体",Font.PLAIN,90));
-		show.setHorizontalAlignment(JTextField.CENTER);  
+		show.setHorizontalAlignment(JTextField.CENTER);
 		jPanel3.setLayout(new BorderLayout());
 		showPane = new JScrollPane();
 		showPane.setViewportView(show);
@@ -314,7 +347,7 @@ public class SafeFrame {
 		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
-		
+
 		// 初始化表格
 		tablePanel.setLayout(new BorderLayout());
 		model = new DefaultTableModel(datas, StatueContent.safeColname1);
@@ -353,7 +386,7 @@ public class SafeFrame {
 
 
 	}
-	
+
 	public static void main(String[] args) {
 		new SafeFrame().init();
 	}
@@ -370,7 +403,7 @@ class AddPeopleFrame {
 	private JLabel ageLabel = new JLabel("年龄：");
 	private JLabel contentLabel = new JLabel("病情：");
 	private JLabel doctorLabel = new JLabel("值班医生：");
-	
+
 	private JLabel nameLabel = new JLabel("姓名：");
 	private JTextField name = new JTextField();
 	private JLabel sexLabel = new JLabel("性别：");
@@ -381,17 +414,17 @@ class AddPeopleFrame {
 	private JTextField age = new JTextField();
 	private JTextArea content = new JTextArea();
 	private JTextField doctor = new JTextField();
-	
+
 	private JLabel temperatureLabel = new JLabel("体温");
-	private JTextField tempterature = new JTextField(); 
+	private JTextField tempterature = new JTextField();
 	private JLabel geliLabel = new JLabel("隔离时间");
 	private JTextField geli = new JTextField();
-	
+
 	private JLabel medicineNameLabel = new JLabel("用药名称");
 	private JTextField medicineName = new JTextField();
 	private JLabel medNumLabel = new JLabel("用药数量");
 	private JTextField medNum = new JTextField();
-	
+
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
@@ -426,19 +459,19 @@ class AddPeopleFrame {
 		tempterature.setBounds(100 , 250 , 80 , 25);
 		geliLabel.setBounds(220, 250, 80, 25);
 		geli.setBounds(300 , 250 , 80 , 25);
-		
+
 		medicineNameLabel.setBounds(30, 290, 80, 25);
 		medicineName.setBounds(100 , 290 , 80 , 25);
 		medNumLabel.setBounds(220, 290, 80, 25);
 		medNum.setBounds(300 , 290 , 80 , 25);
-		
+
 		contentLabel.setBounds(30, 330, 80, 25);
 		content.setBounds(100, 330, 310, 70);
-		
+
 		submit.setBounds(100, 415, 90, 25);
 		cancel.setBounds(200, 415, 90, 25);
 
-		
+
 		jFrame.add(unitLabel);
 		jFrame.add(ageLabel);
 		jFrame.add(contentLabel);
@@ -587,6 +620,7 @@ class AddPeopleFrame {
 }
 
 
+//卫生排查
 class AddInfoFrame {
 	HealthScreenAction healthScreenAction;
 
@@ -595,21 +629,21 @@ class AddInfoFrame {
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
 	private JLabel unitLabel = new JLabel("单位：");
-	
+
 	private JTextField unit = new JTextField();
-	
+
 	private JLabel kindLabel = new JLabel("病情种类");
-	private JTextField kind = new JTextField(); 
+	private JTextField kind = new JTextField();
 	private JLabel peopleLabel = new JLabel("调查人");
 	private JTextField people = new JTextField();
-	
+
 	private JLabel yiqingLabel = new JLabel("有无重大疫情");
-	private JTextField yiqing = new JTextField(); 
-	
+	private JTextField yiqing = new JTextField();
+
 	private JLabel peopleNumLabel = new JLabel("非战斗减员人数");
 	private JTextField peopleNum = new JTextField();
-	
-	
+
+
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
@@ -629,17 +663,17 @@ class AddInfoFrame {
 		kind.setBounds(100 , 100 , 80 , 25);
 		peopleLabel.setBounds(220, 100, 80, 25);
 		people.setBounds(300 , 100 , 80 , 25);
-		
+
 		yiqingLabel.setBounds(30, 140, 100, 25);
 		yiqing.setBounds(130, 140, 150, 25);
-		
+
 		peopleNumLabel.setBounds(30, 180, 100, 25);
 		peopleNum.setBounds(130, 180, 150, 25);
-		
+
 		submit.setBounds(100, 220, 90, 25);
 		cancel.setBounds(200, 220, 90, 25);
 
-		
+
 		jFrame.add(unitLabel);
 		jFrame.add(unit);
 		jFrame.add(kindLabel);
@@ -650,8 +684,8 @@ class AddInfoFrame {
 		jFrame.add(yiqing);
 		jFrame.add(peopleNumLabel);
 		jFrame.add(peopleNum);
-		
-		
+
+
 		jFrame.add(submit);
 		jFrame.add(cancel);
 
@@ -673,8 +707,8 @@ class AddInfoFrame {
 
 				//验证空值
 				if (theName.trim().isEmpty() &&
-							theKind.trim().isEmpty() && theType.trim().isEmpty() &&
-								theDie.trim().isEmpty() && theUnit.trim().isEmpty()){
+						theKind.trim().isEmpty() && theType.trim().isEmpty() &&
+						theDie.trim().isEmpty() && theUnit.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -735,6 +769,181 @@ class AddInfoFrame {
 				jFrame.dispose();
 			}
 		});
+
+		jFrame.setVisible(true);
+	}
+}
+
+//预防工作
+class AddPrevention {
+	private JFrame jFrame = new JFrame("预防工作信息录入");
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("姓名：");
+	private JTextField name = new JTextField();
+
+	private JLabel leaderLabel = new JLabel("值班领导");
+	private JTextField leader = new JTextField();
+
+	private JLabel placeLabel = new JLabel("地点");
+	private JTextField place = new JTextField();
+
+	private JLabel materialsNameLabel = new JLabel("发放物资名称");
+	private JTextField materialName = new JTextField();
+
+	private JLabel materialsNumLabel = new JLabel("发放物资数量");
+	private JTextField materialNum = new JTextField();
+
+	private JLabel workLabel = new JLabel("具体工作");
+	private JTextField work = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddPrevention() {
+		jFrame.setTitle("预防工作信息录入");
+		jFrame.setSize(450, 250);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+		leaderLabel.setBounds(200, 20, 80, 25);
+		leader.setBounds(280, 20, 90, 25);
+
+		placeLabel.setBounds(30, 60, 80, 25);
+		place.setBounds(110,60,90,25);
+
+		materialsNameLabel.setBounds(30, 100, 80, 25);
+		materialName.setBounds(110, 100, 90, 25);
+		materialsNumLabel.setBounds(200, 100, 80, 25);
+		materialNum.setBounds(280, 100, 90, 25);
+
+		workLabel.setBounds(30, 140, 80, 25);
+		work.setBounds(110,140,90,25);
+
+		submit.setBounds(100, 180, 90, 25);
+		cancel.setBounds(200, 180, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			}
+		});
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(leaderLabel);
+		jFrame.add(leader);
+		jFrame.add(placeLabel);
+		jFrame.add(place);
+		jFrame.add(materialsNameLabel);
+		jFrame.add(materialName);
+		jFrame.add(materialsNumLabel);
+		jFrame.add(materialNum);
+		jFrame.add(workLabel);
+		jFrame.add(work);
+		jFrame.add(submit);
+		jFrame.add(cancel);
+		jFrame.setVisible(true);
+	}
+}
+
+//专家讲座
+class AddSpecialist {
+	private JFrame jFrame = new JFrame("专家讲座信息录入");
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("姓名：");
+	private JTextField name = new JTextField();
+
+	private JLabel unitLabel = new JLabel("单位");
+	private JTextField unit = new JTextField();
+
+	private JLabel majorLabel = new JLabel("专业");
+	private JTextField major = new JTextField();
+
+	private JLabel endTimeLabel = new JLabel("截止时间");
+	private JLabel yearLabel = new JLabel("年");
+	private JLabel mouthLabel = new JLabel("月");
+	private JLabel dayLabel = new JLabel("日");
+	private JTextField year = new JTextField();
+	private JTextField mouth = new JTextField();
+	private JTextField day = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddSpecialist() {
+		jFrame.setTitle("专家讲座信息录入");
+		jFrame.setSize(450, 200);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+		majorLabel.setBounds(220, 20, 80, 25);
+		major.setBounds(280, 20, 90, 25);
+
+		unitLabel.setBounds(30, 60, 80, 25);
+		unit.setBounds(110,60,90,25);
+
+		endTimeLabel.setBounds(30, 100, 80, 25);
+		year.setBounds(110 ,100 , 80 , 25);
+		yearLabel.setBounds(190, 100, 15, 25);
+		mouth.setBounds(205 , 100,80,25);
+		mouthLabel.setBounds(285, 100, 15, 25);
+		day.setBounds(300,100,80,25);
+		dayLabel.setBounds(380, 100, 15, 25);
+
+
+		submit.setBounds(100, 140, 90, 25);
+		cancel.setBounds(200, 140, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			}
+		});
+
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(majorLabel);
+		jFrame.add(major);
+		jFrame.add(unitLabel);
+		jFrame.add(unit);
+		jFrame.add(endTimeLabel);
+		jFrame.add(yearLabel);
+		jFrame.add(year);
+		jFrame.add(mouthLabel);
+		jFrame.add(mouth);
+		jFrame.add(dayLabel);
+		jFrame.add(day);
+		jFrame.add(submit);
+		jFrame.add(cancel);
 
 		jFrame.setVisible(true);
 	}
