@@ -672,7 +672,7 @@ class AddPatient{
 		}
 		String[] paraArr = filePath.split("/");
 		if (paraArr.length == 1) {
-			paraArr = filePath.split("\\");
+			paraArr = filePath.split("/");
 		}
 		String url = StatueContent.server_schem + paraArr[paraArr.length - 1];
 		return url;
