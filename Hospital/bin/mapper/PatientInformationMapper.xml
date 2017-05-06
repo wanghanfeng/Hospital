@@ -13,13 +13,12 @@
         <result property="situation" column="situation"/>
         <result property="doctor" column="doctor"/>
         <result property="time" column="time"/>
+        <result property="detail_url" column="detail_url"/>
     </resultMap>
 
     <!-- 添加病人 -->
-    <insert id="addPatientInformation" parameterType="patientInformation">
-        INSERT INTO patientInformation (name,sex,institutions,age,flag,situation,doctor,time)
-            VALUES (#{name },#{sex },#{institutions },#{age },#{flag },#{situation },#{doctor },#{time })
-    </insert>
+    <insert id="addPatientInformation" parameterType="patientInformation">INSERT INTO patientInformation (name,sex,institutions,age,flag,situation,doctor,time,detail_url)
+            VALUES (#{name },#{sex },#{institutions },#{age },#{flag },#{situation },#{doctor },#{time },#{detail_url })</insert>
 
     <!--查找所有病人-->
     <select id="getAllPatient" resultMap="patientInformationMap">

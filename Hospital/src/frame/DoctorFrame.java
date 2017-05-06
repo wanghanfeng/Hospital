@@ -7,14 +7,27 @@ import content.StatueContent;
 import model.Drugs;
 import model.PatientInformation;
 import model.Prescription;
+import utils.FileUploader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.tools.ant.taskdefs.GenerateKey.DnameParam;
+
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -222,7 +235,8 @@ public class DoctorFrame {
 							patient.getSex(),
 							patient.getInstitutions(),
 							patient.getSituation(),
-							patient.getDoctor()
+							patient.getDoctor(),
+							patient.getDetailUrl()
 					});
 				}
 
@@ -359,10 +373,43 @@ public class DoctorFrame {
 					patient.getSex(),
 					patient.getInstitutions(),
 					patient.getSituation(),
-					patient.getDoctor()
+					patient.getDoctor(),
+					patient.getDetailUrl()
 			});
 		}
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int row = ((JTable) e.getSource()).rowAtPoint(e  
+                            .getPoint());  
+                    int col = ((JTable) e.getSource())  
+                            .columnAtPoint(e.getPoint());  
+                    String cellValue = (String) (table  
+                            .getValueAt(row, col));
+                    System.out.println(cellValue);
+                    //展示图片 默认大小 可拖拽放大或缩小
+                    PictureFrame r = new PictureFrame(500, 500);
+                    r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
+				}
+			}
 
+			@Override
+			public void mousePressed(MouseEvent e) {	
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {	
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 
 	}
 }
@@ -374,11 +421,14 @@ class AddPatient{
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
 	
+	private String pictureURl;
+	
 	private JLabel time = new JLabel("时间：");
 	private JLabel unitLabel = new JLabel("单位：");
 	private JLabel ageLabel = new JLabel("年龄：");
 	private JLabel contentLabel = new JLabel("病情：");
 	private JLabel doctorLabel = new JLabel("医生：");
+	private JLabel pictureLabel = new JLabel("图影资料:");
 	
 	private JTextField year = new JTextField();
 	private JTextField mouth = new JTextField();
@@ -396,13 +446,14 @@ class AddPatient{
 	private JRadioButton fuzhen = new JRadioButton("复诊");
 	private JTextArea content = new JTextArea();
 	private JComboBox doctor = new JComboBox<>();
-	//private JTextField doctor = new JTextField();
+	private JTextField pictureTF = new JTextField();
+	private JButton selectBtn = new JButton("选择图片");
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
 	public AddPatient(DoctorFrame doctorFrame) {
 		jFrame.setTitle("病人信息录入");
-		jFrame.setSize(450, 440);
+		jFrame.setSize(550, 540);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
@@ -437,8 +488,13 @@ class AddPatient{
 		contentLabel.setBounds(30, 250, 40, 25);
 		content.setBounds(70,250,310,70);
 		
-		submit.setBounds(70 , 335 , 90 , 25);
-		cancel.setBounds(170 , 335 , 90 , 25);
+		pictureLabel.setBounds(30, 360, 80, 25);
+		pictureTF.setBounds(110, 360, 310, 25 );
+		selectBtn.setBounds(440, 360, 80, 25);
+		pictureTF.setText("请将图片拖拽至此窗口上传");
+		
+		submit.setBounds(70 , 475 , 90 , 25);
+		cancel.setBounds(170 , 475 , 90 , 25);
 		
 //		jFrame.add(time);
 //		jFrame.add(yearLabel);
@@ -462,11 +518,44 @@ class AddPatient{
 		jFrame.add(fuzhen);
 		jFrame.add(content);
 		jFrame.add(doctor);
+		jFrame.add(pictureLabel);
+		jFrame.add(pictureTF);
+//		jFrame.add(selectBtn);
 		jFrame.add(submit);
 		jFrame.add(cancel);
 
 		man.doClick();
 		chuzhen.doClick();
+		
+		new DropTarget(jFrame, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter()
+        {
+            @Override
+            public void drop(DropTargetDropEvent dtde)//重写适配器的drop方法
+            {
+                try
+                {
+                    if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))//如果拖入的文件格式受支持
+                    {
+                        dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);//接收拖拽来的数据
+                        List<File> list =  (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+                        pictureURl = list.get(0).getAbsolutePath();
+                        
+//                        JOptionPane.showMessageDialog(null, pictureURl);
+                        pictureTF.setText(pictureURl);
+                        dtde.dropComplete(true);//指示拖拽操作已完成
+                        new FileUploader(pictureURl);
+                    }
+                    else
+                    {
+                        dtde.rejectDrop();//否则拒绝拖拽来的数据
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 		submit.addActionListener(new ActionListener() {
 			//添加病人
@@ -515,6 +604,10 @@ class AddPatient{
 					JOptionPane.showMessageDialog(null,"年龄必须是整数，请检查","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				
+				//获取图片在网络上的url地址
+				String detail_url = parseToURL(pictureTF.getText());
+				System.out.println(detail_url);
 
 				PatientInformation patientInformation = new PatientInformation();
 				patientInformation.setName(theName);
@@ -525,6 +618,7 @@ class AddPatient{
 				patientInformation.setFlag(theFlag);
 				patientInformation.setDoctor(theDoctor);
 				patientInformation.setSituation(theContent);
+				patientInformation.setDetailUrl(detail_url);
 
 				patientInformationAction = new PatientInformationAction();
 				int i = patientInformationAction.addPatientInformation(patientInformation);
@@ -564,8 +658,18 @@ class AddPatient{
 				jFrame.dispose();
 			}
 		});
+		
+		
 
 		jFrame.setVisible(true);
+	}
+	public String parseToURL(String filePath) {
+		if (filePath.length() == 0) {
+			return "";
+		}
+		String[] paraArr = filePath.split("/");
+		String url = StatueContent.server_schem + paraArr[paraArr.length - 1];
+		return url;
 	}
 }
 

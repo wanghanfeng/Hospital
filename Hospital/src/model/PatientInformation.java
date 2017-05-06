@@ -17,6 +17,7 @@ public class PatientInformation {
     private String situation;
     private String doctor;
     private String time;
+    private String detail_url;
 
     public int getP_id() {
         return p_id;
@@ -88,5 +89,13 @@ public class PatientInformation {
 
     public void setTime(String time) {
         this.time = time;
+    }
+    
+    public void setDetailUrl(String detail_url) {
+    	this.detail_url = detail_url;
+    }
+    
+    public String getDetailUrl() {
+    	return detail_url;
     }
 }

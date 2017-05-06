@@ -15,6 +15,7 @@ import content.ImageContent;
 import content.StatueContent;
 import model.*;
 
+
 public class Login {
 
 	//各部分的控制器——Action
@@ -293,6 +294,8 @@ public class Login {
 		});
 		
 		jFrame.setVisible(true);
+//		Test test = new Test();
+//		test.loadURLImage("https://www.baidu.com/img/bd_logo1.png",jFrame.getGraphics(),jFrame);
 	}
 	
 	public static void main(String[] args) {

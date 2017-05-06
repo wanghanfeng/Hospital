@@ -1,6 +1,11 @@
 package content;
 
 public class StatueContent {
+	//资源服务器属性
+	public final static String server_ip = "123.206.13.45";
+	public final static int server_port = 8800;
+	public final static String server_schem ="http://" + server_ip + "/dashboard/img/";
+	
 	//登陆界面所用属性
 	public final static String login = "用户登陆";
 	public final static int login_width = 625;
@@ -16,7 +21,7 @@ public class StatueContent {
 	public final static int main_width = 800;
 	public final static int main_height = 600;
 	public final static String[] jurisdictions = {"doctor" , "nurse" , "storageKeeper","finance","health","systemCon"};
-	public final static String[] doctorcolname1 = {"时间", "姓名", "性别", "单位", "病情", "医生"};
+	public final static String[] doctorcolname1 = {"时间", "姓名", "性别", "单位", "病情", "医生", "详情"};
 	public final static String[] doctorcolname2 = {"时间", "开药医生", "患者姓名", "患者单位", "药品名称", "音位码", "数量", "用药频率","用药天数","用法说明","慢性病"};
 	public final static String[] nurseColname = {"时间", "姓名", "性别", "单位", "年龄", "用药名称", "音位码","不良反应","值班护士"};
 	public final static String[] nurseColname1 = {"时间","姓名","单位","性别","过敏药物","过敏史","值班护士"};
