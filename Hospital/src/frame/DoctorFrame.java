@@ -11,23 +11,14 @@ import utils.FileUploader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-import org.apache.tools.ant.taskdefs.GenerateKey.DnameParam;
-
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -644,7 +635,8 @@ class AddPatient{
 							patient.getSex(),
 							patient.getInstitutions(),
 							patient.getSituation(),
-							patient.getDoctor()
+							patient.getDoctor(),
+							patient.getDetailUrl()
 					});
 				}
 
