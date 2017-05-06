@@ -11,14 +11,23 @@ import utils.FileUploader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.tools.ant.taskdefs.GenerateKey.DnameParam;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -380,8 +389,10 @@ public class DoctorFrame {
                             .getValueAt(row, col));
                     System.out.println(cellValue);
                     //展示图片 默认大小 可拖拽放大或缩小
-                    PictureFrame r = new PictureFrame(500, 500);
-                    r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
+                    if (col == 6) {
+                    	PictureFrame r = new PictureFrame(500, 500);
+                        r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
+					}
 				}
 			}
 
@@ -660,6 +671,9 @@ class AddPatient{
 			return "";
 		}
 		String[] paraArr = filePath.split("/");
+		if (paraArr.length == 1) {
+			paraArr = filePath.split("\\");
+		}
 		String url = StatueContent.server_schem + paraArr[paraArr.length - 1];
 		return url;
 	}
