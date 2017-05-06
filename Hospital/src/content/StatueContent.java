@@ -32,5 +32,5 @@ public class StatueContent {
 	public final static String[] safeColname2 = {"时间", "单位", "有无重大疫情", "非战斗减亡人员", "病情种类", "调查人"};
 	
 	
-	public final static String about = "SDT Windows [版本 10.0.10586] (c) 2016 Peng。保留所有权利。";
+	public final static String about = "SDT cgbfgfhf [版本 10.0.10586] (c) 2016 Peng。保留所有权利。";
 }

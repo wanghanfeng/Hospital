@@ -1,8 +1,10 @@
 package frame;
 
 import action.NurseRecordsAction;
+import action.PatientInformationAction;
 import content.StatueContent;
 import model.NurseRecords;
+import model.PatientInformation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,12 +25,14 @@ public class NurseFrame {
 	//菜单栏组件
 	private JPanel jPanel1;
     private JMenuBar jMenuBar;
-    private JMenu[] jMenus = {new JMenu("护理记录"),new JMenu("过敏病人"), new JMenu("退出")};
+    private JMenu[] jMenus = {new JMenu("护理记录"),new JMenu("过敏病人"),new JMenu("隔离记录"), new JMenu("退出")};
     private JMenuItem j1 = new JMenuItem("信息录入");
     private JMenuItem j2 = new JMenuItem("信息查询");
 	private JMenuItem j3 = new JMenuItem("信息录入");
 	private JMenuItem j4 = new JMenuItem("信息查询");
-    private JMenuItem j5 = new JMenuItem("注销登陆");
+	private JMenuItem j5 = new JMenuItem("信息录入");
+	private JMenuItem j6 = new JMenuItem("信息查询");
+    private JMenuItem j7 = new JMenuItem("注销登陆");
     
     
     private JPanel jPanel2;
@@ -117,6 +121,20 @@ public class NurseFrame {
 		});
 
 		j5.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddQuarantine();
+			}
+		});
+
+		j6.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		j7.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -260,6 +278,8 @@ public class NurseFrame {
 		jMenus[1].add(j3);
 		jMenus[1].add(j4);
         jMenus[2].add(j5);
+		jMenus[2].add(j6);
+		jMenus[3].add(j7);
         for(int i = 0; i < jMenus.length; i ++) {
         	jMenuBar.add(jMenus[i]);
         }
@@ -555,6 +575,8 @@ class AddNurseInfo {
 class AddAllergyPatient {
 	private JFrame jFrame = new JFrame("过敏病人录入");
 
+
+
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
@@ -576,21 +598,23 @@ class AddAllergyPatient {
 	private JLabel historyLabel = new JLabel("过敏史：");
 	private JTextField history = new JTextField();
 
-	private JLabel nurseLabel = new JLabel("值班护士：");
-	private JComboBox nurse = new JComboBox<>();
+	private JLabel guardianLabel = new JLabel("监护人：");
+	private JTextField guardian = new JTextField();
+
+	private JLabel stateLabel = new JLabel("病情说明");
+	private JTextArea state = new JTextArea();
 
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
 	public AddAllergyPatient() {
-		jFrame.setSize(380, 320);
+		jFrame.setSize(380, 375);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
 
 		nameLabel.setBounds(30, 20, 80, 25);
 		name.setBounds(100, 20, 90, 25);
-
 		unitLabel.setBounds(200, 20, 40, 25);
 		unit.setBounds(240, 20, 90, 25);
 
@@ -606,16 +630,15 @@ class AddAllergyPatient {
 		historyLabel.setBounds(30, 140, 80, 25);
 		history.setBounds(100,140,150,25);
 
-		nurseLabel.setBounds(30, 180, 80, 25);
-		nurse.setBounds(100,180,90,25);
+		guardianLabel.setBounds(30, 180, 80, 25);
+		guardian.setBounds(100,180,90,25);
 
-		for(int i = 0;i < 5; i++) {
-			nurse.addItem(5);
-		}
+		stateLabel.setBounds(30 , 220 , 80 , 25);
+		state.setBounds(100 , 220 , 220 , 70);
+		state.setLineWrap(true);
 
-		submit.setBounds(100, 220, 90, 25);
-		cancel.setBounds(200, 220, 90, 25);
-
+		submit.setBounds(100, 305, 90, 25);
+		cancel.setBounds(200, 305, 90, 25);
 
 		submit.addActionListener(new ActionListener() {
 
@@ -633,7 +656,6 @@ class AddAllergyPatient {
 			}
 		});
 
-
 		jFrame.add(nameLabel);
 		jFrame.add(name);
 		jFrame.add(unitLabel);
@@ -645,14 +667,116 @@ class AddAllergyPatient {
 		jFrame.add(medicine);
 		jFrame.add(historyLabel);
 		jFrame.add(history);
-		jFrame.add(nurseLabel);
-		jFrame.add(nurse);
+		jFrame.add(guardianLabel);
+		jFrame.add(guardian);
+		jFrame.add(stateLabel);
+		jFrame.add(state);
 		jFrame.add(submit);
 		jFrame.add(cancel);
 
 		jFrame.setVisible(true);
 	}
 
+}
+
+class AddQuarantine {
+	private JFrame jFrame = new JFrame("隔离记录录入");
+	private PatientInformationAction patientInformationAction;
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("姓名：");
+	private JComboBox name = new JComboBox<>();
+
+	private JLabel unitLabel = new JLabel("单位：");
+	private JTextField unit = new JTextField();
+
+	private JLabel sexLabel = new JLabel("性别：");
+	private ButtonGroup buttonGroup1 = new ButtonGroup();
+	private JRadioButton man = new JRadioButton("男");
+	private JRadioButton woman = new JRadioButton("女");
+
+	private JLabel daysLabel = new JLabel("隔离天数：");
+	private JTextField days = new JTextField();
+
+	private JLabel reasonLabel = new JLabel("隔离原因：");
+	private JTextArea reason = new JTextArea();
+
+	private JLabel approveLabel = new JLabel("审批人");
+	private JTextField approve = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddQuarantine() {
+		jFrame.setSize(380, 320);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(100, 20, 90, 25);
+		patientInformationAction = new PatientInformationAction();
+		List<PatientInformation> patientInformations = patientInformationAction.getAllPatient();
+		for(PatientInformation p:patientInformations) {
+			name.addItem(p.getName());
+		}
+
+		unitLabel.setBounds(200, 20, 40, 25);
+		unit.setBounds(240, 20, 90, 25);
+
+		sexLabel.setBounds(30, 60, 40, 25);
+		man.setBounds(100,60,50,25);
+		woman.setBounds(150,60,50,25);
+		buttonGroup1.add(man);
+		buttonGroup1.add(woman);
+
+		daysLabel.setBounds(30 , 100 , 80 , 25);
+		days.setBounds(100 , 100 , 90 , 25);
+		approveLabel.setBounds(200, 100, 40, 25);
+		approve.setBounds(240 , 100 , 80 , 25);
+
+		reasonLabel.setBounds(30 , 140 , 80 , 25);
+		reason.setBounds(100 , 140 , 220 , 70);
+		reason.setLineWrap(true);
+
+		submit.setBounds(100, 225, 90, 25);
+		cancel.setBounds(200, 225, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jFrame.dispose();
+			}
+		});
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(unitLabel);
+		jFrame.add(unit);
+		jFrame.add(sexLabel);
+		jFrame.add(man);
+		jFrame.add(woman);
+		jFrame.add(daysLabel);
+		jFrame.add(days);
+		jFrame.add(approveLabel);
+		jFrame.add(approve);
+		jFrame.add(reasonLabel);
+		jFrame.add(reason);
+		jFrame.add(submit);
+		jFrame.add(cancel);
+		jFrame.setVisible(true);
+	}
 }
 
 
