@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PatientInformationDao">
+    <resultMap id="patientInformationMap" type="model.PatientInformation">
+        <id property="p_id" column="p_id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="institutions" column="institutions"/>
+        <result property="age" column="age"/>
+        <result property="flag" column="flag"/>
+        <result property="situation" column="situation"/>
+        <result property="doctor" column="doctor"/>
+        <result property="time" column="time"/>
+        <result property="detail_url" column="detail_url"/>
+    </resultMap>
+
+    <!-- 添加病人 -->
+    <insert id="addPatientInformation" parameterType="patientInformation">INSERT INTO patientInformation (name,sex,institutions,age,flag,situation,doctor,time,detail_url)
+            VALUES (#{name },#{sex },#{institutions },#{age },#{flag },#{situation },#{doctor },#{time },#{detail_url })</insert>
+
+    <!--查找所有病人-->
+    <select id="getAllPatient" resultMap="patientInformationMap">
+        SELECT * FROM patientInformation
+    </select>
+
+    <!-- 查找病人 通过可能有的仨信息查找 -->
+    <select id="getPatientsByInf" resultMap="patientInformationMap">
+        <bind name="pattern" value="'%' + theUnit + '%'" />
+        SELECT * FROM patientInformation WHERE sex=#{theSex }
+        <if test="theName != ''">
+            AND name = #{theName }
+        </if>
+        <if test="theUnit != ''">
+            AND institutions LIKE #{pattern }
+        </if>
+    </select>
+
+
+
+
+
+</mapper>

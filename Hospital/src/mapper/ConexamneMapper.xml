@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ConexamneDao">
+    <resultMap id="conexamneMap" type="model.Conexamne">
+        <id property="c_id" column="c_id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="unit" column="unit"/>
+        <result property="approve" column="approve"/>
+        <result property="suggest" column="suggest"/>
+        <result property="situation" column="situation"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <insert id="addConexamne" parameterType="Conexamne">
+        INSERT INTO conexamne
+          (name,sex,unit,approve,suggest,situation,time)
+          VALUES (#{name} , #{sex} , #{unit} , #{approve} , #{suggest} , #{situation} , #{time})
+    </insert>
+
+    <select id="getConexamneByInf" resultMap="conexamneMap">
+        select * from conexamne
+    </select>
+
+    <select id="getAllConexamne" resultMap="conexamneMap">
+        select * from conexamne
+    </select>
+
+
+
+
+</mapper>

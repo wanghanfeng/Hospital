@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="jdbc.properties"/>
+
+    <!--定义别名-->
+    <typeAliases>
+        <typeAlias type="model.SystemCon" alias="systemCon"/>
+        <typeAlias type="model.Doctor" alias="doctor"/>
+        <typeAlias type="model.Nurse" alias="nurse"/>
+        <typeAlias type="model.Finance" alias="finance"/>
+        <typeAlias type="model.Health" alias="health"/>
+        <typeAlias type="model.StoreKeeper" alias="storekeeper"/>
+        <typeAlias type="model.PatientInformation" alias="patientInformation"/>
+        <typeAlias type="model.Prescription" alias="Prescription"/>
+        <typeAlias type="model.NurseRecords" alias="NurseRecords"/>
+        <typeAlias type="model.Consumables" alias="Consumables"/>
+        <typeAlias type="model.ImportantPerson" alias="ImportantPerson"/>
+        <typeAlias type="model.HealthScreen" alias="HealthScreen"/>
+        <typeAlias type="model.Drugs" alias="Drugs"/>
+        <typeAlias type="model.Stuff" alias="Stuff"/>
+
+    </typeAliases>
+
+    <!--定义数据库信息-->
+    <environments default="development">
+        <environment id="development">
+            <!--采用jdbc事务管理-->
+            <transactionManager type="JDBC" />
+            <!--配置数据库链接信息-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--定义映射器-->
+    <mappers>
+        <mapper resource="mapper/SystemConMapper.xml"/>
+        <mapper resource="mapper/DoctorMapper.xml"/>
+        <mapper resource="mapper/NurseMapper.xml"/>
+        <mapper resource="mapper/FinanceMapper.xml"/>
+        <mapper resource="mapper/StoreKeeperMapper.xml"/>
+        <mapper resource="mapper/HealthMapper.xml"/>
+        <mapper resource="mapper/PatientInformationMapper.xml"/>
+        <mapper resource="mapper/PrescriptionMapper.xml"/>
+        <mapper resource="mapper/NurseRecordsMapper.xml"/>
+        <mapper resource="mapper/ConsumablesMapper.xml"/>
+        <mapper resource="mapper/ImportantPersonMapper.xml"/>
+        <mapper resource="mapper/ImportantPersonMapper.xml"/>
+        <mapper resource="mapper/HealthScreenMapper.xml"/>
+        <mapper resource="mapper/DrugsMapper.xml"/>
+        <mapper resource="mapper/StuffMapper.xml"/>
+    </mappers>
+
+</configuration>

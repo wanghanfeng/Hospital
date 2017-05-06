@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.NurseDao">
+    <resultMap id="nurseMap" type="model.Nurse">
+        <id property="id" column="identify"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+    <!-- 添加护士 -->
+    <insert id="addNurse" parameterType="nurse">
+        INSERT INTO nurse (identify,name,password) VALUES (#{id },#{name },#{password })
+    </insert>
+
+    <!-- 查找护士 通过id -->
+    <select id="loadNurse" resultMap="nurseMap">
+        SELECT * FROM nurse WHERE identify=#{theId }
+    </select>
+
+    <!--登录-->
+    <select id="LoginNurse" resultMap="nurseMap">
+        SELECT * FROM nurse WHERE identify=#{nurId } AND name=#{nurName } AND password=#{nurPassword }
+    </select>
+
+    <update id="updateNurse" parameterType="nurse">
+        UPDATE nurse SET name=#{name },password=#{password } WHERE identify=#{id }
+    </update>
+
+    <select id="selectAllNurse" resultMap="nurseMap">
+        select * from nurse
+    </select>
+
+
+</mapper>

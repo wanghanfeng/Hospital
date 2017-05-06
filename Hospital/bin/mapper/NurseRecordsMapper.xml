@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.NurseRecordsDao">
+    <resultMap id="nurseRecordsMap" type="model.NurseRecords">
+        <id property="pre_id" column="pre_id"/>
+        <result property="patient" column="patient"/>
+        <result property="drug" column="drug"/>
+        <result property="sex" column="sex"/>
+        <result property="thecode" column="thecode"/>
+        <result property="age" column="age"/>
+        <result property="ins" column="ins"/>
+        <result property="thetime" column="thetime"/>
+        <result property="nurse" column="nur"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <!-- 添加护理记录 -->
+    <insert id="addNurseRecords" parameterType="NurseRecords">
+        INSERT INTO NursingRecords
+            (patient,drug,thecode,
+                sex,age,ins,
+                  thetime,nur,note)
+            VALUES (#{patient },#{drug },#{thecode },
+                        #{sex },#{age },#{ins },
+                            #{thetime },#{nurse },#{note })
+    </insert>
+
+
+    <!--查找所有护理记录-->
+    <select id="getAllNurseRecords" resultMap="nurseRecordsMap">
+        SELECT * FROM NursingRecords
+    </select>
+
+    
+    <!--查找护理记录 通过可能有的俩信息查找  患者名称 患者单位-->
+    <select id="getNurseRecordsByInf" resultMap="nurseRecordsMap">
+        <bind name="pattern" value="'%' + theUnit + '%'" />
+        SELECT * FROM NursingRecords WHERE sex = #{theSex }
+        <if test="theName != ''">
+            AND patient = #{theName }
+        </if>
+        <if test="theUnit != ''">
+            AND ins LIKE #{pattern }
+        </if>
+    </select>
+
+
+
+
+
+</mapper>
