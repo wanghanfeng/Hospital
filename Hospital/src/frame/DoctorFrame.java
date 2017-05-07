@@ -661,12 +661,14 @@ class AddPatient{
 		if (filePath.length() == 0) {
 			return "";
 		}
+
 		String temp[] = filePath.split("\\\\");
 		if (temp.length > 1) {
 			filePath = temp[temp.length - 1];
 		}
 		System.out.println(filePath);
 		String url = StatueContent.server_schem + filePath;
+
 		return url;
 	}
 }
