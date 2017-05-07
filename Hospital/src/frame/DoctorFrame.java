@@ -33,12 +33,14 @@ public class DoctorFrame {
 	//菜单栏组件
 	private JPanel jPanel1;
 	private JMenuBar jMenuBar;
-	private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") , new JMenu("退出")};
+	private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") ,new JMenu("外诊审批"), new JMenu("退出")};
 	private JMenuItem j1 = new JMenuItem("病人信息录入");
 	private JMenuItem j2 = new JMenuItem("病人信息查询");
 	private JMenuItem j3 = new JMenuItem("处方信息录入");
 	private JMenuItem j4 = new JMenuItem("处方信息查询");
-	private JMenuItem j5 = new JMenuItem("注销登陆");
+	private JMenuItem j5 = new JMenuItem("外诊审批录入");
+	private JMenuItem j6 = new JMenuItem("外诊审批查询");
+	private JMenuItem j7 = new JMenuItem("注销登陆");
 
 
 	private JPanel jPanel2;
@@ -137,6 +139,18 @@ public class DoctorFrame {
 			}
 		});
 		j5.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AddConexamne();
+			}
+		});
+		j6.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		j7.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -940,6 +954,109 @@ class AddMedicine{
 				jFrame.dispose();
 			}
 		});
+
+		jFrame.setVisible(true);
+	}
+}
+
+//添加外诊审批
+class AddConexamne {
+
+	private JFrame jFrame = new JFrame("处方信息录入");
+
+	Date theDate = new Date();
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String nowTime = df.format(theDate);
+
+	private JLabel nameLabel = new JLabel("姓名：");
+	private JTextField name = new JTextField();
+
+	private JLabel sexLabel = new JLabel("性别：");
+	private ButtonGroup buttonGroup1 = new ButtonGroup();
+	private JRadioButton man = new JRadioButton("男");
+	private JRadioButton woman = new JRadioButton("女");
+
+	private JLabel unitLabel = new JLabel("单位：");
+	private JTextField unit = new JTextField();
+
+	private JLabel hosptialLabel = new JLabel("就诊医院：");
+	private JTextField hospital = new JTextField();
+
+	private JLabel approveLabel = new JLabel("审批人：");
+	private JTextField approve = new JTextField();
+
+	private JLabel suggestLabel = new JLabel("建议门诊：");
+	private JTextField suggest = new JTextField();
+
+	private JLabel situationLabel = new JLabel("病情说明：");
+	private JTextField situation = new JTextField();
+
+	private JButton submit = new JButton("确定");
+	private JButton cancel = new JButton("取消");
+
+	public AddConexamne(){
+		jFrame.setTitle("处方信息录入");
+		jFrame.setSize(450, 480);
+		jFrame.setLayout(null);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setResizable(false);
+
+		nameLabel.setBounds(30, 20, 80, 25);
+		name.setBounds(110, 20, 90, 25);
+		unitLabel.setBounds(220, 20, 80, 25);
+		unit.setBounds(280, 20, 90, 25);
+
+		sexLabel.setBounds(30, 60, 80, 25);
+		man.setBounds(100, 60, 50, 25);
+		woman.setBounds(150, 60, 50, 25);
+		buttonGroup1.add(man);
+		buttonGroup1.add(woman);
+
+		hosptialLabel.setBounds(30, 100, 80, 25);
+		hospital.setBounds(110, 100, 150, 25);
+
+		approveLabel.setBounds(30, 140, 80, 25);
+		approve.setBounds(110, 140, 90, 25);
+		suggestLabel.setBounds(220, 140, 80, 25);
+		suggest.setBounds(280, 140, 90, 25);
+
+		situationLabel.setBounds(30, 180, 80, 25);
+		situation.setBounds(110, 180, 150, 25);
+
+		submit.setBounds(100, 220, 90, 25);
+		cancel.setBounds(200, 220, 90, 25);
+
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			}
+		});
+
+		jFrame.add(nameLabel);
+		jFrame.add(name);
+		jFrame.add(unitLabel);
+		jFrame.add(unit);
+		jFrame.add(hosptialLabel);
+		jFrame.add(hospital);
+		jFrame.add(woman);
+		jFrame.add(man);
+		jFrame.add(sexLabel);
+		jFrame.add(approveLabel);
+		jFrame.add(approve);
+		jFrame.add(situationLabel);
+		jFrame.add(situation);
+		jFrame.add(suggestLabel);
+		jFrame.add(suggest);
+		jFrame.add(submit);
+		jFrame.add(cancel);
 
 		jFrame.setVisible(true);
 	}
