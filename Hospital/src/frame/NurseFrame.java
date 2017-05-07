@@ -345,6 +345,7 @@ public class NurseFrame {
 }
 
 class AddNurseInfo {
+	PatientInformationAction patientInformationAction;
 	NurseRecordsAction nurseRecordsAction;
 	private JFrame jFrame = new JFrame("护理信息录入");
 	Date theDate = new Date();
@@ -369,7 +370,9 @@ class AddNurseInfo {
 	private JTextField year = new JTextField();
 	private JTextField mouth = new JTextField();
 	private JTextField day = new JTextField();
-	private JTextField name = new JTextField();
+
+	private JComboBox name = new JComboBox<>();
+
 	private JTextField usenum = new JTextField();
 	private JTextField unit = new JTextField();
 
@@ -394,15 +397,6 @@ class AddNurseInfo {
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
-
-		// 第一行
-//		time.setBounds(30, 20, 80, 25);
-//		year.setBounds(100, 20, 80, 25);
-//		yearLabel.setBounds(180, 20, 15, 25);
-//		mouth.setBounds(195, 20, 80, 25);
-//		mouthLabel.setBounds(275, 20, 15, 25);
-//		day.setBounds(290, 20, 80, 25);
-//		dayLabel.setBounds(370, 20, 15, 25);
 
 		nameLabel.setBounds(30, 60, 70, 25);
 		name.setBounds(100, 60, 90, 25);
@@ -435,10 +429,6 @@ class AddNurseInfo {
 		submit.setBounds(70, 300, 90, 25);
 		cancel.setBounds(170, 300, 90, 25);
 
-//		jFrame.add(time);
-//		jFrame.add(yearLabel);
-//		jFrame.add(mouthLabel);
-//		jFrame.add(dayLabel);
 		jFrame.add(nameLabel);
 		jFrame.add(name);
 		jFrame.add(unitLabel);
@@ -467,21 +457,20 @@ class AddNurseInfo {
 
 		man.doClick();
 
+		patientInformationAction = new PatientInformationAction();
+		List<PatientInformation> patientInformations = patientInformationAction.getAllPatient();
+		for(PatientInformation p:patientInformations) {
+			name.addItem(p.getName());
+		}
+
 		submit.addActionListener(new ActionListener() {
 			//添加护理信息
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				nurseRecordsAction = new NurseRecordsAction();
-				//添加处方
-//				String theYear = year.getText();
-//				String theMonth = mouth.getText();
-//				String theDay = day.getText();
-//				int yearInt;
-//				int monthInt;
-//				int dayInt;
-
+				//添加护理信息
 				String theDate = nowTime;
-				String theName = name.getText();
+				String theName = name.getSelectedItem().toString();
 				String theCode = id.getText();
 
 				String theSex = "";
@@ -573,6 +562,8 @@ class AddNurseInfo {
 
 
 class AddAllergyPatient {
+
+	PatientInformationAction patientInformationAction;
 	private JFrame jFrame = new JFrame("过敏病人录入");
 
 	Date theDate = new Date();
@@ -580,7 +571,7 @@ class AddAllergyPatient {
 	String nowTime = df.format(theDate);
 
 	private JLabel nameLabel = new JLabel("姓名：");
-	private JTextField name = new JTextField();
+	private JComboBox name = new JComboBox<>();
 
 	private JLabel unitLabel = new JLabel("单位：");
 	private JTextField unit = new JTextField();
@@ -637,6 +628,12 @@ class AddAllergyPatient {
 
 		submit.setBounds(100, 305, 90, 25);
 		cancel.setBounds(200, 305, 90, 25);
+
+		patientInformationAction = new PatientInformationAction();
+		List<PatientInformation> patientInformations = patientInformationAction.getAllPatient();
+		for(PatientInformation p:patientInformations) {
+			name.addItem(p.getName());
+		}
 
 		submit.addActionListener(new ActionListener() {
 
