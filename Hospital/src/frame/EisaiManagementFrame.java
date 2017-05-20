@@ -887,7 +887,9 @@ class AddMedicineFrame {
 								drugs1.getAmount()+"",
 								drugs1.getUser()
 						});
+
 					}
+
 					jFrame.dispose();
 					return;
 				}

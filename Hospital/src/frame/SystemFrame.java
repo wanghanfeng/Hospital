@@ -23,11 +23,11 @@ public class SystemFrame {
 	HealthAction healthAction;
 
 	private JFrame jFrame;
-	
+
 	//菜单栏组件
 	private JPanel jPanel1;
-    private JMenuBar jMenuBar;
-    private JMenu[] jMenus = {new JMenu("字典维护"),new JMenu("病人情况"),new JMenu("财务工作"),new JMenu("仓库管理"),new JMenu("卫生安全"),new JMenu("操作授权"),new JMenu("退出")};
+	private JMenuBar jMenuBar;
+	private JMenu[] jMenus = {new JMenu("字典维护"),new JMenu("病人情况"),new JMenu("财务工作"),new JMenu("仓库管理"),new JMenu("卫生安全"),new JMenu("操作授权"),new JMenu("退出")};
 	private JMenuItem j1 = new JMenuItem("字典维护");
 	private JMenuItem j2 = new JMenuItem("医生工作");
 	private JMenuItem j22 = new JMenuItem("护士工作");
@@ -39,18 +39,17 @@ public class SystemFrame {
 
 	private JPanel jPanel2;
 	private JPanel jPanel3;
-	private JPanel changePath;
 	private JPanel operation;
-    private JPanel tablePanel = new JPanel();
-    //表格组件
-    private String[][] datas = {};
-    private DefaultTableModel model;
-    private JTable table;
-    private JScrollPane scrollPane5;
-    
-    //动态组件
-    private JTextField show;
-    private JScrollPane showPane;
+	private JPanel tablePanel = new JPanel();
+	//表格组件
+	private String[][] datas = {};
+	private DefaultTableModel model;
+	private JTable table;
+	private JScrollPane scrollPane5;
+
+	//动态组件
+	private JTextField show;
+	private JScrollPane showPane;
 
 	private JPanel addDictron;
 	private JPanel doctorWork;
@@ -62,7 +61,6 @@ public class SystemFrame {
 	private DictionaryAction dictionaryAction;
 
 	private String oldValue = "";
-	private int num = 5;
 
 	private String kind;
 
@@ -267,7 +265,6 @@ public class SystemFrame {
 		model.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				System.out.println("=================");
 				if (e.getColumn() < 0)
 					return;
 				String nVal = table.getValueAt(e.getLastRow(), e.getColumn())
@@ -615,7 +612,7 @@ public class SystemFrame {
 			jurisdiction.addItem(StatueContent.jurisdictions[i]);
 		}
 		JButton addInfoSubmit = new JButton("OK");
-		
+
 		//添加控件
 		operation.setLayout(null);
 		idLabel.setBounds(100, 20, 80, 25);
@@ -628,7 +625,7 @@ public class SystemFrame {
 		password2.setBounds(180, 140, 100, 25);
 		jurisdictionLabel1.setBounds(100, 180, 80, 25);
 		jurisdiction.setBounds(180, 180, 100, 25);
-		
+
 		addInfoSubmit.setBounds(400, 220, 90, 25);
 
 		//确认添加
@@ -809,7 +806,7 @@ public class SystemFrame {
 		operation.add(password2);
 		operation.add(jurisdictionLabel1);
 		operation.add(jurisdiction);
-		operation.add(addInfoSubmit);		
+		operation.add(addInfoSubmit);
 		operation.setVisible(false);
 		jPanel2.add(operation);
 	}
@@ -917,7 +914,7 @@ public class SystemFrame {
 				if (result == JOptionPane.OK_OPTION) {
 					int user_id = Integer.parseInt(table.getValueAt(
 							table.getSelectedRow(), 0).toString());
-					//userDao.delete(userid);i
+					//userDao.delete(userid);
 					//loadData();
 					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
 					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
@@ -968,6 +965,7 @@ public class SystemFrame {
 		safe.add(addMedicintSubmit);
 		safe.add(updateSafeSubmit);
 		safe.add(deleteSafeSubmit);
+		safe.setVisible(false);
 		jPanel2.add(safe);
 
 	}
@@ -1138,6 +1136,7 @@ public class SystemFrame {
 		eisai.add(addMedicintSubmit);
 		eisai.add(updateEisaiSubmit);
 		eisai.add(deleteEisaiSubmit);
+		eisai.setVisible(false);
 		jPanel2.add(eisai);
 	}
 
@@ -1297,6 +1296,7 @@ public class SystemFrame {
 		finance.add(addMedicintSubmit);
 		finance.add(updateFinanceSubmit);
 		finance.add(deleteFinanceSubmit);
+		finance.setVisible(false);
 		jPanel2.add(finance);
 
 	}
@@ -1467,6 +1467,7 @@ public class SystemFrame {
 		nurseWork.add(addMedicintSubmit);
 		nurseWork.add(updateNurseSubmit);
 		nurseWork.add(deleteNurseSubmit);
+		nurseWork.setVisible(false);
 		jPanel2.add(nurseWork);
 
 	}
@@ -1582,7 +1583,7 @@ public class SystemFrame {
 					String cellValue = (String) (table
 							.getValueAt(row, col));
 					oldValue = cellValue;
-					//System.out.println(oldValue);
+
 				}
 			}
 
@@ -1675,6 +1676,7 @@ public class SystemFrame {
 		doctorWork.add(addMedicintSubmit);
 		doctorWork.add(updateDoctorSubmit);
 		doctorWork.add(deleteDoctorSubmit);
+		doctorWork.setVisible(false);
 		jPanel2.add(doctorWork);
 
 
