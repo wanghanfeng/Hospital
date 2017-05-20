@@ -514,6 +514,7 @@ public class SafeFrame {
 }
 
 class AddPeopleFrame {
+
 	ImportantPersonAction importantPersonAction;
 
 	private JFrame jFrame = new JFrame("信息录入");
