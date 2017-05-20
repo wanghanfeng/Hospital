@@ -20,4 +20,5 @@ public class DictionaryAction {
     public List<Dictionary> getDictionaryByInf(String theType) {
         return dictionaryService.getDictionaryByInf(theType);
     }
+
 }

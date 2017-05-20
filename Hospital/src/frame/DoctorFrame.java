@@ -30,14 +30,13 @@ public class DoctorFrame {
 	//菜单栏组件
 	private JPanel jPanel1;
 	private JMenuBar jMenuBar;
-	private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") ,new JMenu("外诊审批"), new JMenu("退出")};
+	private JMenu[] jMenus = {new JMenu("病人信息") , new JMenu("药品处方") ,new JMenu("外诊审批")};
 	private JMenuItem j1 = new JMenuItem("病人信息录入");
 	private JMenuItem j2 = new JMenuItem("病人信息查询");
 	private JMenuItem j3 = new JMenuItem("处方信息录入");
 	private JMenuItem j4 = new JMenuItem("处方信息查询");
 	private JMenuItem j5 = new JMenuItem("外诊审批录入");
 	private JMenuItem j6 = new JMenuItem("外诊审批查询");
-	private JMenuItem j7 = new JMenuItem("注销登陆");
 
 
 	private JPanel jPanel2;
@@ -153,14 +152,6 @@ public class DoctorFrame {
 				addPatient.setVisible(false);
 				addMedicint.setVisible(false);
 				addConexamne.setVisible(true);
-			}
-		});
-		j7.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jFrame.dispose();
-				new Login().init();
 			}
 		});
 
@@ -394,7 +385,6 @@ public class DoctorFrame {
 		jMenus[1].add(j4);
 		jMenus[2].add(j5);
 		jMenus[2].add(j6);
-		jMenus[3].add(j7);
 		for(int i = 0; i < jMenus.length; i ++) {
 			jMenuBar.add(jMenus[i]);
 		}
@@ -463,7 +453,6 @@ public class DoctorFrame {
 					String cellValue = (String) (table
 							.getValueAt(row, col));
 					System.out.println("===================> " + cellValue);
-					//展示图片 默认大小 可拖拽放大或缩小
 
 					if (col == 6) {
 						System.out.println("++++++++++++++++++++" + cellValue);
@@ -475,18 +464,22 @@ public class DoctorFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+
 			}
 		});
 
