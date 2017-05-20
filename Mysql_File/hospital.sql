@@ -1,40 +1,86 @@
 /*
- Navicat Premium Data Transfer
+Navicat MySQL Data Transfer
 
- Source Server         : MySQL_Navicat
- Source Server Type    : MySQL
- Source Server Version : 50505
- Source Host           : localhost
- Source Database       : hospital
+Source Server         : test
+Source Server Version : 60002
+Source Host           : localhost:3306
+Source Database       : hospital
 
- Target Server Type    : MySQL
- Target Server Version : 50505
- File Encoding         : utf-8
+Target Server Type    : MYSQL
+Target Server Version : 60002
+File Encoding         : 65001
 
- Date: 05/06/2017 21:46:45 PM
+Date: 2017-05-20 15:58:44
 */
 
-SET NAMES utf8;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
---  Table structure for `conexamne`
+-- Table structure for allergypatient
+-- ----------------------------
+DROP TABLE IF EXISTS `allergypatient`;
+CREATE TABLE `allergypatient` (
+  `a_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `sex` varchar(255) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `history` varchar(255) DEFAULT NULL,
+  `medicine` varchar(255) DEFAULT NULL,
+  `guardian` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `time` date DEFAULT NULL,
+  PRIMARY KEY (`a_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of allergypatient
+-- ----------------------------
+INSERT INTO `allergypatient` VALUES ('1', '1', '男', '1', '11', '1', '1', '1', '2017-05-08');
+INSERT INTO `allergypatient` VALUES ('2', '1', '男', '1', '1', '1', '1', '1', '2017-05-08');
+
+-- ----------------------------
+-- Table structure for changedevice
+-- ----------------------------
+DROP TABLE IF EXISTS `changedevice`;
+CREATE TABLE `changedevice` (
+  `i_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `purchasing` varchar(255) DEFAULT NULL,
+  `approve` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`i_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of changedevice
+-- ----------------------------
+INSERT INTO `changedevice` VALUES ('1', '1', '2', '3', '2017-05-08');
+
+-- ----------------------------
+-- Table structure for conexamne
 -- ----------------------------
 DROP TABLE IF EXISTS `conexamne`;
 CREATE TABLE `conexamne` (
   `c_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `sex` varchar(255) DEFAULT NULL,
+  `hospital` varchar(255) DEFAULT NULL,
   `unit` varchar(255) DEFAULT NULL,
   `approve` varchar(255) DEFAULT NULL,
   `suggest` varchar(255) DEFAULT NULL,
   `situation` varchar(255) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `consumables`
+-- Records of conexamne
+-- ----------------------------
+INSERT INTO `conexamne` VALUES ('1', '12312', '男', '3123', '1231', '12312312', null, '312', '2017-05-07 00:00:00');
+INSERT INTO `conexamne` VALUES ('2', 'kkl', '男', '123', '12', '123', '123', '123', '2017-05-08 00:00:00');
+
+-- ----------------------------
+-- Table structure for consumables
 -- ----------------------------
 DROP TABLE IF EXISTS `consumables`;
 CREATE TABLE `consumables` (
@@ -53,14 +99,28 @@ CREATE TABLE `consumables` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `consumables`
+-- Records of consumables
 -- ----------------------------
-BEGIN;
-INSERT INTO `consumables` VALUES ('1', 'kkl', 'llk', 'iii', 'sdas', 'ssnn', '12.2', '6', '24', 'ls', '1998-02-02'), ('2', '张三', '五排', '哈医大', '出差', '李某', '99.2', '50.2', '2', '张', '2002-01-22'), ('3', 'jjjjk', 'kjk', 'jkn', 'hjhk', 'hjkh', '22', '10', '2', 'sss', '2017-05-01');
-COMMIT;
+INSERT INTO `consumables` VALUES ('1', 'kkl', 'llk', 'iii', 'sdas', 'ssnn', '12.2', '6', '24', 'ls', '1998-02-02');
+INSERT INTO `consumables` VALUES ('2', '张三', '五排', '哈医大', '出差', '李某', '99.2', '50.2', '2', '张', '2002-01-22');
+INSERT INTO `consumables` VALUES ('3', 'jjjjk', 'kjk', 'jkn', 'hjhk', 'hjkh', '22', '10', '2', 'sss', '2017-05-01');
 
 -- ----------------------------
---  Table structure for `doctor`
+-- Table structure for dictionary
+-- ----------------------------
+DROP TABLE IF EXISTS `dictionary`;
+CREATE TABLE `dictionary` (
+  `type` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of dictionary
+-- ----------------------------
+INSERT INTO `dictionary` VALUES ('doctor', 'doctor1');
+
+-- ----------------------------
+-- Table structure for doctor
 -- ----------------------------
 DROP TABLE IF EXISTS `doctor`;
 CREATE TABLE `doctor` (
@@ -71,14 +131,14 @@ CREATE TABLE `doctor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `doctor`
+-- Records of doctor
 -- ----------------------------
-BEGIN;
-INSERT INTO `doctor` VALUES ('1', 'doc', 'doc'), ('2', '张三', 'zs'), ('3', '王医生', '123321');
-COMMIT;
+INSERT INTO `doctor` VALUES ('1', 'doc', 'doc');
+INSERT INTO `doctor` VALUES ('2', '张三', 'zs');
+INSERT INTO `doctor` VALUES ('3', '王医生', '123321');
 
 -- ----------------------------
---  Table structure for `drugs`
+-- Table structure for drugs
 -- ----------------------------
 DROP TABLE IF EXISTS `drugs`;
 CREATE TABLE `drugs` (
@@ -100,14 +160,12 @@ CREATE TABLE `drugs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `drugs`
+-- Records of drugs
 -- ----------------------------
-BEGIN;
-INSERT INTO `drugs` VALUES ('cu', '2003-02-03', '醋', '食用', 'g', '忘了', 'L', '忘了', '20', '10', '4000-02-03', '好像是忘了', '140', '二'), ('yan', '2002-02-02', 'yan', '食用', 'g', '氯化钠', '包', '大海', '99', '199', '3000-02-02', '大海', '200', 'u');
-COMMIT;
+INSERT INTO `drugs` VALUES ('cu', '2003-02-03', '醋', '食用', 'g', '忘了', 'L', '58', '20', '10', '4000-02-03', '好像是忘了', '140', '二');
 
 -- ----------------------------
---  Table structure for `finance`
+-- Table structure for finance
 -- ----------------------------
 DROP TABLE IF EXISTS `finance`;
 CREATE TABLE `finance` (
@@ -118,14 +176,13 @@ CREATE TABLE `finance` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `finance`
+-- Records of finance
 -- ----------------------------
-BEGIN;
-INSERT INTO `finance` VALUES ('1', 'doc', 'docc'), ('2', 'wei', 'wei');
-COMMIT;
+INSERT INTO `finance` VALUES ('1', 'doc', 'docc');
+INSERT INTO `finance` VALUES ('2', 'wei', 'wei');
 
 -- ----------------------------
---  Table structure for `health`
+-- Table structure for health
 -- ----------------------------
 DROP TABLE IF EXISTS `health`;
 CREATE TABLE `health` (
@@ -136,14 +193,13 @@ CREATE TABLE `health` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `health`
+-- Records of health
 -- ----------------------------
-BEGIN;
-INSERT INTO `health` VALUES ('1', 'doc', 'doc'), ('2001', 'wei', 'wei');
-COMMIT;
+INSERT INTO `health` VALUES ('1', 'doc', 'doc');
+INSERT INTO `health` VALUES ('2001', 'wei', 'wei');
 
 -- ----------------------------
---  Table structure for `healthscreen`
+-- Table structure for healthscreen
 -- ----------------------------
 DROP TABLE IF EXISTS `healthscreen`;
 CREATE TABLE `healthscreen` (
@@ -155,17 +211,15 @@ CREATE TABLE `healthscreen` (
   `name` varchar(249) DEFAULT NULL,
   `time` date DEFAULT NULL,
   PRIMARY KEY (`hs_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `healthscreen`
+-- Records of healthscreen
 -- ----------------------------
-BEGIN;
-INSERT INTO `healthscreen` VALUES ('1', 'oo', 'i', '0', 'wu', 'i', '1998-08-08'), ('2', 'ss', 'sase', '0', '无', '李', '1998-08-08'), ('3', 'sj', 'j', '1', 'j', 'j', '1992-02-02');
-COMMIT;
+INSERT INTO `healthscreen` VALUES ('2', 'ss', 'sase', '0', '无', '李', '1998-08-08');
 
 -- ----------------------------
---  Table structure for `importantperson`
+-- Table structure for importantperson
 -- ----------------------------
 DROP TABLE IF EXISTS `importantperson`;
 CREATE TABLE `importantperson` (
@@ -185,14 +239,55 @@ CREATE TABLE `importantperson` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `importantperson`
+-- Records of importantperson
 -- ----------------------------
-BEGIN;
 INSERT INTO `importantperson` VALUES ('1', 'ss', '男', 'asd', '11', '22', 'asd', 'asd', 'asd', 'sad', 'sad', '1998-09-09');
-COMMIT;
 
 -- ----------------------------
---  Table structure for `nurse`
+-- Table structure for importdevice
+-- ----------------------------
+DROP TABLE IF EXISTS `importdevice`;
+CREATE TABLE `importdevice` (
+  `i_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `producer` varchar(255) DEFAULT NULL,
+  `purchasing` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `approve` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`i_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of importdevice
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for leaderpay
+-- ----------------------------
+DROP TABLE IF EXISTS `leaderpay`;
+CREATE TABLE `leaderpay` (
+  `l_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `sex` varchar(255) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `military` varchar(255) DEFAULT NULL,
+  `percentage` varchar(255) DEFAULT NULL,
+  `hospital` varchar(255) DEFAULT NULL,
+  `approve` varchar(255) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`l_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of leaderpay
+-- ----------------------------
+INSERT INTO `leaderpay` VALUES ('1', '1', '男', '2', '3', '4', '5', '6', '7', '2017-05-08');
+
+-- ----------------------------
+-- Table structure for nurse
 -- ----------------------------
 DROP TABLE IF EXISTS `nurse`;
 CREATE TABLE `nurse` (
@@ -203,14 +298,13 @@ CREATE TABLE `nurse` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `nurse`
+-- Records of nurse
 -- ----------------------------
-BEGIN;
-INSERT INTO `nurse` VALUES ('1', 'doc', 'nur'), ('2', 'wei', 'wei');
-COMMIT;
+INSERT INTO `nurse` VALUES ('1', 'doc', 'nur');
+INSERT INTO `nurse` VALUES ('2', 'wei', 'wei');
 
 -- ----------------------------
---  Table structure for `nursingrecords`
+-- Table structure for nursingrecords
 -- ----------------------------
 DROP TABLE IF EXISTS `nursingrecords`;
 CREATE TABLE `nursingrecords` (
@@ -225,17 +319,15 @@ CREATE TABLE `nursingrecords` (
   `nur` varchar(249) DEFAULT NULL,
   `note` varchar(249) DEFAULT NULL,
   PRIMARY KEY (`n_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `nursingrecords`
+-- Records of nursingrecords
 -- ----------------------------
-BEGIN;
-INSERT INTO `nursingrecords` VALUES ('2', 'jkjj', '撒大声地', 'jk', '男', '22', 'das', '1998-02-03', '按时', 'fas'), ('3', '张三', '阿司匹林', 'ssad', '男', '22', '五排', '2009-01-29', '李', '无'), ('4', 'sss', 'dasdsa', 'ss', '男', '22', 'das', '2017-05-01', 'das', 'dsa');
-COMMIT;
+INSERT INTO `nursingrecords` VALUES ('2', 'jkjj', '男', '58', '58', '22', 'jk', '1998-02-03', '按时', 'fas');
 
 -- ----------------------------
---  Table structure for `patientinformation`
+-- Table structure for patientinformation
 -- ----------------------------
 DROP TABLE IF EXISTS `patientinformation`;
 CREATE TABLE `patientinformation` (
@@ -250,17 +342,18 @@ CREATE TABLE `patientinformation` (
   `time` date DEFAULT NULL,
   `detail_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `patientinformation`
+-- Records of patientinformation
 -- ----------------------------
-BEGIN;
-INSERT INTO `patientinformation` VALUES ('1', '张三', '男', '五排', '22', '初诊', '轻微咳嗽', '张医生', '2017-04-13', null), ('3', 'w', '男', 'w', '11', '初诊', 'www', 'ww', '1998-01-01', null), ('8', 'kk', '男', 'www', '11', '初诊', 'oooo', 'lll', '1998-02-03', null), ('9', 'lll', '男', 'llsad2', '233', '初诊', 'sa', 'ws', '2017-05-01', null), ('10', '王尼玛', '男', '优酷紫萍倒', '38', '初诊', '白痴症状', '2', '2017-05-05', null), ('11', 'whd', '男', 'wead', '12', '初诊', '', '0', '2017-05-06', null), ('12', '11', '男', '11', '11', '初诊', '11', '0', '2017-05-06', null), ('13', 'whdd', '男', 'qdas', '12', '初诊', '3ddasd', '0', '2017-05-06', null), ('14', 'dd', '男', '12', '123', '初诊', 'dasdas', '0', '2017-05-06', null), ('15', 'qwe', '男', '2e', '12', '初诊', 'da', '0', '2017-05-06', 'http://123.206.13.45/dashboard/img/whf1.jpg'), ('16', 'www', '男', 'asd', '23', '初诊', 'ddasd', '0', '2017-05-06', 'http://123.206.13.45/dashboard/img/whf1.jpg'), ('17', 'sssa', '男', '123', '21', '初诊', 'dasd', '0', '2017-05-06', 'http://123.206.13.45/dashboard/img/whf_shuai.jpg');
-COMMIT;
+INSERT INTO `patientinformation` VALUES ('1', '1', '男', '1', '1', '初诊', '1', 'doctor1', '2017-05-09', 'http://123.206.13.45/dashboard/img/a686c9177f3e67098588010b3bc79f3df9dc55bd.jpg');
+INSERT INTO `patientinformation` VALUES ('2', '1', '男', '1', '11', '初诊', '1', 'doctor1', '2017-05-09', 'http://123.206.13.45/dashboard/img/jichi.jpg');
+INSERT INTO `patientinformation` VALUES ('3', '12312', '男', '3123123', '123', '初诊', '123123', 'doctor1', '2017-05-20', 'http://123.206.13.45/dashboard/img/a686c9177f3e67098588010b3bc79f3df9dc55bd.jpg');
+INSERT INTO `patientinformation` VALUES ('4', '12', '12', '12', '123', '12', '12', 'doctor1', '2017-05-20', 'http://123.206.13.45/dashboard/img/a686c9177f3e67098588010b3bc79f3df9dc55bd.jpg');
 
 -- ----------------------------
---  Table structure for `prescription`
+-- Table structure for prescription
 -- ----------------------------
 DROP TABLE IF EXISTS `prescription`;
 CREATE TABLE `prescription` (
@@ -278,17 +371,78 @@ CREATE TABLE `prescription` (
   `chronicDisease` varchar(24) DEFAULT NULL,
   `time` date DEFAULT NULL,
   PRIMARY KEY (`pre_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `prescription`
+-- Records of prescription
 -- ----------------------------
-BEGIN;
-INSERT INTO `prescription` VALUES ('3', '张医生', '张三', '五排', '阿司匹林', 'ss2', '12', '一日三次', '一日三次', '33', null, '是', '1200-01-02'), ('4', '123', '张三', '12321', 'yan', '1', '12312321', '131', '123', '213', '123', '是', '2017-05-04');
-COMMIT;
 
 -- ----------------------------
---  Table structure for `storagekeeper`
+-- Table structure for prevention
+-- ----------------------------
+DROP TABLE IF EXISTS `prevention`;
+CREATE TABLE `prevention` (
+  `p_id` int(11) NOT NULL AUTO_INCREMENT,
+  `leader` varchar(255) DEFAULT NULL,
+  `place` varchar(255) DEFAULT NULL,
+  `materialName` varchar(255) DEFAULT NULL,
+  `materialNum` int(11) DEFAULT NULL,
+  `work` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`p_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of prevention
+-- ----------------------------
+INSERT INTO `prevention` VALUES ('1', '1', '2', '3', '4', '5', null);
+INSERT INTO `prevention` VALUES ('2', '1', '1', '1', '1', '1', null);
+
+-- ----------------------------
+-- Table structure for quarantine
+-- ----------------------------
+DROP TABLE IF EXISTS `quarantine`;
+CREATE TABLE `quarantine` (
+  `q_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `sex` varchar(255) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `days` int(11) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `approve` varchar(255) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`q_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of quarantine
+-- ----------------------------
+INSERT INTO `quarantine` VALUES ('1', '1', '女', '1', '1', '1', '1', '2017-05-07 00:00:00');
+INSERT INTO `quarantine` VALUES ('2', '1', '男', '123', '123', '112312', '123', '2017-05-08 00:00:00');
+
+-- ----------------------------
+-- Table structure for speciallist
+-- ----------------------------
+DROP TABLE IF EXISTS `speciallist`;
+CREATE TABLE `speciallist` (
+  `s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `major` varchar(255) DEFAULT NULL,
+  `endtime` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`s_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of speciallist
+-- ----------------------------
+INSERT INTO `speciallist` VALUES ('1', '1', '3', '2', '4-5-6', null);
+INSERT INTO `speciallist` VALUES ('2', '1', '3', '2', '4-5-6', null);
+INSERT INTO `speciallist` VALUES ('3', '1', '3', '2', '4-5-6', '2017-05-08');
+
+-- ----------------------------
+-- Table structure for storagekeeper
 -- ----------------------------
 DROP TABLE IF EXISTS `storagekeeper`;
 CREATE TABLE `storagekeeper` (
@@ -299,14 +453,13 @@ CREATE TABLE `storagekeeper` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `storagekeeper`
+-- Records of storagekeeper
 -- ----------------------------
-BEGIN;
-INSERT INTO `storagekeeper` VALUES ('1', 'doc', 'doc'), ('2', 'wei', 'wei');
-COMMIT;
+INSERT INTO `storagekeeper` VALUES ('1', 'doc', 'doc');
+INSERT INTO `storagekeeper` VALUES ('2', 'wei', 'wei');
 
 -- ----------------------------
---  Table structure for `stuff`
+-- Table structure for stuff
 -- ----------------------------
 DROP TABLE IF EXISTS `stuff`;
 CREATE TABLE `stuff` (
@@ -327,14 +480,13 @@ CREATE TABLE `stuff` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `stuff`
+-- Records of stuff
 -- ----------------------------
-BEGIN;
-INSERT INTO `stuff` VALUES ('mutou', '1998-01-01', '木头', '100', 'kg', '根', null, '大兴安岭', '3000', '3500', '9998-01-01', '1', '我'), ('shitou', '2009-09-09', '石头', '50', '块', 'kg', null, '大地', '20', '24', '9999-09-09', '2', '它');
-COMMIT;
+INSERT INTO `stuff` VALUES ('mutou', '1998-01-01', '木头', '100', 'kg', '根', null, '大兴安岭', '3000', '3500', '9998-01-01', '1', '我');
+INSERT INTO `stuff` VALUES ('shitou', '2009-09-09', '石头', '50', '块', 'kg', null, '大地', '20', '24', '9999-09-09', '2', '它');
 
 -- ----------------------------
---  Table structure for `systemcon`
+-- Table structure for systemcon
 -- ----------------------------
 DROP TABLE IF EXISTS `systemcon`;
 CREATE TABLE `systemcon` (
@@ -345,10 +497,7 @@ CREATE TABLE `systemcon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `systemcon`
+-- Records of systemcon
 -- ----------------------------
-BEGIN;
-INSERT INTO `systemcon` VALUES ('1', 'manager', 'manager'), ('2001', 'wei', 'wei');
-COMMIT;
-
-SET FOREIGN_KEY_CHECKS = 1;
+INSERT INTO `systemcon` VALUES ('1', 'manager', 'manager');
+INSERT INTO `systemcon` VALUES ('2001', 'wei', 'wei');
