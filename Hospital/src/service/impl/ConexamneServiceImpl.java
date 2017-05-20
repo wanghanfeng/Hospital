@@ -42,6 +42,13 @@ public class ConexamneServiceImpl implements ConexamneService {
 
     @Override
     public List<Conexamne> getConexamneByInf(@Param("theName") String theName, @Param("theUnit") String theUnit) {
-        return null;
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        ConexamneDao conexamneDao = sqlSession.getMapper(ConexamneDao.class);
+        //查询所有财务记录
+        List<Conexamne> list = conexamneDao.getConexamneByInf(theName , theUnit);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
     }
 }

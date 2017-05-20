@@ -16,4 +16,9 @@ public interface NurseRecordsDao {
 
     List<NurseRecords> getNurseRecordsByInf(@Param("theName") String theName,@Param("theSex") String theSex,@Param("theUnit") String theUnit);
 
+    List<NurseRecords> getNurseRecordsByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int updatePrescription(NurseRecords nurseRecords);
+
+    int deleteNurseRecords(NurseRecords nurseRecords);
 }

@@ -16,19 +16,26 @@
 
     <insert id="addConexamne" parameterType="Conexamne">
         INSERT INTO conexamne
-          (name,sex,unit,approve,suggest,situation,time)
-          VALUES (#{name} , #{sex} , #{unit} , #{approve} , #{suggest} , #{situation} , #{time})
+          (name,sex,unit,approve,suggest,situation,time,hospital)
+          VALUES (#{name} , #{sex} , #{unit} , #{approve} , #{suggest} , #{situation} , #{time},#{hospital})
     </insert>
 
     <select id="getConexamneByInf" resultMap="conexamneMap">
         select * from conexamne
+        <bind name="pattern" value="'%' + theUnit + '%'" />
+        <where>
+            <if test="theName != ''">
+                AND name = #{theName }
+            </if>
+            <if test="theUnit != ''">
+                AND unit LIKE #{pattern }
+            </if>
+        </where>
     </select>
 
     <select id="getAllConexamne" resultMap="conexamneMap">
         select * from conexamne
     </select>
-
-
 
 
 </mapper>

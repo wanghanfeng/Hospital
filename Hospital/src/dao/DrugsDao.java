@@ -12,6 +12,7 @@ public interface DrugsDao {
 
     List<Drugs> getAllDrugs();
 
+    int updateDrugs(Drugs drugs);
 
     Drugs loadDrug(@Param("drugcode") String drugcode);
 
@@ -19,8 +20,12 @@ public interface DrugsDao {
 
     List<Drugs> getDrugsByInf(@Param("theName")String theName);
 
-    int updateDrugs(Drugs drugs);
+    int updateALLDrugs(Drugs drugs);
 
     Drugs getDrugByName(@Param("drug")String drug);
+
+    List<Drugs> getDrugsByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int deleteDrugs(Drugs drugs);
 
 }

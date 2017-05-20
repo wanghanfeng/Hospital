@@ -47,7 +47,21 @@
     </select>
 
 
+    <!--查找护理记录 通过时间段-->
+    <select id="getNurseRecordsByTime" resultMap="nurseRecordsMap">
+        SELECT * FROM NursingRecords WHERE thetime between #{startTime} and #{endTime}
+    </select>
 
 
+    <update id="updatePrescription" parameterType="NurseRecords">
+        update  NursingRecords set patient = #{patient },drug = #{drug },thecode = #{thecode },
+                        sex = #{sex },age = #{age },ins = #{ins },
+                            thetime = #{thetime },nur = #{nurse },note = #{note }
+        where n_id = #{n_id}
+    </update>
+
+    <delete id="deleteNurseRecords" parameterType="NurseRecords">
+        delete from NursingRecords where n_id = #{n_id}
+    </delete>
 
 </mapper>

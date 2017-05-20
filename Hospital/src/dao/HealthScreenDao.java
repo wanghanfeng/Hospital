@@ -14,6 +14,10 @@ public interface HealthScreenDao {
 
     int addHealthScreen(HealthScreen healthScreen);
 
+    int updateHealthScreen(HealthScreen healthScreen);
     List<HealthScreen> getHealthScreenByInf(@Param("theDate") String theDate);
 
+    List<HealthScreen> getHealthScreenByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int deleteHealthScreen(HealthScreen healthScreen);
 }

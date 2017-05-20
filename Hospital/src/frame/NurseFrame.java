@@ -1,10 +1,8 @@
 package frame;
 
-import action.NurseRecordsAction;
-import action.PatientInformationAction;
+import action.*;
 import content.StatueContent;
-import model.NurseRecords;
-import model.PatientInformation;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +18,8 @@ import java.util.List;
 
 public class NurseFrame {
 	NurseRecordsAction nurseRecordsAction;
+	QuarantineAction quarantineAction;
+	AllergyPatientAction allergyPatientAction;
 	private JFrame jFrame;
 
 	//菜单栏组件
@@ -38,6 +38,7 @@ public class NurseFrame {
 	private JPanel jPanel2;
 	private JPanel jPanel3;
 	private JPanel addInfo;
+	private JPanel getQuarant;
 	private JPanel selectInfo;
 
 	//表格组件
@@ -49,6 +50,7 @@ public class NurseFrame {
 	//动态组件
 	private JTextField show;
 	private JScrollPane showPane;
+
 
 	public NurseFrame() {
 	}
@@ -86,6 +88,14 @@ public class NurseFrame {
 		addInfo.setBounds(0, 0, StatueContent.main_width, 100);
 		addPatientLayout();
 
+		selectInfo = new JPanel();
+		selectInfo.setBounds(0, 0, StatueContent.main_width, 100);
+		addAllergyPatient();
+
+		getQuarant = new JPanel();
+		getQuarant.setBounds(0, 0, StatueContent.main_width, 100);
+		getQuarantLayout();
+
 		// 添加单击事件
 		j1.addActionListener(new ActionListener() {
 
@@ -101,13 +111,14 @@ public class NurseFrame {
 				jPanel3.setVisible(false);
 				addInfo.setVisible(true);
 				selectInfo.setVisible(false);
+				getQuarant.setVisible(false);
 			}
 		});
 
 		j3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddAllergyPatient();
+				new AddAllergyPatient(new NurseFrame(model));
 			}
 		});
 
@@ -117,20 +128,24 @@ public class NurseFrame {
 				jPanel3.setVisible(false);
 				selectInfo.setVisible(true);
 				addInfo.setVisible(false);
+				getQuarant.setVisible(false);
 			}
 		});
 
 		j5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddQuarantine();
+				new AddQuarantine(new NurseFrame(model));
 			}
 		});
 
 		j6.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				jPanel3.setVisible(false);
+				selectInfo.setVisible(false);
+				addInfo.setVisible(false);
+				getQuarant.setVisible(true);
 			}
 		});
 
@@ -146,13 +161,67 @@ public class NurseFrame {
 		jFrame.setVisible(true);
 	}
 
+	private void getQuarantLayout() {
+		//声明控件
+		JLabel nameLabel = new JLabel("姓名：");
+		JTextField name = new JTextField();
+		JLabel unitLabel = new JLabel("单位：");
+		JTextField unit = new JTextField();
+		JButton getQuarantSubmit = new JButton("查找");
+
+		//添加控件
+		getQuarant.setLayout(null);
+		nameLabel.setBounds(100, 20, 40, 25);
+		name.setBounds(140, 20, 100, 25);
+		unitLabel.setBounds(360, 20, 40, 25);
+		unit.setBounds(400, 20, 200, 25);
+		getQuarantSubmit.setBounds(400, 60, 90, 25);
+		getQuarantSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theUnit = unit.getText();
+				String theName = name.getText();
+				quarantineAction = new QuarantineAction();
+
+				List<Quarantine> quarantines = quarantineAction.getQuarantineByInf(theName , theUnit);
+				model.setColumnIdentifiers(StatueContent.quarantine);
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				//查数据库，展示所有病人
+				for (Quarantine q:quarantines) {
+					model.addRow(new String[]{
+							q.getTime(),
+							q.getName(),
+							q.getUnit(),
+							q.getSex(),
+							String.valueOf(q.getDays()),
+							q.getReason(),
+							q.getApprove()
+					});
+				}
+
+			}
+		});
+		getQuarant.add(nameLabel);
+		getQuarant.add(name);
+		getQuarant.add(unitLabel);
+		getQuarant.add(unit);
+		getQuarant.add(getQuarantSubmit);
+		getQuarant.setVisible(false);
+		jPanel2.add(getQuarant);
+	}
+
 	// 病人信息录用模块
 	private void addPatientLayout() {
 		nurseRecordsAction = new NurseRecordsAction();
 		//声明控件
 		JLabel nameLabel = new JLabel("姓名：");
 		JTextField name = new JTextField();
-		JLabel sexLabel = new JLabel("性别：");
+		JLabel sexLabel = new JLabel("性别");
+
 		ButtonGroup buttonGroup = new ButtonGroup();
 		JRadioButton man = new JRadioButton("男");
 		JRadioButton woman = new JRadioButton("女");
@@ -174,6 +243,12 @@ public class NurseFrame {
 		unitLabel.setBounds(360, 20, 40, 25);
 		unit.setBounds(400, 20, 200, 25);
 		addInfoSubmit.setBounds(400, 60, 90, 25);
+		addInfoSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		addInfo.add(nameLabel);
 		addInfo.add(name);
 		addInfo.add(sexLabel);
@@ -235,36 +310,51 @@ public class NurseFrame {
 		//声明控件
 		JLabel nameLabel = new JLabel("姓名：");
 		JTextField name = new JTextField();
-		JLabel sexLabel = new JLabel("性别：");
-		ButtonGroup buttonGroup = new ButtonGroup();
-		JRadioButton man = new JRadioButton("男");
-		JRadioButton woman = new JRadioButton("女");
-		buttonGroup.add(man);
-		buttonGroup.add(woman);
-		man.setSelected(true);
-		woman.setSelected(false);
 		JLabel unitLabel = new JLabel("单位：");
 		JTextField unit = new JTextField();
-		JButton addInfoSubmit = new JButton("查找");
+		JButton AllergyPatientSubmit = new JButton("查找");
 
 		//添加控件
 		selectInfo.setLayout(null);
 		nameLabel.setBounds(100, 20, 40, 25);
 		name.setBounds(140, 20, 100, 25);
-		sexLabel.setBounds(100, 60, 40, 25);
-		man.setBounds(140, 60, 50, 25);
-		woman.setBounds(190, 60, 50, 25);
 		unitLabel.setBounds(360, 20, 40, 25);
 		unit.setBounds(400, 20, 200, 25);
-		addInfoSubmit.setBounds(400, 60, 90, 25);
+		AllergyPatientSubmit.setBounds(400, 60, 90, 25);
 		selectInfo.add(nameLabel);
 		selectInfo.add(name);
-		selectInfo.add(sexLabel);
-		selectInfo.add(man);
-		selectInfo.add(woman);
 		selectInfo.add(unitLabel);
 		selectInfo.add(unit);
-		selectInfo.add(addInfoSubmit);
+		selectInfo.add(AllergyPatientSubmit);
+		AllergyPatientSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theUnit = unit.getText();
+				String theName = name.getText();
+				allergyPatientAction = new AllergyPatientAction();
+
+				List<AllergyPatient> allergyPatients = allergyPatientAction.getAllergyPatientByInf(theName , theUnit);
+				model.setColumnIdentifiers(StatueContent.allergyPatient);
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				//查数据库，展示所有病人
+				for (AllergyPatient a:allergyPatients) {
+					model.addRow(new String[]{
+							a.getTime(),
+							a.getName(),
+							a.getUnit(),
+							a.getSex(),
+							a.getMedicine(),
+							a.getHistory(),
+							a.getGuardian(),
+							a.getState()
+					});
+				}
+			}
+		});
 		selectInfo.setVisible(false);
 		jPanel2.add(selectInfo);
 
@@ -300,7 +390,7 @@ public class NurseFrame {
 		showPane.setViewportView(show);
 		jPanel3.add(showPane , BorderLayout.CENTER);
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
+		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 82);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
 
@@ -342,11 +432,15 @@ public class NurseFrame {
 	public static void main(String[] args) {
 		new NurseFrame().init();
 	}
+
+
 }
 
 class AddNurseInfo {
+	DictionaryAction dictionaryAction;
 	PatientInformationAction patientInformationAction;
 	NurseRecordsAction nurseRecordsAction;
+
 	private JFrame jFrame = new JFrame("护理信息录入");
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -400,6 +494,11 @@ class AddNurseInfo {
 
 		nameLabel.setBounds(30, 60, 70, 25);
 		name.setBounds(100, 60, 90, 25);
+		patientInformationAction = new PatientInformationAction();
+		List<PatientInformation> patientInformations = patientInformationAction.getAllPatient();
+		for(PatientInformation p:patientInformations) {
+			name.addItem(p.getName());
+		}
 		idLabel.setBounds(220, 60, 80, 25);
 		id.setBounds(300, 60, 80, 25);
 
@@ -421,8 +520,11 @@ class AddNurseInfo {
 		note.setBounds(100, 220, 150, 25);
 
 		nurseLabel.setBounds(30, 260, 80, 25);
-		for(int i = 0;i < 5; i++) {
-			nurse.addItem(i);
+		dictionaryAction = new DictionaryAction();
+		List<Dictionary> dictionaries = dictionaryAction.getDictionaryByInf("nurse");
+
+		for(Dictionary d:dictionaries) {
+			nurse.addItem(d.getName());
 		}
 		nurse.setBounds(100, 260, 80, 25);
 
@@ -457,11 +559,7 @@ class AddNurseInfo {
 
 		man.doClick();
 
-		patientInformationAction = new PatientInformationAction();
-		List<PatientInformation> patientInformations = patientInformationAction.getAllPatient();
-		for(PatientInformation p:patientInformations) {
-			name.addItem(p.getName());
-		}
+
 
 		submit.addActionListener(new ActionListener() {
 			//添加护理信息
@@ -563,6 +661,7 @@ class AddNurseInfo {
 
 class AddAllergyPatient {
 
+	AllergyPatientAction allergyPatientAction;
 	PatientInformationAction patientInformationAction;
 	private JFrame jFrame = new JFrame("过敏病人录入");
 
@@ -596,7 +695,7 @@ class AddAllergyPatient {
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
-	public AddAllergyPatient() {
+	public AddAllergyPatient(NurseFrame nurseFrame) {
 		jFrame.setSize(380, 375);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
@@ -639,7 +738,79 @@ class AddAllergyPatient {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//添加隔离记录
+				//日期是当前系统时间 月 日 年
+				String theDate = nowTime;
+				//患者名
+				String theName = name.getSelectedItem().toString();
+				//单位
+				String theUnit = unit.getText();
+				//性别
+				String theSex = "";
+				if (man.isSelected()){
+					theSex = man.getText();
+				}else if (woman.isSelected()){
+					theSex = woman.getText();
+				}
+				//过敏药物
+				String theMedicine = medicine.getText();
+				//过敏史
+				String theHistory = history.getText();
+				//监护人
+				String theGuardian = guardian.getText();
+				//病情说明
+				String theState = state.getText();
 
+				//验证空值
+				if (theName.trim().isEmpty() &&
+						theUnit.trim().isEmpty() &&
+						theGuardian.trim().isEmpty() && theHistory.trim().isEmpty()&&
+						theMedicine.trim().isEmpty() &&theState.trim().isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				AllergyPatient allergyPatient = new AllergyPatient();
+				allergyPatient.setName(theName);
+				allergyPatient.setTime(theDate);
+				allergyPatient.setUnit(theUnit);
+				allergyPatient.setSex(theSex);
+				allergyPatient.setMedicine(theMedicine);
+				allergyPatient.setHistory(theHistory);
+				allergyPatient.setState(theState);
+				allergyPatient.setGuardian(theGuardian);
+
+				allergyPatientAction = new AllergyPatientAction();
+				int i = allergyPatientAction.addAllergyPatient(allergyPatient);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+
+				//清空
+				while(nurseFrame.model.getRowCount()>0){
+					nurseFrame.model.removeRow(nurseFrame.model.getRowCount()-1);
+				}
+
+				nurseFrame.model.setColumnIdentifiers(StatueContent.quarantine);
+
+				//查数据库，展示所有外诊报销
+				List<AllergyPatient> allergyPatients = allergyPatientAction.getAllAllertgyPatient();
+				for (AllergyPatient a:allergyPatients) {
+					nurseFrame.model.addRow(new String[]{
+						a.getTime(),
+						a.getName(),
+						a.getUnit(),
+						a.getSex(),
+						a.getMedicine(),
+						a.getHistory(),
+						a.getGuardian(),
+						a.getState()
+					});
+				}
+
+				jFrame.dispose();
 			}
 		});
 
@@ -678,10 +849,10 @@ class AddAllergyPatient {
 class AddQuarantine {
 	private JFrame jFrame = new JFrame("隔离记录录入");
 	private PatientInformationAction patientInformationAction;
+	private QuarantineAction quarantineAction;
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
-
 	private JLabel nameLabel = new JLabel("姓名：");
 	private JComboBox name = new JComboBox<>();
 
@@ -705,7 +876,7 @@ class AddQuarantine {
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
-	public AddQuarantine() {
+	public AddQuarantine(NurseFrame nurseFrame) {
 		jFrame.setSize(380, 320);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
@@ -744,7 +915,76 @@ class AddQuarantine {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//添加隔离记录
+				//日期是当前系统时间 月 日 年
+				String theDate = nowTime;
+				//患者名
+				String theName = name.getSelectedItem().toString();
+				//单位
+				String theUnit = unit.getText();
+				//性别
+				String theSex = "";
+				if (man.isSelected()){
+					theSex = man.getText();
+				}else if (woman.isSelected()){
+					theSex = woman.getText();
+				}
+				//隔离天数
+				String theDays = days.getText();
+				//隔离原因
+				String theReason = reason.getText();
+				//审批人
+				String theApprove = approve.getText();
 
+				//验证空值
+				if (theName.trim().isEmpty() &&
+						theUnit.trim().isEmpty() &&
+						theApprove.trim().isEmpty() && theReason.trim().isEmpty()&&
+						theDays.trim().isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				Quarantine quarantine = new Quarantine();
+				quarantine.setName(theName);
+				quarantine.setSex(theSex);
+				quarantine.setUnit(theUnit);
+				quarantine.setApprove(theApprove);
+				quarantine.setDays(Integer.parseInt(theDays));
+				quarantine.setReason(theReason);
+				quarantine.setTime(theDate);
+
+				quarantineAction = new QuarantineAction();
+				int i = quarantineAction.addQuarantine(quarantine);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+
+				//清空
+				while(nurseFrame.model.getRowCount()>0){
+					nurseFrame.model.removeRow(nurseFrame.model.getRowCount()-1);
+				}
+
+				nurseFrame.model.setColumnIdentifiers(StatueContent.quarantine);
+
+				//查数据库，展示所有外诊报销
+				List<Quarantine> quarantines = quarantineAction.getAllQuarantine();
+				for (Quarantine q:quarantines) {
+					nurseFrame.model.addRow(new String[]{
+							q.getTime(),
+							q.getName(),
+							q.getUnit(),
+							q.getSex(),
+							String.valueOf(q.getDays()),
+							q.getReason(),
+							q.getApprove()
+
+					});
+				}
+
+				jFrame.dispose();
 			}
 		});
 

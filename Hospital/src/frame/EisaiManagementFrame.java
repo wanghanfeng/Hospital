@@ -1,8 +1,10 @@
 package frame;
 
+import action.DictionaryAction;
 import action.DrugsAction;
 import action.StuffAction;
 import content.StatueContent;
+import model.Dictionary;
 import model.Drugs;
 import model.Stuff;
 
@@ -258,10 +260,10 @@ public class EisaiManagementFrame {
 				List<Drugs> drugsList = drugsAction.getAllDrugs();
 				for (Drugs drugs1 : drugsList) {
 					model.addRow(new String[]{
+							drugs1.getDrugcode(),
 							drugs1.getThetime().toString(),
 							drugs1.getSort(),
 							drugs1.getDrug(),
-							drugs1.getDrugcode(),
 							drugs1.getChe(),
 							drugs1.getPackages(),
 							drugs1.getStandard(),
@@ -423,10 +425,10 @@ public class EisaiManagementFrame {
 				//查数据库，展示所有财务信息
 				for (Drugs drugs : drugsList) {
 					model.addRow(new String[]{
+							drugs.getDrugcode(),
 							drugs.getThetime().toString(),
 							drugs.getSort(),
 							drugs.getDrug(),
-							drugs.getDrugcode(),
 							drugs.getChe(),
 							drugs.getPackages(),
 							drugs.getStandard(),
@@ -534,7 +536,7 @@ public class EisaiManagementFrame {
 		showPane.setViewportView(show);
 		jPanel3.add(showPane , BorderLayout.CENTER);
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
+		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 82);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
 		
@@ -563,10 +565,10 @@ public class EisaiManagementFrame {
 		List<Drugs> drugsList = drugsAction.getAllDrugs();
 		for (Drugs drugs : drugsList) {
 			model.addRow(new String[]{
+					drugs.getDrugcode(),
 					drugs.getThetime().toString(),
 					drugs.getSort(),
 					drugs.getDrug(),
-					drugs.getDrugcode(),
 					drugs.getChe(),
 					drugs.getPackages(),
 					drugs.getStandard(),
@@ -591,7 +593,7 @@ public class EisaiManagementFrame {
 
 class AddMedicineFrame {
 	DrugsAction drugsAction;
-
+	DictionaryAction dictionaryAction;
 	private JFrame jFrame = new JFrame("药品入库录入");
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -668,9 +670,11 @@ class AddMedicineFrame {
 		
 		kindLabel.setBounds(30, 100, 80, 25);
 		kind.setBounds(100 , 100 , 80 , 25);
+		dictionaryAction = new DictionaryAction();
+		List<Dictionary> dictionaries = dictionaryAction.getDictionaryByInf("kind");
 		//种类的下拉表
-		for(int i = 0;i < 5; i++) {
-			kind.addItem(5);
+		for(Dictionary dictionary:dictionaries) {
+			kind.addItem(dictionary.getName());
 		}
 
 
@@ -868,10 +872,10 @@ class AddMedicineFrame {
 					List<Drugs> drugsList = drugsAction.getAllDrugs();
 					for (Drugs drugs1 : drugsList) {
 						eisaiManagementFrame.model.addRow(new String[]{
+								drugs1.getDrugcode(),
 								drugs1.getThetime().toString(),
 								drugs1.getSort(),
 								drugs1.getDrug(),
-								drugs1.getDrugcode(),
 								drugs1.getChe(),
 								drugs1.getPackages(),
 								drugs1.getStandard(),

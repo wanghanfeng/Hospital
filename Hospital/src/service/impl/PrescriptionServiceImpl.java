@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * Created by AceCream on 2017/4/13.
  */
-public class PrescriptionServiceImpl implements PrescriptionService{
+public
+class PrescriptionServiceImpl implements PrescriptionService{
 
     SqlSession sqlSession = null;
 
@@ -51,5 +52,39 @@ public class PrescriptionServiceImpl implements PrescriptionService{
         return list;
     }
 
+    @Override
+    public List<Prescription> getPrescriptionByTime(String startTime, String endTime) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        PrescriptionDao prescriptionDao = sqlSession.getMapper(PrescriptionDao.class);
+        //查找符合条件的
+        List<Prescription> list = prescriptionDao.getPrescriptionByTime(startTime , endTime);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
 
+    @Override
+    public int updatePrescription(Prescription prescription) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        PrescriptionDao prescriptionDao = sqlSession.getMapper(PrescriptionDao.class);
+        //添加处方
+        int i = prescriptionDao.updatePrescription(prescription);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
+
+    @Override
+    public int deletePrescription(Prescription prescription) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        PrescriptionDao prescriptionDao = sqlSession.getMapper(PrescriptionDao.class);
+        //添加处方
+        int i = prescriptionDao.deletePrescription(prescription);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
 }

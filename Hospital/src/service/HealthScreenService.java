@@ -1,6 +1,7 @@
 package service;
 
 import model.HealthScreen;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface HealthScreenService {
     int addHealthScreen(HealthScreen healthScreen);
 
     List<HealthScreen> getHealthScreenByInf(String theDate);
+    int updateHealthScreen(HealthScreen healthScreen);
+    List<HealthScreen> getHealthScreenByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int deleteHealthScreen(HealthScreen healthScreen);
 }

@@ -21,5 +21,11 @@ public interface DrugsService {
     int updateDrugs(Drugs drugs);
 
     Drugs getDrugByName(@Param("drug")String drug);
+    List<Drugs> getDrugsByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int updateALLDrugs(Drugs drugs);
+
+
+    int deleteDrugs(Drugs drugs);
 
 }

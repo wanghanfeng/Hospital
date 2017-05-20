@@ -7,6 +7,15 @@
 
     <!--定义别名-->
     <typeAliases>
+        <typeAlias type="model.Dictionary" alias="dictionary"/>
+        <typeAlias type="model.SpecialList" alias="specialList"/>
+        <typeAlias type="model.Prevention" alias="prevention"/>
+        <typeAlias type="model.LeaderPay" alias="leaderPay"/>
+        <typeAlias type="model.ChangeDevice" alias="changeDevice"/>
+        <typeAlias type="model.ImportDevice" alias="importDevice"/>
+        <typeAlias type="model.AllergyPatient" alias="allergyPatient"/>
+        <typeAlias type="model.Quarantine" alias="quarantine"/>
+        <typeAlias type="model.Conexamne" alias="conexamne"/>
         <typeAlias type="model.SystemCon" alias="systemCon"/>
         <typeAlias type="model.Doctor" alias="doctor"/>
         <typeAlias type="model.Nurse" alias="nurse"/>
@@ -41,6 +50,15 @@
 
     <!--定义映射器-->
     <mappers>
+        <mapper resource="mapper/DictionaryMapper.xml"/>
+        <mapper resource="mapper/SpecialListMapper.xml"/>
+        <mapper resource="mapper/PreventionMapper.xml"/>
+        <mapper resource="mapper/LeaderPayMapper.xml"/>
+        <mapper resource="mapper/ChangeDeviceMapper.xml"/>
+        <mapper resource="mapper/ImportDeviceMapper.xml"/>
+        <mapper resource="mapper/AllergyPatientMapper.xml"/>
+        <mapper resource="mapper/QuarantineMapper.xml"/>
+        <mapper resource="mapper/ConexamneMapper.xml"/>
         <mapper resource="mapper/SystemConMapper.xml"/>
         <mapper resource="mapper/DoctorMapper.xml"/>
         <mapper resource="mapper/NurseMapper.xml"/>

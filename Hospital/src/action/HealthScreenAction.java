@@ -29,4 +29,15 @@ public class HealthScreenAction {
         List<HealthScreen> list = healthScreenService.getHealthScreenByInf(theDate);
         return list;
     }
+
+    public List<HealthScreen> getHealthScreenByTime( String startTime, String endTime) {
+        return healthScreenService.getHealthScreenByTime(startTime , endTime);
+    }
+    public int updateHealthScreen(HealthScreen healthScreen) {
+        return healthScreenService.updateHealthScreen(healthScreen);
+    }
+
+    public int deleteHealthScreen(HealthScreen healthScreen) {
+        return healthScreenService.deleteHealthScreen(healthScreen);
+    }
 }

@@ -50,4 +50,40 @@ public class NurseRecordsServiceImpl implements NurseRecordsService{
         sqlSession.close();
         return list;
     }
+
+    @Override
+    public List<NurseRecords> getNurseRecordsByTime(String startTime, String endTime) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        NurseRecordsDao nurseRecordsDao = sqlSession.getMapper(NurseRecordsDao.class);
+        //查找所有护理记录
+        List<NurseRecords> list = nurseRecordsDao.getNurseRecordsByTime(startTime , endTime);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public int updatePrescription(NurseRecords nurseRecords) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        NurseRecordsDao nurseRecordsDao = sqlSession.getMapper(NurseRecordsDao.class);
+        //添加护理记录
+        int i = nurseRecordsDao.updatePrescription(nurseRecords);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
+
+    @Override
+    public int deleteNurseRecords(NurseRecords nurseRecords) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        NurseRecordsDao nurseRecordsDao = sqlSession.getMapper(NurseRecordsDao.class);
+        //添加护理记录
+        int i = nurseRecordsDao.deleteNurseRecords(nurseRecords);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
 }

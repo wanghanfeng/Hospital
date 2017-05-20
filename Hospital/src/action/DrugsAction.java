@@ -45,5 +45,17 @@ public class DrugsAction {
         return drugs;
     }
 
+    public List<Drugs> getDrugsByTime(String startTime , String endTime) {
+        return drugsService.getDrugsByTime(startTime , endTime);
+    }
+
+    public int updateALLDrugs(Drugs drugs) {
+        return drugsService.updateALLDrugs(drugs);
+    }
+
+    public int deleteDrugs(Drugs drugs) {
+        return drugsService.deleteDrugs(drugs);
+    }
+
 
 }

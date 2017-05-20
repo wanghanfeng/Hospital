@@ -48,8 +48,22 @@
         </if>
     </select>
 
+    <!--查找处方 通过时间段-->
+    <select id="getPrescriptionByTime" resultMap="prescriptionMap">
+        SELECT * FROM Prescription WHERE time between #{startTime} and #{endTime}
+    </select>
 
+    <update id="updatePrescription" parameterType="Prescription">
+        update  prescription set doctor = #{doctor },name = #{name }, institutions = #{institutions },
+                        drug = #{drug },code = #{code },amount = #{amount },
+                            day = #{day },hz = #{hz },
+                              chronicDisease = #{chronicDisease },time = #{time },note = #{note }
+                where pre_id = #{pre_id}
+    </update>
 
+    <delete id="deletePrescription" parameterType="Prescription">
+       DELETE from prescription where pre_id = #{pre_id}
+    </delete>
 
 
 </mapper>

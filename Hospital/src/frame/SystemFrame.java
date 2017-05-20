@@ -5,12 +5,12 @@ import content.StatueContent;
 import model.*;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.List;
 
 public class SystemFrame {
 
@@ -59,7 +59,14 @@ public class SystemFrame {
 	private JPanel eisai;
 	private JPanel safe;
 
+	private DictionaryAction dictionaryAction;
+
+	private String oldValue = "";
 	private int num = 5;
+
+	private String kind;
+
+	List<Prescription> prescriptions;
 
 	public void init() {
 
@@ -147,7 +154,6 @@ public class SystemFrame {
 				safe.setVisible(false);
 
 				tablePanel.setVisible(true);
-				model.setColumnIdentifiers(StatueContent.doctorcolname1);
 				tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 			}
 		});
@@ -168,7 +174,6 @@ public class SystemFrame {
 				safe.setVisible(false);
 
 				tablePanel.setVisible(true);
-				model.setColumnIdentifiers(StatueContent.doctorcolname2);
 				tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 			}
 		});
@@ -189,7 +194,6 @@ public class SystemFrame {
 				safe.setVisible(false);
 
 				tablePanel.setVisible(true);
-				model.setColumnIdentifiers(StatueContent.reimbursementColname);
 				tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 			}
 		});
@@ -210,7 +214,6 @@ public class SystemFrame {
 				safe.setVisible(false);
 
 				tablePanel.setVisible(true);
-				model.setColumnIdentifiers(StatueContent.eisaiManagementColname1);
 				tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 			}
 		});
@@ -230,7 +233,6 @@ public class SystemFrame {
 				safe.setVisible(true);
 
 				tablePanel.setVisible(true);
-				model.setColumnIdentifiers(StatueContent.safeColname1);
 				tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
 			}
 		});
@@ -262,9 +264,167 @@ public class SystemFrame {
 			}
 		});
 
+		model.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				System.out.println("=================");
+				if (e.getColumn() < 0)
+					return;
+				String nVal = table.getValueAt(e.getLastRow(), e.getColumn())
+						.toString();
+				// 如果旧的值 和新的值一样，直接 返回
+				if (nVal.equals(oldValue)) {
+					return;
+				}
+				System.out.println(oldValue);
+				// 判断当前编辑的单元格是否是主键列
+				if (e.getColumn() == 0) {
+					// 还原旧的值
+					table.setValueAt(oldValue, e.getLastRow(), e.getColumn());
+					return;
+				}
+
+				switch (kind) {
+					case "doctor":updateDoctor(e);break;
+					case "nurse":updateNurse(e);break;
+					case "finance":updateFinance(e);break;
+					case "eisai":updateEisai(e); break;
+					case "safe": updateSafe(e);break;
+				}
+			}
+		});
+
 		jFrame.setVisible(true);
 	}
-	
+
+	public void del() {
+		if (table.getSelectedRowCount() <= 0) {
+			JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+			return;
+		}
+		int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+		// 判断用户是否点击
+		if (result == JOptionPane.OK_OPTION) {
+			int userid = Integer.valueOf(table.getValueAt(
+					table.getSelectedRow(), 0).toString());
+			//userDao.delete(userid);
+			//loadData();
+		}
+	}
+
+	private void updateDoctor(TableModelEvent e) {
+		Prescription prescription = new Prescription();
+		prescription.setPre_id(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),0))));
+		prescription.setTime(String.valueOf(model.getValueAt( e.getLastRow(),1)));
+		prescription.setDoctor(String.valueOf(model.getValueAt( e.getLastRow(),2)));
+		prescription.setName(String.valueOf(model.getValueAt( e.getLastRow(),3)));
+		prescription.setInstitutions(String.valueOf(model.getValueAt( e.getLastRow(),4)));
+		prescription.setDrug(String.valueOf(model.getValueAt( e.getLastRow(),5)));
+		prescription.setCode(String.valueOf(model.getValueAt( e.getLastRow(),6)));
+		prescription.setAmount(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),7))));
+		prescription.setHz(String.valueOf(model.getValueAt( e.getLastRow(),8)));
+		prescription.setDay(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),9))));
+		prescription.setNote(String.valueOf(model.getValueAt( e.getLastRow(),10)));
+		prescription.setChronicDisease(String.valueOf(model.getValueAt( e.getLastRow(),11)));
+
+		PrescriptionAction prescriptionAction = new PrescriptionAction();
+		int i = prescriptionAction.updatePrescription(prescription);
+
+		if (i==1){
+			JOptionPane.showMessageDialog(null,"修改成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null,"修改失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void updateNurse(TableModelEvent e) {
+		NurseRecords nurseRecords = new NurseRecords();
+		nurseRecords.setN_id(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),0))));
+		nurseRecords.setThetime(String.valueOf(model.getValueAt( e.getLastRow(),1)));
+		nurseRecords.setPatient(String.valueOf(model.getValueAt( e.getLastRow(),2)));
+		nurseRecords.setThecode(String.valueOf(model.getValueAt( e.getLastRow(),3)));
+		nurseRecords.setSex(String.valueOf(model.getValueAt( e.getLastRow(),4)));
+		nurseRecords.setAge(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),5))));
+		nurseRecords.setIns(String.valueOf(model.getValueAt( e.getLastRow(),6)));
+		nurseRecords.setDrug(String.valueOf(model.getValueAt( e.getLastRow(),7)));
+		nurseRecords.setNote(String.valueOf(model.getValueAt( e.getLastRow(),8)));
+		nurseRecords.setNurse(String.valueOf(model.getValueAt( e.getLastRow(),9)));
+
+		NurseRecordsAction nurseRecordsAction = new NurseRecordsAction();
+
+		int i = nurseRecordsAction.updatePrescription(nurseRecords);
+
+		if (i==1){
+			JOptionPane.showMessageDialog(null,"修改成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null,"修改失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void updateFinance(TableModelEvent e) {
+		ImportDevice importDevice = new ImportDevice();
+		importDevice.setI_id(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),0))));
+		importDevice.setName(String.valueOf(model.getValueAt( e.getLastRow(),1)));
+		importDevice.setApprove(String.valueOf(model.getValueAt( e.getLastRow(),2)));
+		importDevice.setProducer(String.valueOf(model.getValueAt( e.getLastRow(),3)));
+		importDevice.setType(String.valueOf(model.getValueAt( e.getLastRow(),4)));
+		importDevice.setValue(String.valueOf(model.getValueAt( e.getLastRow(),5)));
+		importDevice.setPurchasing(String.valueOf(model.getValueAt( e.getLastRow(),6)));
+
+		ImportDeviceAction importDeviceAction = new ImportDeviceAction();
+		int i = importDeviceAction.updateImportDevice(importDevice);
+		if (i==1){
+			JOptionPane.showMessageDialog(null,"修改成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null,"修改失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void updateEisai(TableModelEvent e) {
+		Drugs drugs = new Drugs();
+		drugs.setDrugcode(String.valueOf(model.getValueAt( e.getLastRow(),0)));
+		drugs.setThetime(String.valueOf(model.getValueAt( e.getLastRow(),1)));
+		drugs.setSort(String.valueOf(model.getValueAt( e.getLastRow(),2)));
+		drugs.setDrug(String.valueOf(model.getValueAt( e.getLastRow(),3)));
+		drugs.setChe(String.valueOf(model.getValueAt( e.getLastRow(),4)));
+		drugs.setPackages(String.valueOf(model.getValueAt( e.getLastRow(),5)));
+		drugs.setStandard(String.valueOf(model.getValueAt( e.getLastRow(),6)));
+		drugs.setPlace(String.valueOf(model.getValueAt( e.getLastRow(),7)));
+		drugs.setBuysale(Double.parseDouble(String.valueOf(model.getValueAt( e.getLastRow(),8))));
+		drugs.setThesale(Double.parseDouble(String.valueOf(model.getValueAt( e.getLastRow(),9))));
+		drugs.setCompany(String.valueOf(model.getValueAt( e.getLastRow(),10)));
+		drugs.setLose(String.valueOf(model.getValueAt( e.getLastRow(),11)));
+		drugs.setAmount(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),12))));
+		drugs.setUser(String.valueOf(model.getValueAt( e.getLastRow(),13)));
+
+		DrugsAction drugsAction = new DrugsAction();
+		int i = drugsAction.updateALLDrugs(drugs);
+		if (i==1){
+			JOptionPane.showMessageDialog(null,"修改成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null,"修改失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void updateSafe(TableModelEvent e) {
+		HealthScreen healthScreen = new HealthScreen();
+		healthScreen.setHs_id(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),0))));
+		healthScreen.setTime(String.valueOf(model.getValueAt( e.getLastRow(),1)));
+		healthScreen.setCompany(String.valueOf(model.getValueAt( e.getLastRow(),2)));
+		healthScreen.setType(String.valueOf(model.getValueAt( e.getLastRow(),3)));
+		healthScreen.setDie(Integer.parseInt(String.valueOf(model.getValueAt( e.getLastRow(),4))));
+		healthScreen.setEpidemic(String.valueOf(model.getValueAt( e.getLastRow(),5)));
+		healthScreen.setName(String.valueOf(model.getValueAt( e.getLastRow(),6)));
+
+		HealthScreenAction healthScreenAction = new HealthScreenAction();
+		int i = healthScreenAction.updateHealthScreen(healthScreen);
+		if (i==1){
+			JOptionPane.showMessageDialog(null,"修改成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null,"修改失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	private void changePathLayout() {
 		//声明控件
 		JLabel addDoctorLabel = new JLabel("添加医生：");
@@ -282,6 +442,128 @@ public class SystemFrame {
 		JLabel addHospitalLabel = new JLabel("添加就诊医院：");
 		JTextField addHospital = new JTextField();
 		JButton addHospitalSubmit = new JButton("OK");
+
+		addDoctorSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = addDoctor.getText();
+				String theType = "doctor";
+				if (theName.isEmpty()||theType.isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				dictionaryAction = new DictionaryAction();
+				List<Dictionary> dictionaryList = dictionaryAction.getDictionaryByInf(theType);
+				if(dictionaryList != null) {
+					for(Dictionary d:dictionaryList) {
+						if(theName.equals(d.getName())) {
+							JOptionPane.showMessageDialog(null,"该医生已存在","错误窗口",JOptionPane.WARNING_MESSAGE);
+							return;
+						}
+					}
+				}
+				Dictionary dictionary = new Dictionary();
+				dictionary.setName(theName);
+				dictionary.setType(theType);
+				int i = dictionaryAction.addDictionary(dictionary);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+				addDoctor.setText("");
+			}
+		});
+
+		addNurseSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = addNurse.getText();
+				String theType = "nurse";
+				if (theName.isEmpty()||theType.isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				dictionaryAction = new DictionaryAction();
+				List<Dictionary> dictionaryList = dictionaryAction.getDictionaryByInf(theType);
+				for(Dictionary d:dictionaryList) {
+					if(theName.equals(d.getName())) {
+						JOptionPane.showMessageDialog(null,"该护士已存在","错误窗口",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				Dictionary dictionary = new Dictionary();
+				dictionary.setName(theName);
+				dictionary.setType(theType);
+				int i = dictionaryAction.addDictionary(dictionary);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+				addNurse.setText("");
+			}
+		});
+
+		addHospitalSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = addHospital.getText();
+				String theType = "hospital";
+				if (theName.isEmpty()||theType.isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				dictionaryAction = new DictionaryAction();
+				List<Dictionary> dictionaryList = dictionaryAction.getDictionaryByInf(theType);
+				for(Dictionary d:dictionaryList) {
+					if(theName.equals(d.getName())) {
+						JOptionPane.showMessageDialog(null,"该医院已存在","错误窗口",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				Dictionary dictionary = new Dictionary();
+				dictionary.setName(theName);
+				dictionary.setType(theType);
+				int i = dictionaryAction.addDictionary(dictionary);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+				addHospital.setText("");
+			}
+		});
+
+		addKindSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = addkind.getText();
+				String theType = "kind";
+				if (theName.isEmpty()||theType.isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				dictionaryAction = new DictionaryAction();
+				List<Dictionary> dictionaryList = dictionaryAction.getDictionaryByInf(theType);
+				for(Dictionary d:dictionaryList) {
+					if(theName.equals(d.getName())) {
+						JOptionPane.showMessageDialog(null,"该药品种类已存在","错误窗口",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				Dictionary dictionary = new Dictionary();
+				dictionary.setName(theName);
+				dictionary.setType(theType);
+				int i = dictionaryAction.addDictionary(dictionary);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+				addkind.setText("");
+			}
+		});
 
 		//添加控件
 		addDictron.setLayout(null);
@@ -301,12 +583,6 @@ public class SystemFrame {
 		addHospital.setBounds(200, 140, 100, 25);
 		addHospitalSubmit.setBounds(400, 140, 90, 25);
 		//备份的OK
-		addDoctorSubmit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 		addDictron.add(addDoctorLabel);
 		addDictron.add(addDoctor);
 		addDictron.add(addDoctorSubmit);
@@ -323,7 +599,6 @@ public class SystemFrame {
 		jPanel2.add(addDictron);
 	}
 
-	//添加人员
 	private void operationLayout() {
 		//声明控件
 		JLabel idLabel = new JLabel("工号：");
@@ -539,23 +814,889 @@ public class SystemFrame {
 		jPanel2.add(operation);
 	}
 
+	private void safeLayout() {
+		// 声明控件
+		JLabel startTimeLabel = new JLabel("开始时间：");
+		JTextField startYear = new JTextField();
+		JLabel startYearLabel = new JLabel("年");
+		JTextField startMouth = new JTextField();
+		JLabel startMouthLabel = new JLabel("月");
+		JTextField startDay = new JTextField();
+		JLabel startDayLabel = new JLabel("日");
+
+		JLabel endTimeLabel = new JLabel("结束时间：");
+		JTextField endYear = new JTextField();
+		JLabel endYearLabel = new JLabel("年");
+		JTextField endMouth = new JTextField();
+		JLabel endMouthLabel = new JLabel("月");
+		JTextField endDay = new JTextField();
+		JLabel endDayLabel = new JLabel("日");
+		JButton addMedicintSubmit = new JButton("查找");
+		JButton updateSafeSubmit = new JButton("修改");
+		JButton deleteSafeSubmit = new JButton("删除");
+		// 添加控件
+		safe.setLayout(null);
+
+		startTimeLabel.setBounds(100, 20, 80, 25);
+		startYear.setBounds(180 ,20 , 80 , 25);
+		startYearLabel.setBounds(260, 20, 15, 25);
+		startMouth.setBounds(275 , 20,80,25);
+		startMouthLabel.setBounds(355, 20, 15, 25);
+		startDay.setBounds(370,20,80,25);
+		startDayLabel.setBounds(450, 20, 15, 25);
+
+		endTimeLabel.setBounds(100, 60, 80, 25);
+		endYear.setBounds(180 ,60 , 80 , 25);
+		endYearLabel.setBounds(260, 60, 15, 25);
+		endMouth.setBounds(275 , 60,80,25);
+		endMouthLabel.setBounds(355, 60, 15, 25);
+		endDay.setBounds(370,60,80,25);
+		endDayLabel.setBounds(450, 60, 15, 25);
+
+		addMedicintSubmit.setBounds(500, 60, 90, 25);
+		addMedicintSubmit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+				String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+				HealthScreenAction healthScreenAction = new HealthScreenAction();
+				List<HealthScreen> healthScreens = healthScreenAction.getHealthScreenByTime(startTime , endTime);
+
+				model.setColumnIdentifiers(StatueContent.safeColname3);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				for (HealthScreen healthScreen1 : healthScreens) {
+					model.addRow(new String[]{
+							String.valueOf(healthScreen1.getHs_id()),
+							healthScreen1.getTime().toString(),
+							healthScreen1.getCompany(),
+							healthScreen1.getType(),
+							healthScreen1.getDie()+"",
+							healthScreen1.getEpidemic(),
+							healthScreen1.getName()
+					});
+				}
+				updateSafeSubmit.setVisible(true);
+				deleteSafeSubmit.setVisible(true);
+				JOptionPane.showMessageDialog(null,"共计" + healthScreens.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		updateSafeSubmit.setBounds(600 , 60 , 90 ,25);
+		updateSafeSubmit.setVisible(false);
+		deleteSafeSubmit.setBounds(600 , 20 , 90 ,25);
+		deleteSafeSubmit.setVisible(false);
+		updateSafeSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(updateSafeSubmit.getText().equals("修改")) {
+					table.setEnabled(true);
+					kind = "safe";
+					updateSafeSubmit.setText("关闭修改");
+				}else if(updateSafeSubmit.getText().equals("关闭修改")) {
+					table.setEnabled(false);
+					updateSafeSubmit.setText("修改");
+
+				}
+			}
+		});
+		deleteSafeSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() <= 0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+					return;
+				}
+				int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+				// 判断用户是否点击
+				if (result == JOptionPane.OK_OPTION) {
+					int user_id = Integer.parseInt(table.getValueAt(
+							table.getSelectedRow(), 0).toString());
+					//userDao.delete(userid);i
+					//loadData();
+					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+					HealthScreenAction healthScreenAction = new HealthScreenAction();
+
+					HealthScreen healthScreen = new HealthScreen();
+					healthScreen.setHs_id(user_id);
+					healthScreenAction.deleteHealthScreen(healthScreen);
+					List<HealthScreen> healthScreens = healthScreenAction.getHealthScreenByTime(startTime , endTime);
+
+					model.setColumnIdentifiers(StatueContent.safeColname3);
+
+					//清空
+					while(model.getRowCount()>0){
+						model.removeRow(model.getRowCount()-1);
+					}
+
+					for (HealthScreen healthScreen1 : healthScreens) {
+						model.addRow(new String[]{
+								String.valueOf(healthScreen1.getHs_id()),
+								healthScreen1.getTime().toString(),
+								healthScreen1.getCompany(),
+								healthScreen1.getType(),
+								healthScreen1.getDie()+"",
+								healthScreen1.getEpidemic(),
+								healthScreen1.getName()
+						});
+					}
+					JOptionPane.showMessageDialog(null,"共计" + healthScreens.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+
+				}
+			}
+		});
+		safe.add(startTimeLabel);
+		safe.add(startYear);
+		safe.add(startYearLabel);
+		safe.add(startMouth);
+		safe.add(startMouthLabel);
+		safe.add(startDay);
+		safe.add(startDayLabel);
+		safe.add(endTimeLabel);
+		safe.add(endYear);
+		safe.add(endYearLabel);
+		safe.add(endMouthLabel);
+		safe.add(endMouth);
+		safe.add(endDayLabel);
+		safe.add(endDay);
+		safe.add(addMedicintSubmit);
+		safe.add(updateSafeSubmit);
+		safe.add(deleteSafeSubmit);
+		jPanel2.add(safe);
+
+	}
+
+	private void eisaiLayout() {
+		// 声明控件
+		JLabel startTimeLabel = new JLabel("开始时间：");
+		JTextField startYear = new JTextField();
+		JLabel startYearLabel = new JLabel("年");
+		JTextField startMouth = new JTextField();
+		JLabel startMouthLabel = new JLabel("月");
+		JTextField startDay = new JTextField();
+		JLabel startDayLabel = new JLabel("日");
+
+		JLabel endTimeLabel = new JLabel("结束时间：");
+		JTextField endYear = new JTextField();
+		JLabel endYearLabel = new JLabel("年");
+		JTextField endMouth = new JTextField();
+		JLabel endMouthLabel = new JLabel("月");
+		JTextField endDay = new JTextField();
+		JLabel endDayLabel = new JLabel("日");
+		JButton addMedicintSubmit = new JButton("查找");
+		JButton updateEisaiSubmit = new JButton("修改");
+		JButton deleteEisaiSubmit = new JButton("删除");
+		// 添加控件
+		eisai.setLayout(null);
+
+		startTimeLabel.setBounds(100, 20, 80, 25);
+		startYear.setBounds(180 ,20 , 80 , 25);
+		startYearLabel.setBounds(260, 20, 15, 25);
+		startMouth.setBounds(275 , 20,80,25);
+		startMouthLabel.setBounds(355, 20, 15, 25);
+		startDay.setBounds(370,20,80,25);
+		startDayLabel.setBounds(450, 20, 15, 25);
+
+		endTimeLabel.setBounds(100, 60, 80, 25);
+		endYear.setBounds(180 ,60 , 80 , 25);
+		endYearLabel.setBounds(260, 60, 15, 25);
+		endMouth.setBounds(275 , 60,80,25);
+		endMouthLabel.setBounds(355, 60, 15, 25);
+		endDay.setBounds(370,60,80,25);
+		endDayLabel.setBounds(450, 60, 15, 25);
+
+		addMedicintSubmit.setBounds(500, 60, 90, 25);
+		addMedicintSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+				String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+				DrugsAction drugsAction = new DrugsAction();
+				List<Drugs> drugses = drugsAction.getDrugsByTime(startTime , endTime);
+
+				model.setColumnIdentifiers(StatueContent.eisaiManagementColname1);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				for (Drugs drugs1 : drugses) {
+					model.addRow(new String[]{
+							drugs1.getDrugcode(),
+							drugs1.getThetime().toString(),
+							drugs1.getSort(),
+							drugs1.getDrug(),
+							drugs1.getChe(),
+							drugs1.getPackages(),
+							drugs1.getStandard(),
+							drugs1.getPlace(),
+							drugs1.getBuysale()+"",
+							drugs1.getThesale()+"",
+							drugs1.getCompany(),
+							drugs1.getLose(),
+							drugs1.getAmount()+"",
+							drugs1.getUser()
+					});
+				}
+				updateEisaiSubmit.setVisible(true);
+				deleteEisaiSubmit.setVisible(true);
+				JOptionPane.showMessageDialog(null,"共计" + drugses.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+			}
+		});
+
+		updateEisaiSubmit.setBounds(600 , 60 , 90 ,25);
+		updateEisaiSubmit.setVisible(false);
+		deleteEisaiSubmit.setBounds(600 , 20 , 90 ,25);
+		deleteEisaiSubmit.setVisible(false);
+		updateEisaiSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(updateEisaiSubmit.getText().equals("修改")) {
+					table.setEnabled(true);
+					kind = "eisai";
+					updateEisaiSubmit.setText("关闭修改");
+				}else if(updateEisaiSubmit.getText().equals("关闭修改")) {
+					table.setEnabled(false);
+					updateEisaiSubmit.setText("修改");
+				}
+			}
+		});
+		deleteEisaiSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() <= 0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+					return;
+				}
+				int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+				// 判断用户是否点击
+				if (result == JOptionPane.OK_OPTION) {
+					String code = table.getValueAt(
+							table.getSelectedRow(), 0).toString();
+					//userDao.delete(userid);
+					//loadData();
+					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+					DrugsAction drugsAction = new DrugsAction();
+					Drugs drugs = new Drugs();
+					drugs.setDrugcode(code);
+					drugsAction.deleteDrugs(drugs);
+					List<Drugs> drugses = drugsAction.getDrugsByTime(startTime , endTime);
+
+					model.setColumnIdentifiers(StatueContent.eisaiManagementColname1);
+
+					//清空
+					while(model.getRowCount()>0){
+						model.removeRow(model.getRowCount()-1);
+					}
+
+					for (Drugs drugs1 : drugses) {
+						model.addRow(new String[]{
+								drugs1.getDrugcode(),
+								drugs1.getThetime().toString(),
+								drugs1.getSort(),
+								drugs1.getDrug(),
+								drugs1.getChe(),
+								drugs1.getPackages(),
+								drugs1.getStandard(),
+								drugs1.getPlace(),
+								drugs1.getBuysale()+"",
+								drugs1.getThesale()+"",
+								drugs1.getCompany(),
+								drugs1.getLose(),
+								drugs1.getAmount()+"",
+								drugs1.getUser()
+						});
+					}
+					JOptionPane.showMessageDialog(null,"共计" + drugses.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		eisai.add(startTimeLabel);
+		eisai.add(startYear);
+		eisai.add(startYearLabel);
+		eisai.add(startMouth);
+		eisai.add(startMouthLabel);
+		eisai.add(startDay);
+		eisai.add(startDayLabel);
+		eisai.add(endTimeLabel);
+		eisai.add(endYear);
+		eisai.add(endYearLabel);
+		eisai.add(endMouthLabel);
+		eisai.add(endMouth);
+		eisai.add(endDayLabel);
+		eisai.add(endDay);
+		eisai.add(addMedicintSubmit);
+		eisai.add(updateEisaiSubmit);
+		eisai.add(deleteEisaiSubmit);
+		jPanel2.add(eisai);
+	}
+
+	private void financeLayout() {
+		// 声明控件
+		JLabel startTimeLabel = new JLabel("开始时间：");
+		JTextField startYear = new JTextField();
+		JLabel startYearLabel = new JLabel("年");
+		JTextField startMouth = new JTextField();
+		JLabel startMouthLabel = new JLabel("月");
+		JTextField startDay = new JTextField();
+		JLabel startDayLabel = new JLabel("日");
+
+		JLabel endTimeLabel = new JLabel("结束时间：");
+		JTextField endYear = new JTextField();
+		JLabel endYearLabel = new JLabel("年");
+		JTextField endMouth = new JTextField();
+		JLabel endMouthLabel = new JLabel("月");
+		JTextField endDay = new JTextField();
+		JLabel endDayLabel = new JLabel("日");
+		JButton addMedicintSubmit = new JButton("查找");
+		JButton updateFinanceSubmit = new JButton("修改");
+		JButton deleteFinanceSubmit = new JButton("删除");
+		// 添加控件
+		finance.setLayout(null);
+
+		startTimeLabel.setBounds(100, 20, 80, 25);
+		startYear.setBounds(180 ,20 , 80 , 25);
+		startYearLabel.setBounds(260, 20, 15, 25);
+		startMouth.setBounds(275 , 20,80,25);
+		startMouthLabel.setBounds(355, 20, 15, 25);
+		startDay.setBounds(370,20,80,25);
+		startDayLabel.setBounds(450, 20, 15, 25);
+
+		endTimeLabel.setBounds(100, 60, 80, 25);
+		endYear.setBounds(180 ,60 , 80 , 25);
+		endYearLabel.setBounds(260, 60, 15, 25);
+		endMouth.setBounds(275 , 60,80,25);
+		endMouthLabel.setBounds(355, 60, 15, 25);
+		endDay.setBounds(370,60,80,25);
+		endDayLabel.setBounds(450, 60, 15, 25);
+
+		addMedicintSubmit.setBounds(500, 60, 90, 25);
+		addMedicintSubmit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+				String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+				ImportDeviceAction importDeviceAction = new ImportDeviceAction();
+				List<ImportDevice> importDevices = importDeviceAction.getImportDeviceByTime(startTime , endTime);
+
+				model.setColumnIdentifiers(StatueContent.importDevice1);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				for (ImportDevice im:importDevices) {
+					model.addRow(new String[]{
+							String.valueOf(im.getI_id()),
+							im.getTime(),
+							im.getName(),
+							im.getProducer(),
+							im.getType(),
+							im.getValue(),
+							im.getPurchasing(),
+							im.getApprove()
+					});
+				}
+
+				updateFinanceSubmit.setVisible(true);
+				deleteFinanceSubmit.setVisible(true);
+				JOptionPane.showMessageDialog(null,"共计" + importDevices.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		updateFinanceSubmit.setBounds(600 , 60 , 90 ,25);
+		updateFinanceSubmit.setVisible(false);
+		deleteFinanceSubmit.setBounds(600 , 20 , 90 ,25);
+		deleteFinanceSubmit.setVisible(false);
+		updateFinanceSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(updateFinanceSubmit.getText().equals("修改")) {
+					table.setEnabled(true);
+					kind = "finance";
+					updateFinanceSubmit.setText("关闭修改");
+				}else if(updateFinanceSubmit.getText().equals("关闭修改")) {
+					table.setEnabled(false);
+					updateFinanceSubmit.setText("修改");
+				}
+			}
+		});
+		deleteFinanceSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() <= 0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+					return;
+				}
+				int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+				// 判断用户是否点击
+				if (result == JOptionPane.OK_OPTION) {
+					int userid = Integer.valueOf(table.getValueAt(
+							table.getSelectedRow(), 0).toString());
+					//userDao.delete(userid);
+					//loadData();
+					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+					ImportDeviceAction importDeviceAction = new ImportDeviceAction();
+					ImportDevice importDevice = new ImportDevice();
+					importDevice.setI_id(userid);
+					importDeviceAction.deleteImportDevice(importDevice);
+					List<ImportDevice> importDevices = importDeviceAction.getImportDeviceByTime(startTime, endTime);
+
+					model.setColumnIdentifiers(StatueContent.importDevice1);
+
+					//清空
+					while (model.getRowCount() > 0) {
+						model.removeRow(model.getRowCount() - 1);
+					}
+
+					for (ImportDevice im : importDevices) {
+						model.addRow(new String[]{
+								String.valueOf(im.getI_id()),
+								im.getTime(),
+								im.getName(),
+								im.getProducer(),
+								im.getType(),
+								im.getValue(),
+								im.getPurchasing(),
+								im.getApprove()
+						});
+					}
+
+					JOptionPane.showMessageDialog(null, "共计" + importDevices.size() + "条", "统计", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		finance.add(startTimeLabel);
+		finance.add(startYear);
+		finance.add(startYearLabel);
+		finance.add(startMouth);
+		finance.add(startMouthLabel);
+		finance.add(startDay);
+		finance.add(startDayLabel);
+		finance.add(endTimeLabel);
+		finance.add(endYear);
+		finance.add(endYearLabel);
+		finance.add(endMouthLabel);
+		finance.add(endMouth);
+		finance.add(endDayLabel);
+		finance.add(endDay);
+		finance.add(addMedicintSubmit);
+		finance.add(updateFinanceSubmit);
+		finance.add(deleteFinanceSubmit);
+		jPanel2.add(finance);
+
+	}
+
+	private void nurseWorkLayout() {
+		// 声明控件
+		JLabel startTimeLabel = new JLabel("开始时间：");
+		JTextField startYear = new JTextField();
+		JLabel startYearLabel = new JLabel("年");
+		JTextField startMouth = new JTextField();
+		JLabel startMouthLabel = new JLabel("月");
+		JTextField startDay = new JTextField();
+		JLabel startDayLabel = new JLabel("日");
+
+		JLabel endTimeLabel = new JLabel("结束时间：");
+		JTextField endYear = new JTextField();
+		JLabel endYearLabel = new JLabel("年");
+		JTextField endMouth = new JTextField();
+		JLabel endMouthLabel = new JLabel("月");
+		JTextField endDay = new JTextField();
+		JLabel endDayLabel = new JLabel("日");
+		JButton addMedicintSubmit = new JButton("查找");
+		JButton updateNurseSubmit = new JButton("修改");
+		JButton deleteNurseSubmit = new JButton("删除");
+		// 添加控件
+		nurseWork.setLayout(null);
+
+		startTimeLabel.setBounds(100, 20, 80, 25);
+		startYear.setBounds(180 ,20 , 80 , 25);
+		startYearLabel.setBounds(260, 20, 15, 25);
+		startMouth.setBounds(275 , 20,80,25);
+		startMouthLabel.setBounds(355, 20, 15, 25);
+		startDay.setBounds(370,20,80,25);
+		startDayLabel.setBounds(450, 20, 15, 25);
+
+		endTimeLabel.setBounds(100, 60, 80, 25);
+		endYear.setBounds(180 ,60 , 80 , 25);
+		endYearLabel.setBounds(260, 60, 15, 25);
+		endMouth.setBounds(275 , 60,80,25);
+		endMouthLabel.setBounds(355, 60, 15, 25);
+		endDay.setBounds(370,60,80,25);
+		endDayLabel.setBounds(450, 60, 15, 25);
+
+		addMedicintSubmit.setBounds(500, 60, 90, 25);
+		addMedicintSubmit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+				String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+				NurseRecordsAction nurseRecordsAction = new NurseRecordsAction();
+				List<NurseRecords> nurseRecordses = nurseRecordsAction.getNurseRecordsByTime(startTime , endTime);
+
+				model.setColumnIdentifiers(StatueContent.nurseColname11);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				for (NurseRecords nurseRecord : nurseRecordses) {
+					model.addRow(new String[]{
+							String.valueOf(nurseRecord.getN_id()),
+							nurseRecord.getThetime().toString(),
+							nurseRecord.getPatient(),
+							nurseRecord.getSex(),
+							nurseRecord.getIns(),
+							nurseRecord.getAge()+"",
+							nurseRecord.getDrug(),
+							nurseRecord.getThecode(),
+							nurseRecord.getNote(),
+							nurseRecord.getNurse()
+					});
+				}
+				deleteNurseSubmit.setVisible(true);
+				updateNurseSubmit.setVisible(true);
+				JOptionPane.showMessageDialog(null,"共计" + nurseRecordses.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		updateNurseSubmit.setBounds(600 , 60 , 90 ,25);
+		updateNurseSubmit.setVisible(false);
+		deleteNurseSubmit.setBounds(600 , 20 , 90 , 25);
+		deleteNurseSubmit.setVisible(false);
+		updateNurseSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(updateNurseSubmit.getText().equals("修改")) {
+					table.setEnabled(true);
+					kind = "nurse";
+					updateNurseSubmit.setText("关闭修改");
+				}else if(updateNurseSubmit.getText().equals("关闭修改")) {
+					table.setEnabled(false);
+					updateNurseSubmit.setText("修改");
+
+				}
+
+
+			}
+		});
+
+		deleteNurseSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() <= 0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+					return;
+				}
+				int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+				// 判断用户是否点击
+				if (result == JOptionPane.OK_OPTION) {
+					int userid = Integer.valueOf(table.getValueAt(
+							table.getSelectedRow(), 0).toString());
+					//userDao.delete(userid);
+					//loadData();
+					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+					NurseRecordsAction nurseRecordsAction = new NurseRecordsAction();
+					NurseRecords nurseRecords = new NurseRecords();
+					nurseRecords.setN_id(userid);
+					nurseRecordsAction.deleteNurseRecords(nurseRecords);
+					List<NurseRecords> nurseRecordses = nurseRecordsAction.getNurseRecordsByTime(startTime , endTime);
+
+					model.setColumnIdentifiers(StatueContent.nurseColname11);
+
+					//清空
+					while(model.getRowCount()>0){
+						model.removeRow(model.getRowCount()-1);
+					}
+
+					for (NurseRecords nurseRecord : nurseRecordses) {
+						model.addRow(new String[]{
+								String.valueOf(nurseRecord.getN_id()),
+								nurseRecord.getThetime().toString(),
+								nurseRecord.getPatient(),
+								nurseRecord.getSex(),
+								nurseRecord.getIns(),
+								nurseRecord.getAge()+"",
+								nurseRecord.getDrug(),
+								nurseRecord.getThecode(),
+								nurseRecord.getNote(),
+								nurseRecord.getNurse()
+						});
+					}
+
+					updateNurseSubmit.setVisible(true);
+					JOptionPane.showMessageDialog(null,"共计" + nurseRecordses.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+
+
+		nurseWork.add(startTimeLabel);
+		nurseWork.add(startYear);
+		nurseWork.add(startYearLabel);
+		nurseWork.add(startMouth);
+		nurseWork.add(startMouthLabel);
+		nurseWork.add(startDay);
+		nurseWork.add(startDayLabel);
+		nurseWork.add(endTimeLabel);
+		nurseWork.add(endYear);
+		nurseWork.add(endYearLabel);
+		nurseWork.add(endMouthLabel);
+		nurseWork.add(endMouth);
+		nurseWork.add(endDayLabel);
+		nurseWork.add(endDay);
+		nurseWork.add(addMedicintSubmit);
+		nurseWork.add(updateNurseSubmit);
+		nurseWork.add(deleteNurseSubmit);
+		jPanel2.add(nurseWork);
+
+	}
+
+	private void doctorWorkLayout() {
+		// 声明控件
+		JLabel startTimeLabel = new JLabel("开始时间：");
+		JTextField startYear = new JTextField();
+		JLabel startYearLabel = new JLabel("年");
+		JTextField startMouth = new JTextField();
+		JLabel startMouthLabel = new JLabel("月");
+		JTextField startDay = new JTextField();
+		JLabel startDayLabel = new JLabel("日");
+
+		JLabel endTimeLabel = new JLabel("结束时间：");
+		JTextField endYear = new JTextField();
+		JLabel endYearLabel = new JLabel("年");
+		JTextField endMouth = new JTextField();
+		JLabel endMouthLabel = new JLabel("月");
+		JTextField endDay = new JTextField();
+		JLabel endDayLabel = new JLabel("日");
+		JButton addMedicintSubmit = new JButton("查找");
+		JButton updateDoctorSubmit = new JButton("修改");
+		JButton deleteDoctorSubmit = new JButton("删除");
+
+		// 添加控件
+		doctorWork.setLayout(null);
+
+		startTimeLabel.setBounds(100, 20, 80, 25);
+		startYear.setBounds(180 ,20 , 80 , 25);
+		startYearLabel.setBounds(260, 20, 15, 25);
+		startMouth.setBounds(275 , 20,80,25);
+		startMouthLabel.setBounds(355, 20, 15, 25);
+		startDay.setBounds(370,20,80,25);
+		startDayLabel.setBounds(450, 20, 15, 25);
+
+		endTimeLabel.setBounds(100, 60, 80, 25);
+		endYear.setBounds(180 ,60 , 80 , 25);
+		endYearLabel.setBounds(260, 60, 15, 25);
+		endMouth.setBounds(275 , 60,80,25);
+		endMouthLabel.setBounds(355, 60, 15, 25);
+		endDay.setBounds(370,60,80,25);
+		endDayLabel.setBounds(450, 60, 15, 25);
+
+		addMedicintSubmit.setBounds(500, 60, 90, 25);
+		addMedicintSubmit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+				String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+				PrescriptionAction prescriptionAction = new PrescriptionAction();
+				prescriptions = prescriptionAction.getPrescriptionByTime(startTime , endTime);
+
+				model.setColumnIdentifiers(StatueContent.doctorcolname22);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+
+				for (Prescription prescription : prescriptions) {
+					model.addRow(new String[]{
+							String.valueOf(prescription.getPre_id()),
+							prescription.getTime().toString(),
+							prescription.getDoctor(),
+							prescription.getName(),
+							prescription.getInstitutions(),
+							prescription.getDrug(),
+							prescription.getCode(),
+							prescription.getAmount()+"",
+							prescription.getHz(),
+							prescription.getDay()+"",
+							prescription.getNote(),
+							prescription.getChronicDisease()
+					});
+				}
+
+
+				JOptionPane.showMessageDialog(null,"共计" + prescriptions.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+				updateDoctorSubmit.setVisible(true);
+				deleteDoctorSubmit.setVisible(true);
+			}
+		});
+
+		updateDoctorSubmit.setBounds(600 , 60 , 90 ,25);
+		updateDoctorSubmit.setVisible(false);
+		deleteDoctorSubmit.setBounds(600 , 20 , 90 ,25);
+		deleteDoctorSubmit.setVisible(false);
+		updateDoctorSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(updateDoctorSubmit.getText().equals("修改")) {
+					kind = "doctor";
+					table.setEnabled(true);
+					updateDoctorSubmit.setText("关闭修改");
+				}else if(updateDoctorSubmit.getText().equals("关闭修改")) {
+					table.setEnabled(false);
+					updateDoctorSubmit.setText("修改");
+				}
+			}
+		});
+
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 1) {
+					int row = ((JTable) e.getSource()).rowAtPoint(e
+							.getPoint());
+					int col = ((JTable) e.getSource())
+							.columnAtPoint(e.getPoint());
+					String cellValue = (String) (table
+							.getValueAt(row, col));
+					oldValue = cellValue;
+					//System.out.println(oldValue);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+
+		deleteDoctorSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() <= 0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的数据行");
+					return;
+				}
+				int result = JOptionPane.showConfirmDialog(null, "是否确定要删除");
+				// 判断用户是否点击
+				if (result == JOptionPane.OK_OPTION) {
+					int userid = Integer.valueOf(table.getValueAt(
+							table.getSelectedRow(), 0).toString());
+					//userDao.delete(userid);
+					//loadData();
+					PrescriptionAction prescriptionAction = new PrescriptionAction();
+					Prescription prescription = new Prescription();
+					prescription.setPre_id(userid);
+					prescriptionAction.deletePrescription(prescription);
+
+					String startTime = startYear.getText() + "-" + startMouth.getText() + "-" + startDay.getText();
+					String endTime = endYear.getText() + "-" + endMouth.getText() + "-" + endDay.getText();
+
+					prescriptions = prescriptionAction.getPrescriptionByTime(startTime , endTime);
+
+					model.setColumnIdentifiers(StatueContent.doctorcolname22);
+
+					//清空
+					while(model.getRowCount()>0){
+						model.removeRow(model.getRowCount()-1);
+					}
+
+					for (Prescription p : prescriptions) {
+						model.addRow(new String[]{
+								String.valueOf(prescription.getPre_id()),
+								p.getTime().toString(),
+								p.getDoctor(),
+								p.getName(),
+								p.getInstitutions(),
+								p.getDrug(),
+								p.getCode(),
+								p.getAmount()+"",
+								p.getHz(),
+								p.getDay()+"",
+								p.getNote(),
+								p.getChronicDisease()
+						});
+					}
+
+					JOptionPane.showMessageDialog(null,"共计" + prescriptions.size() + "条","统计",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+
+
+
+		doctorWork.add(startTimeLabel);
+		doctorWork.add(startYear);
+		doctorWork.add(startYearLabel);
+		doctorWork.add(startMouth);
+		doctorWork.add(startMouthLabel);
+		doctorWork.add(startDay);
+		doctorWork.add(startDayLabel);
+		doctorWork.add(endTimeLabel);
+		doctorWork.add(endYear);
+		doctorWork.add(endYearLabel);
+		doctorWork.add(endMouthLabel);
+		doctorWork.add(endMouth);
+		doctorWork.add(endDayLabel);
+		doctorWork.add(endDay);
+		doctorWork.add(addMedicintSubmit);
+		doctorWork.add(updateDoctorSubmit);
+		doctorWork.add(deleteDoctorSubmit);
+		jPanel2.add(doctorWork);
+
+
+	}
+
 	private void layoutPanel1() {
-        jPanel1.setLayout(new BorderLayout());
-        jMenuBar = new JMenuBar();
-        jMenus[0].add(j1);
-        jMenus[1].add(j2);
-        jMenus[1].add(j22);
+		jPanel1.setLayout(new BorderLayout());
+		jMenuBar = new JMenuBar();
+		jMenus[0].add(j1);
+		jMenus[1].add(j2);
+		jMenus[1].add(j22);
 		jMenus[2].add(j3);
 		jMenus[3].add(j4);
 		jMenus[4].add(j5);
 		jMenus[5].add(j6);
 		jMenus[6].add(j7);
-        for(int i = 0; i < jMenus.length; i ++) {
-        	jMenuBar.add(jMenus[i]);
-        }
-        jPanel1.add(jMenuBar);
-    }
-	
+		for(int i = 0; i < jMenus.length; i ++) {
+			jMenuBar.add(jMenus[i]);
+		}
+		jPanel1.add(jMenuBar);
+	}
+
 	private void layoutPanel2() {
 		jPanel2.setLayout(null);
 		jPanel3 = new JPanel();
@@ -564,7 +1705,7 @@ public class SystemFrame {
 		show = new JTextField("欢迎使用");
 		show.setEnabled(false);
 		show.setFont(new Font("黑体",Font.PLAIN,90));
-		show.setHorizontalAlignment(JTextField.CENTER);  
+		show.setHorizontalAlignment(JTextField.CENTER);
 		jPanel3.setLayout(new BorderLayout());
 		showPane = new JScrollPane();
 		showPane.setViewportView(show);
@@ -580,223 +1721,11 @@ public class SystemFrame {
 		scrollPane5 = new JScrollPane(table);
 		table.getTableHeader().setResizingAllowed(false);
 		tablePanel.add(scrollPane5, BorderLayout.CENTER);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.setRowHeight(35);
 		table.setEnabled(false);
 		tablePanel.setVisible(false);
 	}
-
-	private void safeLayout() {
-		// 声明控件
-		JLabel timeLabel = new JLabel("时间：");
-		JTextField year = new JTextField();
-		JLabel yearLabel = new JLabel("年");
-		JTextField mouth = new JTextField();
-		JLabel mouthLabel = new JLabel("月");
-		JTextField day = new JTextField();
-		JLabel dayLabel = new JLabel("日");
-		JButton addMedicintSubmit = new JButton("查找");
-
-		// 添加控件
-		safe.setLayout(null);
-
-		timeLabel.setBounds(100, 20, 80, 25);
-		year.setBounds(180 ,20 , 80 , 25);
-		yearLabel.setBounds(260, 20, 15, 25);
-		mouth.setBounds(275 , 20,80,25);
-		mouthLabel.setBounds(355, 20, 15, 25);
-		day.setBounds(370,20,80,25);
-		dayLabel.setBounds(450, 20, 15, 25);
-
-		addMedicintSubmit.setBounds(440, 60, 90, 25);
-		addMedicintSubmit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,"共计" + num + "人","统计人数",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-		safe.add(timeLabel);
-		safe.add(year);
-		safe.add(yearLabel);
-		safe.add(mouth);
-		safe.add(mouthLabel);
-		safe.add(day);
-		safe.add(dayLabel);
-		safe.add(addMedicintSubmit);
-		jPanel2.add(safe);
-
-	}
-
-	private void eisaiLayout() {
-		// 声明控件
-		JLabel timeLabel = new JLabel("时间：");
-		JTextField year = new JTextField();
-		JLabel yearLabel = new JLabel("年");
-		JTextField mouth = new JTextField();
-		JLabel mouthLabel = new JLabel("月");
-		JTextField day = new JTextField();
-		JLabel dayLabel = new JLabel("日");
-		JButton addMedicintSubmit = new JButton("查找");
-
-		// 添加控件
-		eisai.setLayout(null);
-
-		timeLabel.setBounds(100, 20, 80, 25);
-		year.setBounds(180 ,20 , 80 , 25);
-		yearLabel.setBounds(260, 20, 15, 25);
-		mouth.setBounds(275 , 20,80,25);
-		mouthLabel.setBounds(355, 20, 15, 25);
-		day.setBounds(370,20,80,25);
-		dayLabel.setBounds(450, 20, 15, 25);
-
-		addMedicintSubmit.setBounds(440, 60, 90, 25);
-		addMedicintSubmit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,"共计" + num + "人","统计人数",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-
-		eisai.add(timeLabel);
-		eisai.add(year);
-		eisai.add(yearLabel);
-		eisai.add(mouth);
-		eisai.add(mouthLabel);
-		eisai.add(day);
-		eisai.add(dayLabel);
-		eisai.add(addMedicintSubmit);
-		jPanel2.add(eisai);
-	}
-
-	private void financeLayout() {
-		// 声明控件
-		JLabel timeLabel = new JLabel("时间：");
-		JTextField year = new JTextField();
-		JLabel yearLabel = new JLabel("年");
-		JTextField mouth = new JTextField();
-		JLabel mouthLabel = new JLabel("月");
-		JTextField day = new JTextField();
-		JLabel dayLabel = new JLabel("日");
-		JButton addMedicintSubmit = new JButton("查找");
-
-		// 添加控件
-		finance.setLayout(null);
-
-		timeLabel.setBounds(100, 20, 80, 25);
-		year.setBounds(180 ,20 , 80 , 25);
-		yearLabel.setBounds(260, 20, 15, 25);
-		mouth.setBounds(275 , 20,80,25);
-		mouthLabel.setBounds(355, 20, 15, 25);
-		day.setBounds(370,20,80,25);
-		dayLabel.setBounds(450, 20, 15, 25);
-
-		addMedicintSubmit.setBounds(440, 60, 90, 25);
-		addMedicintSubmit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,"共计" + num + "人","统计人数",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-		finance.add(timeLabel);
-		finance.add(year);
-		finance.add(yearLabel);
-		finance.add(mouth);
-		finance.add(mouthLabel);
-		finance.add(day);
-		finance.add(dayLabel);
-		finance.add(addMedicintSubmit);
-		jPanel2.add(finance);
-
-	}
-
-	private void nurseWorkLayout() {
-		// 声明控件
-		JLabel timeLabel = new JLabel("时间：");
-		JTextField year = new JTextField();
-		JLabel yearLabel = new JLabel("年");
-		JTextField mouth = new JTextField();
-		JLabel mouthLabel = new JLabel("月");
-		JTextField day = new JTextField();
-		JLabel dayLabel = new JLabel("日");
-		JButton addMedicintSubmit = new JButton("查找");
-
-		// 添加控件
-		nurseWork.setLayout(null);
-
-		timeLabel.setBounds(100, 20, 80, 25);
-		year.setBounds(180 ,20 , 80 , 25);
-		yearLabel.setBounds(260, 20, 15, 25);
-		mouth.setBounds(275 , 20,80,25);
-		mouthLabel.setBounds(355, 20, 15, 25);
-		day.setBounds(370,20,80,25);
-		dayLabel.setBounds(450, 20, 15, 25);
-
-		addMedicintSubmit.setBounds(440, 60, 90, 25);
-		addMedicintSubmit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,"共计" + num + "人","统计人数",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-		nurseWork.add(timeLabel);
-		nurseWork.add(year);
-		nurseWork.add(yearLabel);
-		nurseWork.add(mouth);
-		nurseWork.add(mouthLabel);
-		nurseWork.add(day);
-		nurseWork.add(dayLabel);
-		nurseWork.add(addMedicintSubmit);
-		jPanel2.add(nurseWork);
-
-	}
-
-	private void doctorWorkLayout() {
-		// 声明控件
-		JLabel timeLabel = new JLabel("时间：");
-		JTextField year = new JTextField();
-		JLabel yearLabel = new JLabel("年");
-		JTextField mouth = new JTextField();
-		JLabel mouthLabel = new JLabel("月");
-		JTextField day = new JTextField();
-		JLabel dayLabel = new JLabel("日");
-		JButton addMedicintSubmit = new JButton("查找");
-
-		// 添加控件
-		doctorWork.setLayout(null);
-
-		timeLabel.setBounds(100, 20, 80, 25);
-		year.setBounds(180 ,20 , 80 , 25);
-		yearLabel.setBounds(260, 20, 15, 25);
-		mouth.setBounds(275 , 20,80,25);
-		mouthLabel.setBounds(355, 20, 15, 25);
-		day.setBounds(370,20,80,25);
-		dayLabel.setBounds(450, 20, 15, 25);
-
-		addMedicintSubmit.setBounds(440, 60, 90, 25);
-
-		addMedicintSubmit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null,"共计" + num + "人","统计人数",JOptionPane.WARNING_MESSAGE);
-			}
-		});
-		doctorWork.add(timeLabel);
-		doctorWork.add(year);
-		doctorWork.add(yearLabel);
-		doctorWork.add(mouth);
-		doctorWork.add(mouthLabel);
-		doctorWork.add(day);
-		doctorWork.add(dayLabel);
-		doctorWork.add(addMedicintSubmit);
-		jPanel2.add(doctorWork);
-
-
-	}
-
-
 
 	public static void main(String[] args) {
 		new SystemFrame().init();

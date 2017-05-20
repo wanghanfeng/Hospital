@@ -17,4 +17,10 @@ public interface PrescriptionDao {
 
     List<Prescription> getPrescriptionByInf(@Param("theName") String theName, @Param("theUnit") String theUnit);
 
+    List<Prescription> getPrescriptionByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    int updatePrescription(Prescription prescription);
+
+    int deletePrescription(Prescription prescription);
+
 }

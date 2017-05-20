@@ -129,5 +129,22 @@ public class Prescription {
         this.time = time;
     }
 
-
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "pre_id=" + pre_id +
+                ", doctor='" + doctor + '\'' +
+                ", name='" + name + '\'' +
+                ", institutions='" + institutions + '\'' +
+                ", drug='" + drug + '\'' +
+                ", code='" + code + '\'' +
+                ", amount=" + amount +
+                ", dosage='" + dosage + '\'' +
+                ", day=" + day +
+                ", hz='" + hz + '\'' +
+                ", chronicDisease='" + chronicDisease + '\'' +
+                ", note='" + note + '\'' +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }

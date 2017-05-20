@@ -65,8 +65,22 @@
         UPDATE drugs set amount=#{amount } where drugcode=#{drugcode }
     </update>
 
+    <!--查找药品记录 通过时间段-->
+    <select id="getDrugsByTime" resultMap="drugsMap">
+        SELECT * FROM drugs WHERE thetime between #{startTime} and #{endTime}
+    </select>
 
+    <!--查找药品记录 通过时间段-->
+    <update id="updateALLDrugs" parameterType="Drugs">
+       update drugs set thetime = #{thetime },drug = #{drug },
+                        sort = #{sort },standard = #{standard },che = #{che },
+                            packages = #{packages },place = #{place },buysale = #{buysale },thesale = #{thesale },
+                              lose = #{lose },company = #{company },amount = #{amount },user = #{user }
+                    where drugcode = #{drugcode }
+    </update>
 
-
+    <delete id="deleteDrugs" parameterType="Drugs">
+        delete from drugs where drugcode = #{drugcode }
+    </delete>
 
 </mapper>

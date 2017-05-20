@@ -1,6 +1,7 @@
 package action;
 
 import model.Prescription;
+import model.Prevention;
 import service.PrescriptionService;
 import service.impl.PrescriptionServiceImpl;
 
@@ -27,5 +28,16 @@ public class PrescriptionAction {
     public List<Prescription> getPrescriptionByInf(String theName, String theUnit) {
         List<Prescription> list = prescriptionService.getPrescriptionByInf(theName,theUnit);
         return list;
+    }
+
+    public List<Prescription> getPrescriptionByTime(String startTime, String endTime) {
+        return prescriptionService.getPrescriptionByTime(startTime , endTime);
+    }
+    public int updatePrescription(Prescription prescription) {
+        return prescriptionService.updatePrescription(prescription);
+    }
+
+    public int deletePrescription(Prescription prescription) {
+        return prescriptionService.deletePrescription(prescription);
     }
 }

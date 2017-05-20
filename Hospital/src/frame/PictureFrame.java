@@ -1,19 +1,11 @@
 package frame;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class PictureFrame extends JFrame implements ChangeListener{
 
@@ -89,12 +81,12 @@ public class PictureFrame extends JFrame implements ChangeListener{
     	if ( infoflags == ALLBITS ) {
            loadFinished = true;
            repaint();
-           System.out.println(val + " " + (++aa));
+           //System.out.println(val + " " + (++aa));
            progressCount = val;
            return false;
        } else
        {
-    	   System.out.println(val + " " + (++aa));
+    	  // System.out.println(val + " " + (++aa));
     	   progressCount = val;
            return true;
        }

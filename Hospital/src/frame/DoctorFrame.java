@@ -1,12 +1,8 @@
 package frame;
 
-import action.DrugsAction;
-import action.PatientInformationAction;
-import action.PrescriptionAction;
+import action.*;
 import content.StatueContent;
-import model.Drugs;
-import model.PatientInformation;
-import model.Prescription;
+import model.*;
 import utils.FileUploader;
 
 import javax.swing.*;
@@ -28,6 +24,7 @@ public class DoctorFrame {
 
 	private JFrame jFrame;
 	PatientInformationAction patientInformationAction;
+	ConexamneAction conexamneAction;
 	PrescriptionAction prescriptionAction;
 
 	//菜单栏组件
@@ -47,6 +44,7 @@ public class DoctorFrame {
 	private JPanel jPanel3;
 	private JPanel addPatient;
 	private JPanel addMedicint;
+	private JPanel addConexamne;
 
 	//表格组件
 	public String[][] datas = {};
@@ -101,7 +99,9 @@ public class DoctorFrame {
 		addMedicint.setBounds(0, 0, StatueContent.main_width, 100);
 		addMedicintLayout(new DoctorFrame(model));
 
-
+		addConexamne = new JPanel();
+		addConexamne.setBounds(0, 0, StatueContent.main_width, 100);
+		addConexamneLayout(new DoctorFrame(model));
 
 		// 添加单击事件
 		j1.addActionListener(new ActionListener() {
@@ -118,6 +118,7 @@ public class DoctorFrame {
 				jPanel3.setVisible(false);
 				addPatient.setVisible(true);
 				addMedicint.setVisible(false);
+				addConexamne.setVisible(false);
 			}
 		});
 
@@ -136,18 +137,22 @@ public class DoctorFrame {
 				jPanel3.setVisible(false);
 				addPatient.setVisible(false);
 				addMedicint.setVisible(true);
+				addConexamne.setVisible(false);
 			}
 		});
 		j5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddConexamne();
+				new AddConexamne(new DoctorFrame(model));
 			}
 		});
 		j6.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				jPanel3.setVisible(false);
+				addPatient.setVisible(false);
+				addMedicint.setVisible(false);
+				addConexamne.setVisible(true);
 			}
 		});
 		j7.addActionListener(new ActionListener() {
@@ -162,7 +167,70 @@ public class DoctorFrame {
 		jFrame.setVisible(true);
 	}
 
+	private void addConexamneLayout(DoctorFrame doctorFrame) {
+		//声明控件
+		JLabel nameLabel = new JLabel("姓名：");
+		JTextField name = new JTextField();
+		JLabel unitLabel = new JLabel("单位：");
+		JTextField unit = new JTextField();
+		JButton addConexamneSubmit = new JButton("查找");
 
+		//添加控件
+		addConexamne.setLayout(null);
+		nameLabel.setBounds(100, 20, 40, 25);
+		name.setBounds(140, 20, 100, 25);
+		unitLabel.setBounds(360, 20, 40, 25);
+		unit.setBounds(400, 20, 200, 25);
+		addConexamneSubmit.setBounds(400, 60, 90, 25);
+
+		/**
+		 * 查找外诊审批
+		 *目的：1.有姓名 按照 姓名+性别 查找
+		 *     2.有姓名和单位 按照 姓名+性别+单位 查找
+		 *     3.有单位 按照 单位+性别 查找
+		 * @param e
+		 */
+		addConexamneSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//实现查找病人 先获取填空信息
+				String theName = name.getText();
+				String theUnit = unit.getText();
+				conexamneAction = new ConexamneAction();
+				List<Conexamne> list = conexamneAction.getConexamneByInf(theName , theUnit);
+
+				doctorFrame.model.setColumnIdentifiers(StatueContent.consxamne);
+
+				//清空
+				while(doctorFrame.model.getRowCount()>0){
+					doctorFrame.model.removeRow(doctorFrame.model.getRowCount()-1);
+				}
+
+				//展示选择的病人
+				for (Conexamne c : list) {
+					doctorFrame.model.addRow(new String[]{
+							c.getTime(),
+							c.getName(),
+							c.getSex(),
+							c.getUnit(),
+							c.getHospital(),
+							c.getApprove(),
+							c.getSuggest(),
+							c.getSituation()
+					});
+				}
+			}
+		});
+
+		addConexamne.add(nameLabel);
+		addConexamne.add(name);
+		addConexamne.add(unitLabel);
+		addConexamne.add(unit);
+		addConexamne.add(addConexamneSubmit);
+		addConexamne.setVisible(false);
+		jPanel2.add(addConexamne);
+
+	}
 
 
 	// 病人信息录用模块
@@ -325,6 +393,8 @@ public class DoctorFrame {
 		jMenus[1].add(j3);
 		jMenus[1].add(j4);
 		jMenus[2].add(j5);
+		jMenus[2].add(j6);
+		jMenus[3].add(j7);
 		for(int i = 0; i < jMenus.length; i ++) {
 			jMenuBar.add(jMenus[i]);
 		}
@@ -345,7 +415,7 @@ public class DoctorFrame {
 		showPane.setViewportView(show);
 		jPanel3.add(showPane , BorderLayout.CENTER);
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
+		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 82);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
 
@@ -385,16 +455,18 @@ public class DoctorFrame {
 		table.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 1) {
 					int row = ((JTable) e.getSource()).rowAtPoint(e
 							.getPoint());
 					int col = ((JTable) e.getSource())
 							.columnAtPoint(e.getPoint());
 					String cellValue = (String) (table
 							.getValueAt(row, col));
-					System.out.println(cellValue);
+					System.out.println("===================> " + cellValue);
 					//展示图片 默认大小 可拖拽放大或缩小
+
 					if (col == 6) {
+						System.out.println("++++++++++++++++++++" + cellValue);
 						PictureFrame r = new PictureFrame(500, 500);
 						r.loadURLImage(cellValue,r.getGraphics(),((JFrame)r));
 					}
@@ -423,6 +495,7 @@ public class DoctorFrame {
 
 class AddPatient{
 	PatientInformationAction patientInformationAction;
+	DictionaryAction dictionaryAction;
 	private JFrame jFrame = new JFrame("添加病人");
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -487,8 +560,10 @@ class AddPatient{
 		buttonGroup2.add(fuzhen);
 
 		doctorLabel.setBounds(30, 210, 40, 25);
-		for(int i = 0;i < 5; i++) {
-			doctor.addItem(i);
+		dictionaryAction = new DictionaryAction();
+		List<Dictionary> dictionaries = dictionaryAction.getDictionaryByInf("doctor");
+		for(Dictionary d:dictionaries) {
+			doctor.addItem(d.getName());
 		}
 		doctor.setBounds(70 , 210 , 150,25);
 
@@ -691,7 +766,7 @@ class AddMedicine{
 	PrescriptionAction prescriptionAction;
 	DrugsAction drugsAction = new DrugsAction();
 	PatientInformationAction patientInformationAction = new PatientInformationAction();
-
+	DictionaryAction dictionaryAction = new DictionaryAction();
 	private JFrame jFrame = new JFrame("处方信息录入");
 
 	Date theDate = new Date();
@@ -732,7 +807,7 @@ class AddMedicine{
 	private JTextField note = new JTextField();
 
 	private JLabel doctorLabel = new JLabel("开药医生：");
-	private JTextField doctor = new JTextField();
+	private JComboBox doctor = new JComboBox<>();
 
 	private JTextField id = new JTextField();
 
@@ -788,6 +863,11 @@ class AddMedicine{
 
 		doctorLabel.setBounds(30, 340, 80, 25);
 		doctor.setBounds(100,340,80,25);
+		dictionaryAction = new DictionaryAction();
+		List<Dictionary> dictionaries = dictionaryAction.getDictionaryByInf("doctor");
+		for(Dictionary d:dictionaries) {
+			doctor.addItem(d.getName());
+		}
 
 		submit.setBounds(70 , 380 , 90 , 25);
 		cancel.setBounds(170 , 380 , 90 , 25);
@@ -859,7 +939,7 @@ class AddMedicine{
 				}
 				//用法说明
 				String theNote = note.getText();
-				String theDoctor = doctor.getText();
+				String theDoctor = doctor.getSelectedItem().toString();
 
 				//验证空值
 				if (theName.trim().isEmpty() &&
@@ -962,14 +1042,17 @@ class AddMedicine{
 //添加外诊审批
 class AddConexamne {
 
-	private JFrame jFrame = new JFrame("处方信息录入");
+	private ConsumablesAction consumablesAction;
+	private ConexamneAction conexamneAction;
+
+	private JFrame jFrame = new JFrame("外诊审批信息录入");
 
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
 
 	private JLabel nameLabel = new JLabel("姓名：");
-	private JTextField name = new JTextField();
+	private JComboBox name = new JComboBox<>();
 
 	private JLabel sexLabel = new JLabel("性别：");
 	private ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -994,15 +1077,20 @@ class AddConexamne {
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
-	public AddConexamne(){
-		jFrame.setTitle("处方信息录入");
-		jFrame.setSize(450, 480);
+	public AddConexamne(DoctorFrame doctorFrame){
+		jFrame.setTitle("外诊审批信息录入");
+		jFrame.setSize(450, 280);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
 
+		consumablesAction = new ConsumablesAction();
 		nameLabel.setBounds(30, 20, 80, 25);
 		name.setBounds(110, 20, 90, 25);
+		List<Consumables> consumables = consumablesAction.getAllConsumables();
+		for(Consumables c:consumables) {
+			name.addItem(c.getThename());
+		}
 		unitLabel.setBounds(220, 20, 80, 25);
 		unit.setBounds(280, 20, 90, 25);
 
@@ -1029,7 +1117,79 @@ class AddConexamne {
 		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//添加处方
+				//日期是当前系统时间 月 日 年
+				String theDate = nowTime;
+				//患者名
+				String theName = name.getSelectedItem().toString();
+				//单位
+				String theUnit = unit.getText();
+				//性别
+				String theSex = "";
+				if (man.isSelected()){
+					theSex = man.getText();
+				}else if (woman.isSelected()){
+					theSex = woman.getText();
+				}
+				//就诊医院
+				String theHospital = hospital.getText();
+				//审批人
+				String theApprove = approve.getText();
+				//建议门诊
+				String theSuggest = suggest.getText();
+				//病情说明
+				String theSituation = situation.getText();
 
+				//验证空值
+				if (theName.trim().isEmpty() &&
+						theUnit.trim().isEmpty() &&
+						theApprove.trim().isEmpty() && theHospital.trim().isEmpty()&&
+						theSituation.trim().isEmpty()&& theSuggest.trim().isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				Conexamne conexamne = new Conexamne();
+				conexamne.setName(theName);
+				conexamne.setUnit(theUnit);
+				conexamne.setTime(theDate);
+				conexamne.setApprove(theApprove);
+				conexamne.setHospital(theHospital);
+				conexamne.setSituation(theSituation);
+				conexamne.setSuggest(theSuggest);
+				conexamne.setSex(theSex);
+
+				conexamneAction = new ConexamneAction();
+				int i = conexamneAction.addConexamne(conexamne);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+
+				//清空
+				while(doctorFrame.model.getRowCount()>0){
+					doctorFrame.model.removeRow(doctorFrame.model.getRowCount()-1);
+				}
+
+				doctorFrame.model.setColumnIdentifiers(StatueContent.consxamne);
+
+				//查数据库，展示所有外诊报销
+				List<Conexamne> conexamnes = conexamneAction.getAllConexamne();
+				for (Conexamne c:conexamnes) {
+					doctorFrame.model.addRow(new String[]{
+							c.getTime(),
+							c.getName(),
+							c.getSex(),
+							c.getUnit(),
+							c.getHospital(),
+							c.getApprove(),
+							c.getSuggest(),
+							c.getSituation()
+					});
+				}
+
+				jFrame.dispose();
 			}
 		});
 

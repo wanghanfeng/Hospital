@@ -28,4 +28,16 @@ public class NurseRecordsAction {
         List<NurseRecords> list = nurseRecordsService.getNurseRecordsByInf(theName,theSex,theUnit);
         return list;
     }
+
+    public List<NurseRecords> getNurseRecordsByTime(String startTime, String endTime) {
+        return nurseRecordsService.getNurseRecordsByTime(startTime , endTime);
+    }
+
+    public int updatePrescription(NurseRecords nurseRecords) {
+        return nurseRecordsService.updatePrescription(nurseRecords);
+    }
+
+    public int deleteNurseRecords(NurseRecords nurseRecords) {
+        return nurseRecordsService.deleteNurseRecords(nurseRecords);
+    }
 }

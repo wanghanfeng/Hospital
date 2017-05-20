@@ -1,8 +1,8 @@
 package service.impl;
 
 import dao.HealthScreenDao;
-import model.Health;
 import model.HealthScreen;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import service.HealthScreenService;
 import utils.SqlSessionFactoryUtil;
@@ -49,5 +49,36 @@ public class HealthScreenServiceImpl implements HealthScreenService{
         return list;
     }
 
+    @Override
+    public List<HealthScreen> getHealthScreenByTime(@Param("startTime") String startTime, @Param("endTime") String endTime) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        HealthScreenDao healthScreenDao = sqlSession.getMapper(HealthScreenDao.class);
+        List<HealthScreen> list = healthScreenDao.getHealthScreenByTime(startTime , endTime);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
 
+    @Override
+    public int updateHealthScreen(HealthScreen healthScreen) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        HealthScreenDao healthScreenDao = sqlSession.getMapper(HealthScreenDao.class);
+        int i = healthScreenDao.updateHealthScreen(healthScreen);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
+
+    @Override
+    public int deleteHealthScreen(HealthScreen healthScreen) {
+        //开启SqlSession
+        sqlSession = SqlSessionFactoryUtil.openSqlSession();
+        HealthScreenDao healthScreenDao = sqlSession.getMapper(HealthScreenDao.class);
+        int i = healthScreenDao.deleteHealthScreen(healthScreen);
+        sqlSession.commit();
+        sqlSession.close();
+        return i;
+    }
 }

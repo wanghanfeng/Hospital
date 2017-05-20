@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 /**
  * Created by lp on 2017/5/4.
  */
@@ -12,8 +10,9 @@ public class Conexamne {
     private String unit;
     private String approve;
     private String suggest;
+    private String hospital;
     private String situation;
-    private Date time;
+    private String time;
 
     public int getC_id() {
         return c_id;
@@ -71,12 +70,20 @@ public class Conexamne {
         this.situation = situation;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 
     @Override
@@ -88,6 +95,7 @@ public class Conexamne {
                 ", unit='" + unit + '\'' +
                 ", approve='" + approve + '\'' +
                 ", suggest='" + suggest + '\'' +
+                ", hosptial='" + hospital + '\'' +
                 ", situation='" + situation + '\'' +
                 ", time=" + time +
                 '}';

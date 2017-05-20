@@ -2,9 +2,13 @@ package frame;
 
 import action.HealthScreenAction;
 import action.ImportantPersonAction;
+import action.PreventionAction;
+import action.SpecialListAction;
 import content.StatueContent;
 import model.HealthScreen;
 import model.ImportantPerson;
+import model.Prevention;
+import model.SpecialList;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -44,6 +48,8 @@ public class SafeFrame {
 	private JPanel jPanel3;
 	private JPanel addPeople;
 	private JPanel addInfo;
+	private JPanel addPrevention;
+	private JPanel addSpecialList;
 
 	//表格组件
 	private String[][] datas = {};
@@ -95,6 +101,14 @@ public class SafeFrame {
 		addInfo.setBounds(0, 0, StatueContent.main_width, 100);
 		addInfoLayout();
 
+		addSpecialList = new JPanel();
+		addSpecialList.setBounds(0, 0, StatueContent.main_width, 100);
+		addSpecialListLayout();
+
+		addPrevention = new JPanel();
+		addPrevention.setBounds(0, 0, StatueContent.main_width, 100);
+		addPreventionLayout();
+
 		table.setEnabled(false);
 		// 添加单击事件
 		j1.addActionListener(new ActionListener() {
@@ -126,31 +140,41 @@ public class SafeFrame {
 			public void actionPerformed(ActionEvent e) {
 				jPanel3.setVisible(false);
 				addPeople.setVisible(false);
+				addPrevention.setVisible(false);
+				addSpecialList.setVisible(false);
 				addInfo.setVisible(true);
 			}
 		});
 		j5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddPrevention();
+				new AddPrevention(new SafeFrame(model));
 			}
 		});
 		j6.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				jPanel3.setVisible(false);
+				addPeople.setVisible(false);
+				addPrevention.setVisible(true);
+				addSpecialList.setVisible(false);
+				addInfo.setVisible(false);
 			}
 		});
 		j7.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddSpecialist();
+				new AddSpecialist(new SafeFrame(model));
 			}
 		});
 		j8.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				jPanel3.setVisible(false);
+				addPeople.setVisible(false);
+				addPrevention.setVisible(false);
+				addSpecialList.setVisible(true);
+				addInfo.setVisible(false);
 			}
 		});
 
@@ -166,6 +190,103 @@ public class SafeFrame {
 		jFrame.setVisible(true);
 	}
 
+	private void addSpecialListLayout() {
+		//声明控件
+		JLabel nameLabel = new JLabel("姓名：");
+		JTextField name = new JTextField();
+		JLabel unitLabel = new JLabel("单位：");
+		JTextField unit = new JTextField();
+		JButton addPatientSubmit = new JButton("查找");
+
+		//添加控件
+		addSpecialList.setLayout(null);
+		nameLabel.setBounds(100, 20, 40, 25);
+		name.setBounds(140, 20, 100, 25);
+		unitLabel.setBounds(360, 20, 40, 25);
+		unit.setBounds(400, 20, 200, 25);
+		addPatientSubmit.setBounds(400, 60, 90, 25);
+		addSpecialList.add(nameLabel);
+		addSpecialList.add(name);
+		addSpecialList.add(unitLabel);
+		addSpecialList.add(unit);
+		addSpecialList.add(addPatientSubmit);
+		addSpecialList.setVisible(false);
+		jPanel2.add(addSpecialList);
+		addPatientSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = name.getText();
+				String theUnit = unit.getText();
+
+				SpecialListAction specialListAction = new SpecialListAction();
+
+				List<SpecialList> specialLists = specialListAction.getSpecialListByInf(theName , theUnit);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+				model.setColumnIdentifiers(StatueContent.specialList);
+
+				//查数据库，展示所有病人
+				for (SpecialList s:specialLists) {
+					model.addRow(new String[]{
+							s.getTime(),
+							s.getName(),
+							s.getUnit(),
+							s.getMajor(),
+							s.getEndtime()
+					});
+				}
+			}
+		});
+	}
+
+	private void addPreventionLayout() {
+		//声明控件
+		JLabel nameLabel = new JLabel("姓名：");
+		JTextField name = new JTextField();
+		JButton addPatientSubmit = new JButton("查找");
+
+		//添加控件
+		addPrevention.setLayout(null);
+		nameLabel.setBounds(100, 20, 40, 25);
+		name.setBounds(140, 20, 100, 25);
+		addPatientSubmit.setBounds(400, 60, 90, 25);
+		addPrevention.add(nameLabel);
+		addPrevention.add(name);
+		addPrevention.add(addPatientSubmit);
+		addPrevention.setVisible(false);
+		jPanel2.add(addPrevention);
+		addPatientSubmit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String theName = name.getText();
+
+				PreventionAction preventAtion = new PreventionAction();
+
+				List<Prevention> preventions = preventAtion.getPreventionByInf(theName);
+
+				//清空
+				while(model.getRowCount()>0){
+					model.removeRow(model.getRowCount()-1);
+				}
+				model.setColumnIdentifiers(StatueContent.prevention);
+
+				//查数据库，展示所有病人
+				for (Prevention p:preventions) {
+					model.addRow(new String[]{
+							p.getTime(),
+							p.getLeader(),
+							p.getPlace(),
+							p.getMaterialName(),
+							String.valueOf(p.getMaterialNum()),
+							p.getWork()
+					});
+				}
+			}
+		});
+	}
 	// 病人信息录用模块
 	private void addPeopleLayout() {
 		//声明控件
@@ -344,7 +465,7 @@ public class SafeFrame {
 		showPane.setViewportView(show);
 		jPanel3.add(showPane , BorderLayout.CENTER);
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 100);
+		tablePanel.setBounds(0, 100, StatueContent.main_width, StatueContent.main_height - 82);
 		jPanel2.add(jPanel3);
 		jPanel2.add(tablePanel);
 
@@ -776,13 +897,11 @@ class AddInfoFrame {
 
 //预防工作
 class AddPrevention {
+	private PreventionAction preventionAction;
 	private JFrame jFrame = new JFrame("预防工作信息录入");
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	String nowTime = df.format(theDate);
-
-	private JLabel nameLabel = new JLabel("姓名：");
-	private JTextField name = new JTextField();
 
 	private JLabel leaderLabel = new JLabel("值班领导");
 	private JTextField leader = new JTextField();
@@ -802,17 +921,15 @@ class AddPrevention {
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
-	public AddPrevention() {
+	public AddPrevention(SafeFrame safeFrame) {
 		jFrame.setTitle("预防工作信息录入");
 		jFrame.setSize(450, 250);
 		jFrame.setLayout(null);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
 
-		nameLabel.setBounds(30, 20, 80, 25);
-		name.setBounds(110, 20, 90, 25);
-		leaderLabel.setBounds(200, 20, 80, 25);
-		leader.setBounds(280, 20, 90, 25);
+		leaderLabel.setBounds(30, 20, 80, 25);
+		leader.setBounds(110, 20, 90, 25);
 
 		placeLabel.setBounds(30, 60, 80, 25);
 		place.setBounds(110,60,90,25);
@@ -831,7 +948,65 @@ class AddPrevention {
 		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//添加预防工作
+				String theDate = nowTime;
+				//地点
+				String thePlace = place.getText();
+				//值班领导
+				String theLeader = leader.getText();
+				//发放物资名称
+				String theMaterialName = materialName.getText();
+				//发放物资数量
+				String theMaterialNum = materialNum.getText();
+				//具体工作
+				String theWork = work.getText();
 
+				//验证空值
+				if (thePlace.trim().isEmpty() &&
+						theLeader.trim().isEmpty() &&
+						theMaterialName.trim().isEmpty() && theMaterialNum.trim().isEmpty()&&
+						theWork.trim().isEmpty() ){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				Prevention prevention = new Prevention();
+				prevention.setTime(theDate);
+				prevention.setLeader(theLeader);
+				prevention.setMaterialName(theMaterialName);
+				prevention.setMaterialNum(Integer.parseInt(theMaterialNum));
+				prevention.setPlace(thePlace);
+				prevention.setWork(theWork);
+
+				preventionAction = new PreventionAction();
+				int i = preventionAction.addPrevention(prevention);
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+
+				//清空
+				while(safeFrame.model.getRowCount()>0){
+					safeFrame.model.removeRow(safeFrame.model.getRowCount()-1);
+				}
+
+				safeFrame.model.setColumnIdentifiers(StatueContent.prevention);
+
+				//查数据库，展示所有外诊报销
+				List<Prevention> preventions = preventionAction.getAllPrevention();
+				for (Prevention p:preventions) {
+					safeFrame.model.addRow(new String[]{
+							p.getTime(),
+							p.getLeader(),
+							p.getPlace(),
+							p.getMaterialName(),
+							String.valueOf(p.getMaterialNum()),
+							p.getWork()
+					});
+				}
+
+				jFrame.dispose();
 			}
 		});
 
@@ -842,8 +1017,6 @@ class AddPrevention {
 			}
 		});
 
-		jFrame.add(nameLabel);
-		jFrame.add(name);
 		jFrame.add(leaderLabel);
 		jFrame.add(leader);
 		jFrame.add(placeLabel);
@@ -862,6 +1035,7 @@ class AddPrevention {
 
 //专家讲座
 class AddSpecialist {
+	private SpecialListAction specialListAction;
 	private JFrame jFrame = new JFrame("专家讲座信息录入");
 	Date theDate = new Date();
 	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -887,7 +1061,7 @@ class AddSpecialist {
 	private JButton submit = new JButton("确定");
 	private JButton cancel = new JButton("取消");
 
-	public AddSpecialist() {
+	public AddSpecialist(SafeFrame safeFrame) {
 		jFrame.setTitle("专家讲座信息录入");
 		jFrame.setSize(450, 200);
 		jFrame.setLayout(null);
@@ -917,7 +1091,58 @@ class AddSpecialist {
 		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//添加专家讲座
+				String theName = name.getText();
+				String theMajor = major.getText();
+				String theUnit = unit.getText();
+				String endTime = year.getText() + "-" + mouth.getText() + "-" + day.getText();
+				String theDate = nowTime;
 
+				//验证空值
+				if (theName.trim().isEmpty() &&
+						theMajor.trim().isEmpty() && theUnit.trim().isEmpty() &&
+						endTime.trim().isEmpty() && theUnit.trim().isEmpty()){
+					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				SpecialList specialList = new SpecialList();
+				specialList.setName(theName);
+				specialList.setMajor(theMajor);
+				specialList.setEndtime(endTime);
+				specialList.setUnit(theUnit);
+				specialList.setTime(theDate);
+
+
+				specialListAction = new SpecialListAction();
+				int i = specialListAction.addSpecialList(specialList);
+
+				if (i==1){
+					JOptionPane.showMessageDialog(null,"添加成功","消息窗口",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"添加失败","错误窗口",JOptionPane.ERROR_MESSAGE);
+				}
+
+				//清空
+				while(safeFrame.model.getRowCount()>0){
+					safeFrame.model.removeRow(safeFrame.model.getRowCount()-1);
+				}
+
+				safeFrame.model.setColumnIdentifiers(StatueContent.specialList);
+
+				//查数据库，展示所有病人
+				List<SpecialList> specialLists = specialListAction.getAllSpecialList();
+				for (SpecialList s:specialLists) {
+					safeFrame.model.addRow(new String[]{
+						s.getTime(),
+						s.getName(),
+						s.getUnit(),
+						s.getMajor(),
+						s.getEndtime()
+					});
+				}
+
+				jFrame.dispose();
 			}
 		});
 

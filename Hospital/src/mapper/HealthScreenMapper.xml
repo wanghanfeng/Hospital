@@ -37,8 +37,20 @@
         </if>
     </select>
 
+    <!--查找安全排查记录 通过时间段-->
+    <select id="getHealthScreenByTime" resultMap="healthScreenMap">
+        SELECT * FROM healthScreen WHERE  time between #{startTime} and #{endTime}
+    </select>
 
+    <update id="updateHealthScreen" parameterType="HealthScreen">
+        update healthScreen set company = #{company },time = #{time },name = #{name },
+                        type = #{type },die = #{die },epidemic = #{epidemic }
 
+                        where hs_id = #{hs_id}
+    </update>
 
+    <delete id="deleteHealthScreen" parameterType="HealthScreen">
+        delete from healthScreen where hs_id = #{hs_id}
+    </delete>
 
 </mapper>

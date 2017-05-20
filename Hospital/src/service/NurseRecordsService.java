@@ -16,4 +16,9 @@ public interface NurseRecordsService {
 
     List<NurseRecords> getNurseRecordsByInf(String theName, String theSex, String theUnit);
 
+    List<NurseRecords> getNurseRecordsByTime(String startTime, String endTime);
+
+    int updatePrescription(NurseRecords nurseRecords);
+
+    int deleteNurseRecords(NurseRecords nurseRecords);
 }

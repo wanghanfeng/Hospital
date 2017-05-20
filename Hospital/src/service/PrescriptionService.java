@@ -11,9 +11,14 @@ public interface PrescriptionService {
 
     int addPrescription(Prescription prescription);
 
-
     List<Prescription> getAllPrescription();
 
     List<Prescription> getPrescriptionByInf(String theName, String theUnit);
+
+    List<Prescription> getPrescriptionByTime(String startTime, String endTime);
+
+    int updatePrescription(Prescription prescription);
+
+    int deletePrescription(Prescription prescription);
 
 }
