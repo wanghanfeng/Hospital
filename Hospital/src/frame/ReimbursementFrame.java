@@ -800,13 +800,27 @@ class AddImport {
 				String thePurchasing = purchasing.getText();
 				//审批人
 				String theApprove = approve.getText();
-
+				double value;
+				double pur;
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theProducer.trim().isEmpty() &&
-						theApprove.trim().isEmpty() && theType.trim().isEmpty()&&
-						theValue.trim().isEmpty() && thePurchasing.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theProducer.trim().isEmpty() ||
+						theApprove.trim().isEmpty() || theType.trim().isEmpty()&&
+						theValue.trim().isEmpty() || thePurchasing.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				try{
+					value = Double.parseDouble(theValue);
+					pur = Double.parseDouble(thePurchasing);
+				}catch (Exception e2){
+					JOptionPane.showMessageDialog(null,"价格应该是数字","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if (value<pur){
+					JOptionPane.showMessageDialog(null,"进价不能大于市场价格","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
@@ -855,7 +869,7 @@ class AddImport {
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				jFrame.dispose();
 			}
 		});
 
@@ -930,11 +944,20 @@ class AddChange{
 				//审批人
 				String theApprove = approve.getText();
 
+				double pur;
+
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						thePurchasing.trim().isEmpty() &&
+				if (theName.trim().isEmpty() ||
+						thePurchasing.trim().isEmpty() ||
 						theApprove.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				try {
+					pur = Double.parseDouble(thePurchasing);
+				}catch (Exception e1){
+					JOptionPane.showMessageDialog(null,"进价必须为数字","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 

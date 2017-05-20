@@ -896,6 +896,7 @@ class AddQuarantine {
 		sexLabel.setBounds(30, 60, 40, 25);
 		man.setBounds(100,60,50,25);
 		woman.setBounds(150,60,50,25);
+		man.doClick();
 		buttonGroup1.add(man);
 		buttonGroup1.add(woman);
 
