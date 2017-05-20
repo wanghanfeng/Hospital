@@ -1141,10 +1141,10 @@ class AddConexamne {
 				String theSituation = situation.getText();
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theUnit.trim().isEmpty() &&
-						theApprove.trim().isEmpty() && theHospital.trim().isEmpty()&&
-						theSituation.trim().isEmpty()&& theSuggest.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theUnit.trim().isEmpty() ||
+						theApprove.trim().isEmpty() || theHospital.trim().isEmpty() ||
+						theSituation.trim().isEmpty() || theSuggest.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
