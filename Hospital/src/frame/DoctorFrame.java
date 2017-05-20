@@ -539,7 +539,6 @@ class AddPatient{
 		jFrame.setResizable(false);
 
 		//第一行
-
 		nameLabel.setBounds(30,60,40,25);
 		name.setBounds(70,60,150,25);
 
@@ -578,10 +577,6 @@ class AddPatient{
 		submit.setBounds(70 , 475 , 90 , 25);
 		cancel.setBounds(170 , 475 , 90 , 25);
 
-//		jFrame.add(time);
-//		jFrame.add(yearLabel);
-//		jFrame.add(mouthLabel);
-//		jFrame.add(dayLabel);
 		jFrame.add(unitLabel);
 		jFrame.add(ageLabel);
 		jFrame.add(contentLabel);
@@ -602,7 +597,6 @@ class AddPatient{
 		jFrame.add(doctor);
 		jFrame.add(pictureLabel);
 		jFrame.add(pictureTF);
-//		jFrame.add(selectBtn);
 		jFrame.add(submit);
 		jFrame.add(cancel);
 
@@ -644,10 +638,6 @@ class AddPatient{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-//				String theYear = year.getText();
-//				String theMonth = mouth.getText();
-//				String theDay = day.getText();
-
 				String theName = name.getText();
 				String theSex = "";
 				if (man.isSelected()){
@@ -660,9 +650,6 @@ class AddPatient{
 				String theAge = age.getText();
 				String theFlag="";
 				int ageInt;
-//				int yearInt;
-//				int monthInt;
-//				int dayInt;
 
 				if (chuzhen.isSelected()){
 					theFlag = chuzhen.getText();
@@ -675,7 +662,7 @@ class AddPatient{
 
 				String theDate = nowTime;
 				//验证空值
-				if (theName.trim().isEmpty() && theInstitutions.trim().isEmpty() && theAge.trim().isEmpty() && theDoctor.trim().isEmpty() && theContent.trim().isEmpty()){
+				if (theName.trim().isEmpty() || theInstitutions.trim().isEmpty() || theAge.trim().isEmpty() || theDoctor.trim().isEmpty() || theContent.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -872,10 +859,6 @@ class AddMedicine{
 		submit.setBounds(70 , 380 , 90 , 25);
 		cancel.setBounds(170 , 380 , 90 , 25);
 
-//		jFrame.add(time);
-//		jFrame.add(yearLabel);
-//		jFrame.add(mouthLabel);
-//		jFrame.add(dayLabel);
 		jFrame.add(nameLabel);
 		jFrame.add(name);
 		jFrame.add(unitLabel);
@@ -942,10 +925,10 @@ class AddMedicine{
 				String theDoctor = doctor.getSelectedItem().toString();
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theInstitutions.trim().isEmpty() && theDosage.trim().isEmpty() &&
-						theDoctor.trim().isEmpty() && theName.trim().isEmpty()&&
-						theDrug.trim().isEmpty()&& theUseDay.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theInstitutions.trim().isEmpty() || theDosage.trim().isEmpty() ||
+						theDoctor.trim().isEmpty() || theName.trim().isEmpty() ||
+						theDrug.trim().isEmpty() || theUseDay.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}

@@ -796,13 +796,13 @@ class AddMedicineFrame {
 				int amountInt;
 
 				//验证空值
-				if (theEndYear.trim().isEmpty() &&
-						theEndMounth.trim().isEmpty() && theEndDay.trim().isEmpty() &&
-						theDrug.trim().isEmpty() && theKind.trim().isEmpty() &&
-						theStandard.trim().isEmpty() && thePackages.trim().isEmpty()&&
-						thePlace.trim().isEmpty() && theBuySale.trim().isEmpty() &&
-						theSale.trim().isEmpty() && theCompany.trim().isEmpty() &&
-						theAmount.trim().isEmpty() && theUser.trim().isEmpty() && theChe.trim().isEmpty()){
+				if (theEndYear.trim().isEmpty() ||
+						theEndMounth.trim().isEmpty() || theEndDay.trim().isEmpty() ||
+						theDrug.trim().isEmpty() || theKind.trim().isEmpty() ||
+						theStandard.trim().isEmpty() || thePackages.trim().isEmpty()||
+						thePlace.trim().isEmpty() || theBuySale.trim().isEmpty() ||
+						theSale.trim().isEmpty() || theCompany.trim().isEmpty() ||
+						theAmount.trim().isEmpty() || theUser.trim().isEmpty() || theChe.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -1127,13 +1127,13 @@ class AddStuffFrame {
 				String theUser = people.getText();
 
 				//验证空值
-				if (theEndYear.trim().isEmpty() &&
-						theEndMounth.trim().isEmpty() && theEndDay.trim().isEmpty() &&
-						theStuff.trim().isEmpty() && theStuffCode.trim().isEmpty()&&
-						theStandard.trim().isEmpty() && theBuySale.trim().isEmpty()&&
-						theSale.trim().isEmpty() && theCompany.trim().isEmpty()&&
-						theAmount.trim().isEmpty()&&theUser.trim().isEmpty()&&
-						thePiCode.trim().isEmpty()&&thePalce.trim().isEmpty()){
+				if (theEndYear.trim().isEmpty() ||
+						theEndMounth.trim().isEmpty() || theEndDay.trim().isEmpty() ||
+						theStuff.trim().isEmpty() || theStuffCode.trim().isEmpty()||
+						theStandard.trim().isEmpty() || theBuySale.trim().isEmpty()||
+						theSale.trim().isEmpty() || theCompany.trim().isEmpty()||
+						theAmount.trim().isEmpty() || theUser.trim().isEmpty()||
+						thePiCode.trim().isEmpty() || thePalce.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}

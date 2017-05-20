@@ -586,9 +586,9 @@ class AddNurseInfo {
 				String theNurse = nurse.getSelectedItem().toString();
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theAge.trim().isEmpty() && theIns.trim().isEmpty() &&
-						theNote.trim().isEmpty() && theNurse.trim().isEmpty()&&
+				if (theName.trim().isEmpty() ||
+						theAge.trim().isEmpty() || theIns.trim().isEmpty() ||
+						theNote.trim().isEmpty() || theNurse.trim().isEmpty()||
 						theCode.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
@@ -762,10 +762,10 @@ class AddAllergyPatient {
 				String theState = state.getText();
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theUnit.trim().isEmpty() &&
-						theGuardian.trim().isEmpty() && theHistory.trim().isEmpty()&&
-						theMedicine.trim().isEmpty() &&theState.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theUnit.trim().isEmpty() ||
+						theGuardian.trim().isEmpty() || theHistory.trim().isEmpty()||
+						theMedicine.trim().isEmpty() || theState.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -938,9 +938,9 @@ class AddQuarantine {
 				String theApprove = approve.getText();
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theUnit.trim().isEmpty() &&
-						theApprove.trim().isEmpty() && theReason.trim().isEmpty()&&
+				if (theName.trim().isEmpty() ||
+						theUnit.trim().isEmpty() ||
+						theApprove.trim().isEmpty() || theReason.trim().isEmpty() ||
 						theDays.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;

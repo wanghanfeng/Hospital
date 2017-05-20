@@ -650,11 +650,11 @@ class AddPeopleFrame {
 
 				int ageInt;
 				//验证空值
-				if (theName.isEmpty() &&
-						theAge.isEmpty() && theUnit.isEmpty() &&
-						theSex.isEmpty() && theDoctor.isEmpty()&&
-						theTemp.isEmpty() && theIos.trim().isEmpty()&&
-						theDrug.isEmpty() && theDrugAmount.trim().isEmpty()&&
+				if (theName.isEmpty() ||
+						theAge.isEmpty() || theUnit.isEmpty() ||
+						theSex.isEmpty() || theDoctor.isEmpty()||
+						theTemp.isEmpty() || theIos.trim().isEmpty()||
+						theDrug.isEmpty() || theDrugAmount.trim().isEmpty()||
 						theSituation.isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
@@ -827,9 +827,9 @@ class AddInfoFrame {
 				int dieInt;
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theKind.trim().isEmpty() && theType.trim().isEmpty() &&
-						theDie.trim().isEmpty() && theUnit.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theKind.trim().isEmpty() || theType.trim().isEmpty() ||
+						theDie.trim().isEmpty() || theUnit.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -962,9 +962,9 @@ class AddPrevention {
 				String theWork = work.getText();
 
 				//验证空值
-				if (thePlace.trim().isEmpty() &&
-						theLeader.trim().isEmpty() &&
-						theMaterialName.trim().isEmpty() && theMaterialNum.trim().isEmpty()&&
+				if (thePlace.trim().isEmpty() ||
+						theLeader.trim().isEmpty() ||
+						theMaterialName.trim().isEmpty() || theMaterialNum.trim().isEmpty()||
 						theWork.trim().isEmpty() ){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
@@ -1099,9 +1099,9 @@ class AddSpecialist {
 				String theDate = nowTime;
 
 				//验证空值
-				if (theName.trim().isEmpty() &&
-						theMajor.trim().isEmpty() && theUnit.trim().isEmpty() &&
-						endTime.trim().isEmpty() && theUnit.trim().isEmpty()){
+				if (theName.trim().isEmpty() ||
+						theMajor.trim().isEmpty() || theUnit.trim().isEmpty() ||
+						endTime.trim().isEmpty() || theUnit.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null,"不能有空值","错误窗口",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
